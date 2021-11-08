@@ -7,4 +7,5 @@ public interface BoardRepository {
     Board findById(Long id);
     List<Board> findByWriterId(Long id);
     List<Board> findAll();
+    void update(Long BoardIdx, Board updateParam);
 }

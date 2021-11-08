@@ -1,5 +1,6 @@
 package com.example.mediacommunity.domain.board;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@Slf4j
 public class JdbcBoardRepository implements BoardRepository{
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -31,6 +33,8 @@ public class JdbcBoardRepository implements BoardRepository{
         boardMap.put("writerId", board.getWriterId());
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(boardMap));
         board.setId(key.longValue());
+
+        log.info("saved success = {}", board);
         return board;
     }
 
@@ -52,19 +56,22 @@ public class JdbcBoardRepository implements BoardRepository{
         return jdbcTemplate.query(sql, rowMapper());
     }
 
+    @Override
+    public void update(Long boardIdx, Board updateParam) {
+        log.info("updateParam = {}", updateParam);
+        String sql = "update board set content=?, writerId=?, createdAt=?, updatedAt=?, viewCnt=? where id=?";
+        jdbcTemplate.update(sql, updateParam.getContent(), updateParam.getWriterId(), updateParam.getCreatedAt(),
+                updateParam.getUpdatedAt(), updateParam.getViewCnt(), boardIdx);
+    }
+
     RowMapper<Board> rowMapper() {
-        return new RowMapper<Board>() {
-            @Override
-            public Board mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Board(
-                        rs.getLong("id"),
-                        rs.getString("content"),
-                        rs.getTimestamp("createdAt"),
-                        rs.getTimestamp("updatedAt"),
-                        rs.getLong("writerId"),
-                        rs.getInt("viewCnt")
-                );
-            }
-        };
+        return (rs, rowNum) -> new Board(
+                rs.getLong("id"),
+                rs.getString("content"),
+                rs.getTimestamp("createdAt"),
+                rs.getTimestamp("updatedAt"),
+                rs.getLong("writerId"),
+                rs.getInt("viewCnt")
+        );
     }
 }
