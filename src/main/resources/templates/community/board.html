@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <table border="1">
+    <thead>
+    <tr>
+      <th>viewCnt</th>
+      <th>writerId</th>
+      <th>createdAt</th>
+      <th>updatedAt</th>
+      <th>content</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td th:text="${board.writerId}"></td>
+      <td th:text="${board.viewCnt}"></td>
+      <td th:text="${board.createdAt}"></td>
+      <td th:text="${board.updatedAt}"></td>
+      <td th:text="${board.content}"></td>
+    </tr>
+    </tbody>
+  </table>
+  <button th:onClick="|location.href='@{/boards/edit/{boardId}(boardId=${board.id})}'|">수정하기</button>
+  <button th:onClick="|location.href='@{/boards}'|">이전으로</button>
+</body>
+</html>
