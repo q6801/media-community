@@ -39,6 +39,12 @@ public class JdbcMemberRepository implements MemberRepository{
     }
 
     @Override
+    public Member findByLoginId(String loginId) {
+        String sql = "select * from members where loginId = ?";
+        return jdbcTemplate.queryForObject(sql, rowMapper(), loginId);
+    }
+
+    @Override
     public Member findByNickName(String nickName) {
         String sql = "select * from members where nickname=?";
         return jdbcTemplate.queryForObject(sql, rowMapper(), nickName);
