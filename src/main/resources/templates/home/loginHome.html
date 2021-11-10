@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>media-community</title>
+  <meta charset="UTF-8">
+  <title>media-community</title>
 </head>
 <body>
-<button th:onclick="|location.href='@{/login}'|">로그인으로 이동</button>
+<div>
+  <span th:text="|${nickname}님 환영합니다.|">대충 닉네임</span>
+</div>
 <button th:onclick="|location.href='@{/boards}'|">게시판으로 이동</button>
 </body>
 </html>
