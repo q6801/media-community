@@ -4,13 +4,18 @@ import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.member.LoginDto;
 import com.example.mediacommunity.domain.member.Member;
 import com.example.mediacommunity.domain.member.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
+@Slf4j
 @Controller
 @RequestMapping("/login")
 public class LoginController {
@@ -18,17 +23,22 @@ public class LoginController {
     private MemberRepository memberRepository;
 
     @GetMapping
-    public String loginForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)
-                            Member member) {
+    public String loginForm(Model model) {
+        model.addAttribute("member", new LoginDto());
         return "login/loginForm";
     }
 
     @PostMapping
-    public String login(@ModelAttribute("loginDto") LoginDto loginDto,
-                        HttpServletRequest request) {
+    public String login(@Valid @ModelAttribute("member") LoginDto loginDto,
+                        BindingResult bindingResult, HttpServletRequest request) {
+        if(bindingResult.hasErrors()) {
+            log.info("error={}", bindingResult);
+            return "/login/loginForm";
+        }
         String loginId = loginDto.getLoginId();
         Member member = memberRepository.findByLoginId(loginId);
         if(!passwordEquals(loginDto, member)) {
+            log.info("password error");
             return "/login/loginForm";
         }
         HttpSession httpSession = request.getSession();
