@@ -20,7 +20,7 @@ public class LoginController {
     @GetMapping
     public String loginForm(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)
                             Member member) {
-        return "home/loginForm";
+        return "login/loginForm";
     }
 
     @PostMapping
