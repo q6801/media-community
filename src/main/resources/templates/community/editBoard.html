@@ -10,10 +10,12 @@
   <div>
     <label for="writerId">글쓴이</label>
     <input type="text" th:field="*{writerId}" placeholder="글쓴이">
+    <div th:errors="*{writerId}"></div>
   </div>
   <div>
     <label for="content">내용</label>
     <textarea th:field="*{content}" placeholder="내용입력"></textarea>
+    <div th:errors="*{content}"></div>
   </div>
   <div>
     <button type="submit">등록</button>

@@ -6,14 +6,16 @@
   <title>Title</title>
 </head>
 <body>
-  <form action th:action="@{/boards/add}" method="post">
+  <form action th:action="@{/boards/add}" th:object="${board}" method="post">
     <div>
       <label for="writerId">글쓴이</label>
-      <input type="text" id="writerId" name="writerId" placeholder="글쓴이">
+      <input type="text" th:field="*{writerId}" placeholder="글쓴이">
+      <div th:errors="*{writerId}">상품명 오류</div>
     </div>
     <div>
       <label for="content">내용</label>
       <textarea id="content" name="content" placeholder="내용입력"></textarea>
+      <div th:errors="*{content}">내용 오류</div>
     </div>
     <div>
       <button type="submit">등록</button>
