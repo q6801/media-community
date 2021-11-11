@@ -6,14 +6,16 @@
     <title>Title</title>
 </head>
 <body>
-<form action="" th:action method="post">
+<form action="" th:action th:object="${member}", method="post">
   <div>
     <label for="loginId">id</label>
-    <input type="text" id="loginId" name="loginId">
+    <input type="text" th:field="*{loginId}">
+    <div th:errors="*{loginId}"></div>
   </div>
   <div>
     <label for="password">pw</label>
-    <input type="password" id="password" name="password">
+    <input type="password" th:field="*{password}">
+    <div th:errors="*{password}"></div>
   </div>
   <div>
     <button type="submit">로그인</button>

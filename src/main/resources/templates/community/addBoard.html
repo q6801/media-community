@@ -14,7 +14,7 @@
     </div>
     <div>
       <label for="content">내용</label>
-      <textarea id="content" name="content" placeholder="내용입력"></textarea>
+      <textarea th:field="*{content}" placeholder="내용입력"></textarea>
       <div th:errors="*{content}">내용 오류</div>
     </div>
     <div>
