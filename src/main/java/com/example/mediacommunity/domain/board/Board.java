@@ -12,10 +12,10 @@ public class Board {
     private String content;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-    private Long writerId;
+    private String writerId;
     private int viewCnt;
 
-    public Board(String content, Timestamp createdAt, Timestamp updatedAt, Long writerId, int viewCnt) {
+    public Board(String content, Timestamp createdAt, Timestamp updatedAt, String writerId, int viewCnt) {
         this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

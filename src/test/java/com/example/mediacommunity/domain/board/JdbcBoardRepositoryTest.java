@@ -29,7 +29,7 @@ class JdbcBoardRepositoryTest {
     void saveAndFindById() {
         //
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = new Board("start content", timestamp, timestamp, 1L, 1);
+        Board board = new Board("start content", timestamp, timestamp, "test", 1);
 
         // when
         Board savedBoard = boardRepository.save(board);
@@ -43,7 +43,7 @@ class JdbcBoardRepositoryTest {
 
     @Test
     void findByWriterId() {
-        long writerId = 100L;
+        String writerId = "test";
 
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board board1 = new Board("one", timestamp, timestamp, writerId, 1);
@@ -60,8 +60,8 @@ class JdbcBoardRepositoryTest {
     @Test
     void findAll() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board1 = new Board("one", timestamp, timestamp, 1L, 1);
-        Board board2 = new Board("two", timestamp, timestamp, 1L, 10);
+        Board board1 = new Board("one", timestamp, timestamp, "test", 1);
+        Board board2 = new Board("two", timestamp, timestamp, "test", 10);
 
         boardRepository.save(board1);
         boardRepository.save(board2);

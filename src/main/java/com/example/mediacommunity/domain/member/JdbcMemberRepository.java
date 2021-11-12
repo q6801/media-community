@@ -20,22 +20,10 @@ public class JdbcMemberRepository implements MemberRepository{
 
     @Override
     public Member save(Member member) {
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("members").usingGeneratedKeyColumns("id");
-
-        Map<String, Object> memberMap = new HashMap<>();
-        memberMap.put("loginId", member.getLoginId());
-        memberMap.put("password", member.getPassword());
-        memberMap.put("nickname", member.getNickname());
-        Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(memberMap));
-        member.setId(key.longValue());
+        String sql = "insert into members values(?, ?, ?)";
+        jdbcTemplate.update(sql, member.getLoginId(),
+                member.getPassword(), member.getNickname());
         return member;
-    }
-
-    @Override
-    public Member findById(Long id) {
-        String sql = "select * from members where id = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper(), id);
     }
 
     @Override
@@ -62,7 +50,7 @@ public class JdbcMemberRepository implements MemberRepository{
     }
 
     private RowMapper<Member> rowMapper() {
-        return (rs, rowNum) -> new Member(rs.getLong("id"),
+        return (rs, rowNum) -> new Member(
                 rs.getString("loginId"),
                 rs.getString("password"),
                 rs.getString("nickname"));

@@ -11,11 +11,11 @@ public class BoardAddingDto {
     @NotBlank
     private String content;
 
-    @Positive
-    private Long writerId;
+    @NotBlank
+    private String writerId;
 
     public BoardAddingDto() {}
-    public BoardAddingDto(String content, Long writerId) {
+    public BoardAddingDto(String content, String writerId) {
         this.content = content;
         this.writerId = writerId;
     }

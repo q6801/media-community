@@ -45,7 +45,7 @@ public class JdbcBoardRepository implements BoardRepository{
     }
 
     @Override
-    public List<Board> findByWriterId(Long id) {
+    public List<Board> findByWriterId(String id) {
         String sql = "select * from board where writerId = ?";
         return jdbcTemplate.query(sql, rowMapper(), id);
     }
@@ -70,7 +70,7 @@ public class JdbcBoardRepository implements BoardRepository{
                 rs.getString("content"),
                 rs.getTimestamp("createdAt"),
                 rs.getTimestamp("updatedAt"),
-                rs.getLong("writerId"),
+                rs.getString("writerId"),
                 rs.getInt("viewCnt")
         );
     }

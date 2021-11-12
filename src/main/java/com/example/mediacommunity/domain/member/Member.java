@@ -10,13 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Data
 public class Member {
-    private Long id;
     private String loginId;
     private String password;
     private String nickname;
-    public Member(String longinId, String password, String nickname) {
-        this.loginId = longinId;
-        this.password = password;
-        this.nickname = nickname;
-    }
 }
