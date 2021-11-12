@@ -9,5 +9,8 @@
   <span th:text="|${nickname}님 환영합니다.|">대충 닉네임</span>
 </div>
 <button th:onclick="|location.href='@{/boards}'|">게시판으로 이동</button>
+<form th:action="@{/logout}" method="post">
+  <button type="submit">로그 아웃</button>
+</form>
 </body>
 </html>

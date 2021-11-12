@@ -17,30 +17,31 @@ import javax.validation.Valid;
 
 @Slf4j
 @Controller
-@RequestMapping("/login")
 public class LoginController {
     @Autowired
     private MemberRepository memberRepository;
 
-    @GetMapping
+    @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("member", new LoginDto());
         return "login/loginForm";
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public String login(@Valid @ModelAttribute("member") LoginDto loginDto,
                         BindingResult bindingResult, HttpServletRequest request) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
             return "/login/loginForm";
         }
+
         String loginId = loginDto.getLoginId();
         Member member = memberRepository.findByLoginId(loginId);
-        if(!passwordEquals(loginDto, member)) {
+        if (!passwordEquals(loginDto, member)) {
             log.info("password error");
             return "/login/loginForm";
         }
+
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute(SessionConst.LOGIN_MEMBER, member);
         return "redirect:/";
@@ -48,5 +49,14 @@ public class LoginController {
 
     private boolean passwordEquals(LoginDto loginDto, Member member) {
         return member.getPassword().equals(loginDto.getPassword());
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
     }
 }
