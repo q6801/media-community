@@ -11,12 +11,8 @@ public class BoardAddingDto {
     @NotBlank
     private String content;
 
-    @NotBlank
-    private String writerId;
-
     public BoardAddingDto() {}
     public BoardAddingDto(String content, String writerId) {
         this.content = content;
-        this.writerId = writerId;
     }
 }
