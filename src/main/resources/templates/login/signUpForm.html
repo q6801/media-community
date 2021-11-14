@@ -10,6 +10,10 @@
   <div>
     <span>회원 가입</span>
   </div>
+  <div th:if="${#fields.hasGlobalErrors()}">
+    <p th:each="err : ${#fields.globalErrors}"
+       th:text="${err}"></p>
+  </div>
   <div>
     <label for="loginId">id</label>
     <input type="text" th:field="*{loginId}">
