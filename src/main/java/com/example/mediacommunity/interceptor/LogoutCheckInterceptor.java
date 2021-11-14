@@ -12,8 +12,9 @@ public class LogoutCheckInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
+        String requestURI = request.getRequestURI();
         if (session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
-            response.sendRedirect("/login");
+            response.sendRedirect("/login?redirectURL=" + requestURI);
             return false;
         }
         return true;
