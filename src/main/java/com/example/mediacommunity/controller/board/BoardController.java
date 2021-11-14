@@ -1,8 +1,11 @@
 package com.example.mediacommunity.controller.board;
 
+import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.board.Board;
 import com.example.mediacommunity.domain.board.BoardAddingDto;
+import com.example.mediacommunity.domain.board.BoardEditingDto;
 import com.example.mediacommunity.domain.board.BoardRepository;
+import com.example.mediacommunity.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -45,16 +48,23 @@ public class BoardController {
     }
 
     @PostMapping("/add")
-    public String addBoard(@Valid @ModelAttribute("board") BoardAddingDto boardDto, BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes) {
+    public String addBoard(@Valid @ModelAttribute("board") BoardAddingDto boardDto,
+                           BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         if(bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "community/addBoard";
         }
 
-        Board savedBoard = saveBoardToDB(boardDto);
+        Board savedBoard = saveBoardToDB(boardDto, member);
         redirectAttributes.addAttribute("boardIdx", savedBoard.getId());
         return "redirect:/boards/{boardIdx}";
+    }
+
+    private Board saveBoardToDB(BoardAddingDto boardDto, Member member) {
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
+        Board board = new Board(boardDto.getContent(), timestamp, timestamp, member.getLoginId(), 0);
+        return boardRepository.save(board);
     }
 
     @GetMapping("/edit/{boardIdx}")
@@ -64,7 +74,7 @@ public class BoardController {
     }
 
     @PostMapping("/edit/{boardIdx}")
-    public String editBoard(@PathVariable long boardIdx, @Valid @ModelAttribute("board") BoardAddingDto boardDto,
+    public String editBoard(@PathVariable long boardIdx, @Valid @ModelAttribute("board") BoardEditingDto boardDto,
                             BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
@@ -75,13 +85,7 @@ public class BoardController {
         return "redirect:/boards/{boardIdx}";
     }
 
-    private Board saveBoardToDB(BoardAddingDto boardDto) {
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = new Board(boardDto.getContent(), timestamp, timestamp, boardDto.getWriterId(), 0);
-        return boardRepository.save(board);
-    }
-
-    private void updateBoardToDB(long boardIdx, BoardAddingDto boardDto) {
+    private void updateBoardToDB(long boardIdx, BoardEditingDto boardDto) {
         Board board = boardRepository.findById(boardIdx);
         Timestamp updatedTime = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         board.setUpdatedAt(updatedTime);
