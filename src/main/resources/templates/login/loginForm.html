@@ -7,6 +7,10 @@
 </head>
 <body>
 <form action="" th:action th:object="${member}", method="post">
+  <div th:if="${#fields.hasGlobalErrors()}">
+    <p th:each="err : ${#fields.globalErrors}"
+      th:text="${err}"></p>
+  </div>
   <div>
     <label for="loginId">id</label>
     <input type="text" th:field="*{loginId}">
