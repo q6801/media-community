@@ -65,13 +65,16 @@ public class JdbcBoardRepository implements BoardRepository{
     }
 
     RowMapper<Board> rowMapper() {
-        return (rs, rowNum) -> new Board(
-                rs.getLong("id"),
-                rs.getString("content"),
-                rs.getTimestamp("createdAt"),
-                rs.getTimestamp("updatedAt"),
-                rs.getString("writerId"),
-                rs.getInt("viewCnt")
-        );
+        return (rs, rowNum) -> {
+            Board board = new Board(
+                    rs.getString("content"),
+                    rs.getTimestamp("createdAt"),
+                    rs.getTimestamp("updatedAt"),
+                    rs.getString("writerId"),
+                    rs.getInt("viewCnt")
+            );
+            board.setId(rs.getLong("id"));
+            return board;
+        };
     }
 }
