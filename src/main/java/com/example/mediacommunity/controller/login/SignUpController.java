@@ -1,9 +1,7 @@
 package com.example.mediacommunity.controller.login;
 
-import com.example.mediacommunity.domain.member.LoginDto;
-import com.example.mediacommunity.domain.member.Member;
-import com.example.mediacommunity.domain.member.MemberRepository;
 import com.example.mediacommunity.domain.member.SignUpDto;
+import com.example.mediacommunity.service.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +17,7 @@ import javax.validation.Valid;
 @RequestMapping("/signup")
 public class SignUpController {
     @Autowired
-    MemberRepository memberRepository;
+    MemberService memberService;
 
     @GetMapping
     public String signUpForm(Model model) {
@@ -30,11 +28,11 @@ public class SignUpController {
     @PostMapping
     public String signUp(@Valid @ModelAttribute("member") SignUpDto signUpDto,
                          BindingResult bindingResult) {
+
+        memberService.signUp(signUpDto, bindingResult);
         if (bindingResult.hasErrors()) {
             return "login/signUpForm";
         }
-        memberRepository.save(new Member(signUpDto.getLoginId(),
-                signUpDto.getPassword(), signUpDto.getNickname()));
         return "redirect:/";
     }
 }
