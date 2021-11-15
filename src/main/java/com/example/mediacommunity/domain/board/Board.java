@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 public class Board {
     private Long id;
     private String content;
