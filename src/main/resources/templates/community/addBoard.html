@@ -7,11 +7,11 @@
 </head>
 <body>
   <form action th:action="@{/boards/add}" th:object="${board}" method="post">
-<!--    <div>-->
-<!--      <label for="writerId">글쓴이</label>-->
-<!--      <input type="text" th:field="*{writerId}" placeholder="글쓴이">-->
-<!--      <div th:errors="*{writerId}">상품명 오류</div>-->
-<!--    </div>-->
+    <div>
+      <label for="title">제목</label>
+      <input type="text" th:field="*{title}" placeholder="제목">
+      <div th:errors="*{title}">제목 오류</div>
+    </div>
     <div>
       <label for="content">내용</label>
       <textarea th:field="*{content}" placeholder="내용입력"></textarea>

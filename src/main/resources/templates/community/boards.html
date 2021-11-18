@@ -10,7 +10,7 @@
     <table border="1">
         <thead>
             <tr>
-                <th>index</th>
+                <th>title</th>
                 <th>writerId</th>
                 <th>viewCnt</th>
                 <th>createdAt</th>
@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             <tr th:each="board, boardStat:${boards}">
-                <td><a href="" th:href="@{|/boards/${board.id}|}" th:text="${boardStat.index}"></a></td>
+                <td><a href="" th:href="@{|/boards/${board.id}|}" th:text="${board.title}"></a></td>
                 <td th:text="${board.writerId}"></td>
                 <td th:text="${board.viewCnt}"></td>
                 <td th:text="${board.createdAt}"></td>

@@ -8,9 +8,9 @@
 <body>
 <form action="" th:action th:object="${board}" method="post">
   <div>
-    <label for="writerId">글쓴이</label>
-    <input type="text" th:field="*{writerId}" placeholder="글쓴이">
-    <div th:errors="*{writerId}"></div>
+    <label for="title">title</label>
+    <input type="text" th:field="*{title}" placeholder="글쓴이">
+    <div th:errors="*{title}"></div>
   </div>
   <div>
     <label for="content">내용</label>

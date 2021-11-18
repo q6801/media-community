@@ -9,6 +9,7 @@
   <table border="1">
     <thead>
     <tr>
+      <th>title</th>
       <th>writerId</th>
       <th>viewCnt</th>
       <th>createdAt</th>
@@ -18,6 +19,7 @@
     </thead>
     <tbody>
     <tr>
+      <td th:text="${board.title}"></td>
       <td th:text="${board.writerId}"></td>
       <td th:text="${board.viewCnt}"></td>
       <td th:text="${board.createdAt}"></td>
