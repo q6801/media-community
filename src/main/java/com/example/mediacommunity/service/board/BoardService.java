@@ -9,6 +9,7 @@ public interface BoardService {
     Board save(Board board);
     Optional<Board> findBoard(Long id);
     List<Board> findBoards(String writerId);
+    List<Board> findBoards(Pagination pagination);
     List<Board> findAllBoards();
     void modifyBoard(Long BoardIdx, Board updateParam);
 }

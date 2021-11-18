@@ -50,6 +50,11 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    public List<Board> findBoards(Pagination pagination) {
+        return boardRepository.findBoards(pagination);
+    }
+
+    @Override
     public List<Board> findAllBoards() {
         try {
             List<Board> boards = boardRepository.findAll();
