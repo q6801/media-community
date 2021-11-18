@@ -2,6 +2,7 @@ package com.example.mediacommunity.service.board;
 
 import com.example.mediacommunity.domain.board.Board;
 import com.example.mediacommunity.domain.board.BoardRepository;
+import com.example.mediacommunity.service.Pagination;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
