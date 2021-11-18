@@ -30,15 +30,17 @@ public class BoardController {
     private final Pagination pagination;
 
     @GetMapping
-    public String boards(Model model, @RequestParam(defaultValue = "1") int page,
-                         @RequestParam(defaultValue = "1") int initRange) {
-        int totalBoardsNum = boardService.getTotalBoardsNum();
-        pagination.pageInfo(page, initRange, totalBoardsNum);
+    public String boards(Model model, @RequestParam(defaultValue = "1") int page) {
+        rgstrBoardsWithPages(page, model);
+        return "community/boards";
+    }
 
+    private void rgstrBoardsWithPages(int page, Model model) {
+        int totalBoardsNum = boardService.getTotalBoardsNum();
+        pagination.pageInfo(page, totalBoardsNum);
         List<Board> boards = boardService.findBoards(pagination);
         model.addAttribute("boards", boards);
         model.addAttribute("pagination", pagination);
-        return "community/boards";
     }
 
     @GetMapping("/{boardIdx}")
