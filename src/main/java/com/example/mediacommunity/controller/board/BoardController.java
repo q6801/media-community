@@ -39,8 +39,22 @@ public class BoardController {
     public String board(@PathVariable long boardIdx, Model model) {
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
+
+        increaseViewCnt(boardIdx, board);
         model.addAttribute("board", board);
         return "community/board";
+    }
+
+    private void increaseViewCnt(long boardIdx, Board board) {
+        boardService.increaseViewCnt(boardIdx, board.getViewCnt());
+        board.setViewCnt(board.getViewCnt() + 1);
+    }
+
+    private boolean compareUserAndWriter(Member member, Board board) {
+        if (member != null  && member.getLoginId().equals(board.getWriterId())) {
+            return true;
+        }
+        return false;
     }
 
     @GetMapping("/add")
