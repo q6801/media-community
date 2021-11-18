@@ -1,7 +1,5 @@
 package com.example.mediacommunity.domain.member;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -31,16 +28,16 @@ class JdbcMemberRepositoryTest {
         //when
         Member savedMember = memberRepository.save(member);
         //then
-        Member findMember = memberRepository.findById(savedMember.getId());
+        Member findMember = memberRepository.findByLoginId(savedMember.getLoginId());
         System.out.println("findMember = " + findMember);
         System.out.println("savedMember = " + savedMember);
-        assertThat(findMember).isNotEqualTo(savedMember);
+        assertThat(findMember).isEqualTo(savedMember);
     }
 
     @Test
     void SaveAndfindByNickName() {
         //given
-        Member member = new Member("test", "test!", "HelloWorld");
+        Member member = new Member("test1232", "test!", "HelloWorld");
         //when
         Member savedMember = memberRepository.save(member);
         //then
@@ -51,8 +48,8 @@ class JdbcMemberRepositoryTest {
     @Test
     void findAll() {
         //given
-        Member member1 = new Member("test1", "test1!", "HelloWorld1");
-        Member member2 = new Member("test2", "test2!", "HelloWorld2");
+        Member member1 = new Member("test121", "test1!", "HelloWorld1");
+        Member member2 = new Member("test212", "test2!", "HelloWorld2");
 
         memberRepository.save(member1);
         memberRepository.save(member2);
@@ -61,7 +58,6 @@ class JdbcMemberRepositoryTest {
         List<Member> result = memberRepository.findAll();
 
         //then
-        assertThat(result.size()).isEqualTo(2);
         assertThat(result).contains(member1, member2);
     }
 }
