@@ -31,6 +31,7 @@ public class LoginController {
     public String login(@Valid @ModelAttribute("member") LoginDto loginDto,
                         BindingResult bindingResult, HttpServletRequest request,
                         @RequestParam(defaultValue = "/") String redirectURL) {
+
         Member member = memberService.login(loginDto, bindingResult);
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
