@@ -1,6 +1,7 @@
 package com.example.mediacommunity.service.board;
 
 import com.example.mediacommunity.domain.board.Board;
+import com.example.mediacommunity.service.Pagination;
 
 import java.util.List;
 import java.util.Optional;
