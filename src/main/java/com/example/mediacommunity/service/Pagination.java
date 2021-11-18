@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 public class Pagination {
-    private  int onePageBoardsNum = 7;
-    private int rangeSize = 5;
+    private  int onePageBoardsNum = 10;
+    private int rangeSize = 10;
 
     private int page;
     private int startingRangeNum;
