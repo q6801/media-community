@@ -89,7 +89,7 @@ public class BoardController {
 
     private Board saveBoardToDB(BoardAddingDto boardDto, Member member) {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = new Board(boardDto.getContent(), timestamp, timestamp, member.getLoginId(), 0);
+        Board board = new Board(boardDto.getContent(), timestamp, timestamp, member.getLoginId(), 0, boardDto.getTitle());
         return boardService.save(board);
     }
 
@@ -121,8 +121,8 @@ public class BoardController {
         Timestamp updatedTime = Timestamp.valueOf(LocalDateTime.now().withNano(0));
 
         board.setUpdatedAt(updatedTime);
-        board.setWriterId(boardDto.getWriterId());
         board.setContent(boardDto.getContent());
+        board.setTitle(boardDto.getTitle());
         boardService.modifyBoard(boardIdx, board);
     }
 
