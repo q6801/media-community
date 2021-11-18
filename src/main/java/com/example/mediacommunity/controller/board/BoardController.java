@@ -4,8 +4,8 @@ import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.board.Board;
 import com.example.mediacommunity.domain.board.BoardAddingDto;
 import com.example.mediacommunity.domain.board.BoardEditingDto;
-import com.example.mediacommunity.domain.board.BoardRepository;
 import com.example.mediacommunity.domain.member.Member;
+import com.example.mediacommunity.service.Pagination;
 import com.example.mediacommunity.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +82,6 @@ public class BoardController {
             log.info("errors={}", bindingResult);
             return "community/addBoard";
         }
-
         Board savedBoard = saveBoardToDB(boardDto, member);
         redirectAttributes.addAttribute("boardIdx", savedBoard.getId());
         return "redirect:/boards/{boardIdx}";
@@ -113,7 +112,6 @@ public class BoardController {
             log.info("errors={}", bindingResult);
             return "community/editBoard";
         }
-
         updateBoardToDB(boardIdx, boardDto);
         return "redirect:/boards/{boardIdx}";
     }
