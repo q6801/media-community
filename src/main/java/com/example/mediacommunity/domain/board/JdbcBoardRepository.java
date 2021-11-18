@@ -64,6 +64,24 @@ public class JdbcBoardRepository implements BoardRepository{
                 updateParam.getUpdatedAt(), updateParam.getViewCnt(), boardIdx);
     }
 
+    @Override
+    public void increaseViewCnt(Long id, int viewCnt) {
+        String sql = "update board set viewCnt=? where id=?";
+        jdbcTemplate.update(sql, viewCnt+1, id);
+    }
+
+    @Override
+    public void delete(Long id) {
+        String sql = "delete from board where id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public int getTotalBoardsNum() {
+        String sql = "select count(*) from board";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
+
     RowMapper<Board> rowMapper() {
         return (rs, rowNum) -> {
             Board board = new Board(
