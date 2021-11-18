@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
 </head>
 <body>
     <table border="1">
@@ -26,6 +27,18 @@
             </tr>
         </tbody>
     </table>
+    <div th:object="${pagination}">
+        <div th:text="${pagination}"></div>
+        <button th:if=*{prev} th:onClick="|location.href='@{/boards(page=*{startingRangeNum-1}, initRange=*{startingRangeNum-rangeSize})}'|">이전</button>
+
+        <th:block th:each="num : *{#numbers.sequence(startingRangeNum, endPage)}">
+            <button th:text="${num}" th:onClick="|location.href='@{/boards(page=${num}, initRange=*{startingRangeNum})}'|"
+                th:classappend="${num} == *{page} ? page"></button>
+        </th:block>
+        <button th:if=*{next} th:onClick="|location.href='@{/boards(page=*{endPage+1}, initRange=*{endPage+1})}'|">다음</button>
+    </div>
+
+
     <button th:onClick="|location.href='@{/boards/add}'|">글 쓰기</button>
     <button th:onClick="|location.href='@{/}'|">이전화면</button>
 </body>
