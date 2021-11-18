@@ -44,7 +44,7 @@ public class BoardController {
     }
 
     @GetMapping("/{boardIdx}")
-    public String board(@PathVariable long boardIdx, Model model,
+    public String board(@PathVariable long boardIdx, Model model, @RequestParam(defaultValue = "1") int page,
                         @SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
         Board board = boardService.findBoard(boardIdx)
@@ -55,6 +55,8 @@ public class BoardController {
         if (compareUserAndWriter(member, board)) {
             model.addAttribute("editPermission", true);
         }
+        rgstrBoardsWithPages(page, model);
+
         return "community/board";
     }
 
