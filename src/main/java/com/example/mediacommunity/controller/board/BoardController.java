@@ -36,12 +36,17 @@ public class BoardController {
     }
 
     @GetMapping("/{boardIdx}")
-    public String board(@PathVariable long boardIdx, Model model) {
+    public String board(@PathVariable long boardIdx, Model model,
+                        @SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member member) {
+
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
 
         increaseViewCnt(boardIdx, board);
         model.addAttribute("board", board);
+        if (compareUserAndWriter(member, board)) {
+            model.addAttribute("editPermission", true);
+        }
         return "community/board";
     }
 
