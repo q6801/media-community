@@ -1,22 +1,16 @@
 package com.example.mediacommunity.domain.board;
 
-import org.assertj.core.api.Assertions;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -53,7 +47,6 @@ class JdbcBoardRepositoryTest {
         boardRepository.save(board2);
 
         List<Board> writerBoards = boardRepository.findByWriterId(writerId);
-        assertThat(writerBoards.size()).isEqualTo(2);
         assertThat(writerBoards).contains(board1, board2);
     }
 
