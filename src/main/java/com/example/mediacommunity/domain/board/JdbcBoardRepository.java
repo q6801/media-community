@@ -32,6 +32,7 @@ public class JdbcBoardRepository implements BoardRepository{
         boardMap.put("updatedAt", board.getUpdatedAt());
         boardMap.put("viewCnt", board.getViewCnt());
         boardMap.put("writerId", board.getWriterId());
+        boardMap.put("title", board.getTitle());
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(boardMap));
         board.setId(key.longValue());
 
@@ -53,7 +54,7 @@ public class JdbcBoardRepository implements BoardRepository{
 
     @Override
     public List<Board> findBoards(Pagination pagination) {
-        String sql = "select * from board limit ?, ?";
+        String sql = "select * from board order by updatedAt desc limit ?, ?";
         return jdbcTemplate.query(sql, rowMapper(),
                 pagination.getStartingBoardNumInPage(),
                 pagination.getOnePageBoardsNum());
@@ -68,9 +69,9 @@ public class JdbcBoardRepository implements BoardRepository{
     @Override
     public void update(Long boardIdx, Board updateParam) {
         log.info("updateParam = {}", updateParam);
-        String sql = "update board set content=?, writerId=?, createdAt=?, updatedAt=?, viewCnt=? where id=?";
+        String sql = "update board set content=?, writerId=?, createdAt=?, updatedAt=?, viewCnt=?, title=? where id=?";
         jdbcTemplate.update(sql, updateParam.getContent(), updateParam.getWriterId(), updateParam.getCreatedAt(),
-                updateParam.getUpdatedAt(), updateParam.getViewCnt(), boardIdx);
+                updateParam.getUpdatedAt(), updateParam.getViewCnt(), updateParam.getTitle(), boardIdx);
     }
 
     @Override
@@ -98,7 +99,8 @@ public class JdbcBoardRepository implements BoardRepository{
                     rs.getTimestamp("createdAt"),
                     rs.getTimestamp("updatedAt"),
                     rs.getString("writerId"),
-                    rs.getInt("viewCnt")
+                    rs.getInt("viewCnt"),
+                    rs.getString("title")
             );
             board.setId(rs.getLong("id"));
             return board;
