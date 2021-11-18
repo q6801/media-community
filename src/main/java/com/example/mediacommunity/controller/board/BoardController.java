@@ -70,9 +70,15 @@ public class BoardController {
     }
 
     @GetMapping("/edit/{boardIdx}")
-    public String editForm(@PathVariable long boardIdx, Model model) {
-        model.addAttribute("board", boardService.findBoard(boardIdx));
-        return "community/editBoard";
+    public String editForm(@PathVariable long boardIdx, Model model,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+
+        Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board not found error"));
+        if (compareUserAndWriter(member, board)) {
+            model.addAttribute("board", board);
+            return "community/editBoard";
+        }
+        return "redirect:/boards";
     }
 
     @PostMapping("/edit/{boardIdx}")
