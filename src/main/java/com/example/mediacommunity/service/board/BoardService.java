@@ -13,4 +13,7 @@ public interface BoardService {
     List<Board> findBoards(Pagination pagination);
     List<Board> findAllBoards();
     void modifyBoard(Long BoardIdx, Board updateParam);
+    void increaseViewCnt(Long id, int viewCnt);
+    void deleteBoard(Long id);
+    int getTotalBoardsNum();
 }

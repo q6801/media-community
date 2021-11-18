@@ -74,4 +74,27 @@ public class BoardServiceImpl implements BoardService{
             log.warn("class: BoardServiceImpl, method: modifyBoard, {}", e);
         }
     }
+
+    @Override
+    public void increaseViewCnt(Long id, int viewCnt) {
+        try {
+            boardRepository.increaseViewCnt(id, viewCnt);
+        } catch(RuntimeException e) {
+            log.warn("class: BoardServiceImpl, method: increaseViewCnt, {}", e);
+        }
+    }
+
+    @Override
+    public void deleteBoard(Long id) {
+        try {
+            boardRepository.delete(id);
+        } catch(RuntimeException e) {
+            log.warn("class: BoardServiceImpl, method: deleteBoard, {}", e);
+        }
+    }
+
+    @Override
+    public int getTotalBoardsNum() {
+        return boardRepository.getTotalBoardsNum();
+    }
 }
