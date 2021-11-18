@@ -3,7 +3,6 @@ package com.example.mediacommunity.domain.board;
 import lombok.*;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 public class Board {
