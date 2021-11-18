@@ -26,7 +26,12 @@
     </tr>
     </tbody>
   </table>
-  <button th:onClick="|location.href='@{/boards/edit/{boardId}(boardId=${board.id})}'|">수정하기</button>
+  <div th:if="${editPermission}">
+    <button th:onClick="|location.href='@{/boards/edit/{boardId}(boardId=${board.id})}'|">수정하기</button>
+    <form action="" th:action="@{/boards/delete/{boardId}(boardId=${board.id})}" th:method="post">
+      <button type="submit">삭제하기</button>
+    </form>
+  </div>
   <button th:onClick="|location.href='@{/boards}'|">이전으로</button>
 </body>
 </html>
