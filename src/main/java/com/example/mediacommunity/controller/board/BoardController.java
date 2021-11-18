@@ -88,11 +88,24 @@ public class BoardController {
     }
 
     private void updateBoardToDB(long boardIdx, BoardEditingDto boardDto) {
-        Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board finding error"));
+        Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board not found error"));
         Timestamp updatedTime = Timestamp.valueOf(LocalDateTime.now().withNano(0));
+
         board.setUpdatedAt(updatedTime);
         board.setWriterId(boardDto.getWriterId());
         board.setContent(boardDto.getContent());
         boardService.modifyBoard(boardIdx, board);
+    }
+
+    @PostMapping("/delete/{boardIdx}")
+    public String deleteBoard(@PathVariable Long boardIdx,
+                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+        Board board = boardService.findBoard(boardIdx)
+                .orElseThrow(() -> new RuntimeException("board finding error"));
+
+        if (compareUserAndWriter(member, board)) {
+            boardService.deleteBoard(boardIdx);
+        }
+        return "redirect:/boards";
     }
 }
