@@ -27,11 +27,17 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final Pagination pagination;
 
     @GetMapping
-    public String boards(Model model) {
-        List<Board> boards = boardService.findAllBoards();
+    public String boards(Model model, @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "1") int initRange) {
+        int totalBoardsNum = boardService.getTotalBoardsNum();
+        pagination.pageInfo(page, initRange, totalBoardsNum);
+
+        List<Board> boards = boardService.findBoards(pagination);
         model.addAttribute("boards", boards);
+        model.addAttribute("pagination", pagination);
         return "community/boards";
     }
 
