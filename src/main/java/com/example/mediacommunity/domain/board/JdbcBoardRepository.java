@@ -1,5 +1,6 @@
 package com.example.mediacommunity.domain.board;
 
+import com.example.mediacommunity.service.Pagination;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
