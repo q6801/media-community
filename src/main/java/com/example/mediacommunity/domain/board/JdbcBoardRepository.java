@@ -51,6 +51,14 @@ public class JdbcBoardRepository implements BoardRepository{
     }
 
     @Override
+    public List<Board> findBoards(Pagination pagination) {
+        String sql = "select * from board limit ?, ?";
+        return jdbcTemplate.query(sql, rowMapper(),
+                pagination.getStartingBoardNumInPage(),
+                pagination.getOnePageBoardsNum());
+    }
+
+    @Override
     public List<Board> findAll() {
         String sql = "select * from board";
         return jdbcTemplate.query(sql, rowMapper());
