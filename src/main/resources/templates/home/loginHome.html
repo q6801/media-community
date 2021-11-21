@@ -6,7 +6,7 @@
 </head>
 <body>
 <div>
-  <span th:text="|${nickname}님 환영합니다.|">대충 닉네임</span>
+  <a th:text="|${nickname}님 환영합니다.|" th:href="@{/member}">대충 닉네임</a>
 </div>
 <button th:onclick="|location.href='@{/boards}'|">게시판으로 이동</button>
 <form th:action="@{/logout}" method="post">
