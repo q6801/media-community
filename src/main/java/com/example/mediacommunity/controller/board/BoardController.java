@@ -4,9 +4,11 @@ import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.board.Board;
 import com.example.mediacommunity.domain.board.BoardAddingDto;
 import com.example.mediacommunity.domain.board.BoardEditingDto;
+import com.example.mediacommunity.domain.heart.Heart;
 import com.example.mediacommunity.domain.member.Member;
 import com.example.mediacommunity.service.Pagination;
 import com.example.mediacommunity.service.board.BoardService;
+import com.example.mediacommunity.service.heart.HeartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final Pagination pagination;
+    private final HeartService heartService;
 
     @GetMapping
     public String boards(Model model, @RequestParam(defaultValue = "1") int page) {
@@ -46,15 +49,15 @@ public class BoardController {
     @GetMapping("/{boardIdx}")
     public String board(@PathVariable long boardIdx, Model model, @RequestParam(defaultValue = "1") int page,
                         @SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member member) {
-
+        model.addAttribute("member", member); // 좋아요는 로그인한 사용자만 보임
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
-
-        increaseViewCnt(boardIdx, board);
         model.addAttribute("board", board);
+        increaseViewCnt(boardIdx, board);
         if (compareUserAndWriter(member, board)) {
             model.addAttribute("editPermission", true);
         }
+        insertHeartStatus(boardIdx, model, member);
         rgstrBoardsWithPages(page, model);
 
         return "community/board";
@@ -70,6 +73,14 @@ public class BoardController {
             return true;
         }
         return false;
+    }
+
+    private void insertHeartStatus(long boardIdx, Model model, Member member) {
+        model.addAttribute("heartNums", heartService.cntHearts(boardIdx));
+        if (member != null && heartService.findTheHeart(new Heart(boardIdx, member.getLoginId())).isPresent())
+            model.addAttribute("heart", true);
+        else
+            model.addAttribute("heart", false);
     }
 
     @GetMapping("/add")
