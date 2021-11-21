@@ -15,5 +15,6 @@ public interface MemberService {
     List<Member> findAllMembers();
     Member login(LoginDto loginDto, BindingResult bindingResult);
     void signUp(SignUpDto signUpDto, BindingResult bindingResult);
+    void signOut(Member member);
     void clear();
 }
