@@ -7,5 +7,6 @@ public interface MemberRepository {
     Member findByLoginId(String loginId);
     Member findByNickName(String nickName);
     List<Member> findAll();
+    void deleteMember(Member member);
     void clear();
 }
