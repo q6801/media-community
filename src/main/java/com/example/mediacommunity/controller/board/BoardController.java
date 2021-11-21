@@ -6,9 +6,12 @@ import com.example.mediacommunity.domain.board.BoardAddingDto;
 import com.example.mediacommunity.domain.board.BoardEditingDto;
 import com.example.mediacommunity.domain.heart.Heart;
 import com.example.mediacommunity.domain.member.Member;
+import com.example.mediacommunity.domain.reply.Reply;
+import com.example.mediacommunity.domain.reply.ReplyDto;
 import com.example.mediacommunity.service.Pagination;
 import com.example.mediacommunity.service.board.BoardService;
 import com.example.mediacommunity.service.heart.HeartService;
+import com.example.mediacommunity.service.reply.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -31,6 +34,7 @@ public class BoardController {
     private final BoardService boardService;
     private final Pagination pagination;
     private final HeartService heartService;
+    private final ReplyService replyService;
 
     @GetMapping
     public String boards(Model model, @RequestParam(defaultValue = "1") int page) {
@@ -60,6 +64,9 @@ public class BoardController {
         insertHeartStatus(boardIdx, model, member);
         rgstrBoardsWithPages(page, model);
 
+        List<Reply> replies = replyService.findAllReplies(boardIdx);
+        model.addAttribute("replies", replies);
+        model.addAttribute("reply", new ReplyDto());
         return "community/board";
     }
 
