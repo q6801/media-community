@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface MemberService {
     Member save(Member member);
-    Optional<Member> findMemberById(String loginId) ;
-    Optional<Member> findMemberByName(String nickName);
+    Member findMemberById(String loginId) ;
+    Member findMemberByName(String nickName);
     List<Member> findAllMembers();
     Member login(LoginDto loginDto, BindingResult bindingResult);
     void signUp(SignUpDto signUpDto, BindingResult bindingResult);
