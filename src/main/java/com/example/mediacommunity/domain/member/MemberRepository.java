@@ -1,11 +1,12 @@
 package com.example.mediacommunity.domain.member;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepository {
     Member save(Member member);
-    Member findByLoginId(String loginId);
-    Member findByNickName(String nickName);
+    Optional<Member> findByLoginId(String loginId);
+    Optional<Member> findByNickName(String nickName);
     List<Member> findAll();
     void clear();
 }
