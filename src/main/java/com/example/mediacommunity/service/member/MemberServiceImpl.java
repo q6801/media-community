@@ -4,27 +4,31 @@ import com.example.mediacommunity.domain.member.LoginDto;
 import com.example.mediacommunity.domain.member.Member;
 import com.example.mediacommunity.domain.member.MemberRepository;
 import com.example.mediacommunity.domain.member.SignUpDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Slf4j
 @Service
-public class MemberServiceImpl implements MemberService{
-    @Autowired
-    MemberRepository memberRepository;
+@RequiredArgsConstructor
+public class MemberServiceImpl implements MemberService {
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Member save(Member member) {
         try {
             return memberRepository.save(member);
-        } catch(DataAccessException e) {
+        } catch (DataAccessException e) {
             log.warn("class: MemberServiceImpl, method: save, ", e);
             throw new RuntimeException("saveBoard failed");
         }
@@ -61,15 +65,14 @@ public class MemberServiceImpl implements MemberService{
 
         if (member.isEmpty()) {
             bindingResult.reject("idFail");
-        }
-        else if (!passwordEquals(loginDto, member.get())) {
+        } else if (!passwordEquals(loginDto, member.get())) {
             bindingResult.reject("passwordFail");
         }
         return member.orElseGet(() -> new Member());
     }
 
     private boolean passwordEquals(LoginDto loginDto, Member member) {
-        return member.getPassword().equals(loginDto.getPassword());
+        return passwordEncoder.matches(loginDto.getPassword(), member.getPassword());
     }
 
     @Override
@@ -80,7 +83,7 @@ public class MemberServiceImpl implements MemberService{
         if (bindingResult.hasErrors()) return;                              // blank가 있는 경우
         if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
             save(new Member(signUpDto.getLoginId(),
-                    signUpDto.getPassword(), signUpDto.getNickname()));
+                    passwordEncoder.encode(signUpDto.getPassword()), signUpDto.getNickname()));
         } else {
             bindingResult.reject("signUpFail");
         }
