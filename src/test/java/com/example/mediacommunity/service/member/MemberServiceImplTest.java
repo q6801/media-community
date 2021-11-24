@@ -39,10 +39,10 @@ class MemberServiceImplTest {
                 new Member("test123sfd", "test12!", "helloWorld"));
 
         //when
-        Optional<Member> foundMember = memberService.findMemberById("test123sfd");
+        Member foundMember = memberService.findMemberById("test123sfd");
 
         //then
-        Assertions.assertThat(foundMember.get()).isEqualTo(savedMember);
+        Assertions.assertThat(foundMember).isEqualTo(savedMember);
     }
 
     @Test
@@ -50,10 +50,10 @@ class MemberServiceImplTest {
         //given
         String notMemberId = "test12";
         //when
-        Optional<Member> foundMember = memberService.findMemberById(notMemberId);
+        Member foundMember = memberService.findMemberById(notMemberId);
 
         //then
-        Assertions.assertThat(foundMember.isEmpty()).isEqualTo(true);
+        Assertions.assertThat(foundMember).isEqualTo(true);
     }
 
     @Test
@@ -63,10 +63,10 @@ class MemberServiceImplTest {
                 new Member("test123sfd", "test12!", "helloWorld"));
 
         //when
-        Optional<Member> foundMember = memberService.findMemberByName("helloWorld");
+        Member foundMember = memberService.findMemberByName("helloWorld");
 
         //then
-        Assertions.assertThat(foundMember.get()).isEqualTo(savedMember);
+        Assertions.assertThat(foundMember).isEqualTo(savedMember);
     }
 
     @Test
