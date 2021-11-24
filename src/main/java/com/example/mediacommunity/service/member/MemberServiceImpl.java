@@ -31,25 +31,17 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Optional<Member> findMemberById(String loginId) {
-        try {
-            Member member = memberRepository.findByLoginId(loginId);
-            return Optional.ofNullable(member);
-        } catch (DataAccessException e) {
-            log.warn("class: MemberServiceImpl, method: findMemberById, ", e);
-            return Optional.empty();
-        }
+    public Member findMemberById(String loginId) throws DataAccessException{
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new RuntimeException("MemberServiceImpl, findMemberById"));
+        return member;
     }
 
     @Override
-    public Optional<Member> findMemberByName(String nickName) {
-        try {
-            Member member = memberRepository.findByNickName(nickName);
-            return Optional.ofNullable(member);
-        } catch (DataAccessException e) {
-            log.warn("class: MemberServiceImpl, method: findMemberByName, ", e);
-            return Optional.empty();
-        }
+    public Member findMemberByName(String nickName) {
+            Member member = memberRepository.findByNickName(nickName)
+                    .orElseThrow(() -> new RuntimeException("MemberServiceImpl, findMemberByName"));
+            return member;
     }
 
     @Override
@@ -65,7 +57,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Member login(LoginDto loginDto, BindingResult bindingResult) {
         String loginId = loginDto.getLoginId();
-        Optional<Member> member = findMemberById(loginId);
+        Optional<Member> member = memberRepository.findByLoginId(loginId);
 
         if (member.isEmpty()) {
             bindingResult.reject("idFail");
@@ -82,8 +74,8 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public void signUp(SignUpDto signUpDto, BindingResult bindingResult) {
-        Optional<Member> duplicatedId = findMemberById(signUpDto.getLoginId());
-        Optional<Member> duplicatedName = findMemberByName(signUpDto.getNickname());
+        Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
+        Optional<Member> duplicatedName = memberRepository.findByNickName(signUpDto.getNickname());
 
         if (bindingResult.hasErrors()) return;                              // blank가 있는 경우
         if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
