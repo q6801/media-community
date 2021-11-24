@@ -1,5 +1,6 @@
 package com.example.mediacommunity.controller.board;
 
+import com.example.mediacommunity.annotation.AuthUser;
 import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.board.Board;
 import com.example.mediacommunity.domain.board.BoardAddingDto;
@@ -45,7 +46,7 @@ public class BoardController {
 
     @GetMapping("/{boardIdx}")
     public String board(@PathVariable long boardIdx, Model model, @RequestParam(defaultValue = "1") int page,
-                        @SessionAttribute(name=SessionConst.LOGIN_MEMBER, required = false) Member member) {
+                        @AuthUser Member member) {
 
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
@@ -79,9 +80,8 @@ public class BoardController {
     }
 
     @PostMapping("/add")
-    public String addBoard(@Valid @ModelAttribute("board") BoardAddingDto boardDto,
-                           BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+    public String addBoard(@Valid @ModelAttribute("board") BoardAddingDto boardDto, BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes, @AuthUser Member member) {
         if(bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "community/addBoard";
@@ -98,8 +98,7 @@ public class BoardController {
     }
 
     @GetMapping("/edit/{boardIdx}")
-    public String editForm(@PathVariable long boardIdx, Model model,
-                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+    public String editForm(@PathVariable long boardIdx, Model model, @AuthUser Member member) {
 
         Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board not found error"));
         if (compareUserAndWriter(member, board)) {
@@ -131,8 +130,7 @@ public class BoardController {
     }
 
     @PostMapping("/delete/{boardIdx}")
-    public String deleteBoard(@PathVariable Long boardIdx,
-                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+    public String deleteBoard(@PathVariable Long boardIdx, @AuthUser Member member) {
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
 
