@@ -2,11 +2,13 @@ package com.example.mediacommunity.domain.member;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -23,15 +25,24 @@ public class JdbcMemberRepository implements MemberRepository{
     }
 
     @Override
-    public Member findByLoginId(String loginId) {
-        String sql = "select * from members where loginId = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper(), loginId);
+    public Optional<Member> findByLoginId(String loginId) {
+        try {
+            String sql = "select * from members where loginId = ?";
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper(), loginId));
+        } catch(DataAccessException e) {
+            return Optional.empty();
+        }
+
     }
 
     @Override
-    public Member findByNickName(String nickName) {
-        String sql = "select * from members where nickname=?";
-        return jdbcTemplate.queryForObject(sql, rowMapper(), nickName);
+    public Optional<Member> findByNickName(String nickName) {
+        try {
+            String sql = "select * from members where nickname=?";
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper(), nickName));
+        } catch(DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
