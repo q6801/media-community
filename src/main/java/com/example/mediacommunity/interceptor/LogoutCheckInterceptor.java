@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-// 로그아웃인 사용자가 접근이 불가능 곳에 접근할 때
+/**
+ * 로그아웃인 사용자가 접근이 불가능 곳에 접근할 때
+ */
 public class LogoutCheckInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
