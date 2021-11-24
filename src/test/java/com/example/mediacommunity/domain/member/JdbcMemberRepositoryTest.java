@@ -28,7 +28,7 @@ class JdbcMemberRepositoryTest {
         //when
         Member savedMember = memberRepository.save(member);
         //then
-        Member findMember = memberRepository.findByLoginId(savedMember.getLoginId());
+        Member findMember = memberRepository.findByLoginId(savedMember.getLoginId()).get();
         System.out.println("findMember = " + findMember);
         System.out.println("savedMember = " + savedMember);
         assertThat(findMember).isEqualTo(savedMember);
@@ -41,7 +41,7 @@ class JdbcMemberRepositoryTest {
         //when
         Member savedMember = memberRepository.save(member);
         //then
-        Member findMember = memberRepository.findByNickName(savedMember.getNickname());
+        Member findMember = memberRepository.findByNickName(savedMember.getNickname()).get();
         assertThat(findMember).isEqualTo(savedMember);
     }
 
