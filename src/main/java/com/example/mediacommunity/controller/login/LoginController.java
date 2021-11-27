@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -42,6 +43,20 @@ public class LoginController {
 //        return "redirect:" + redirectURL;
 //    }
 
+    @PostMapping("/loginFail")
+    public String loginFail(@Valid @ModelAttribute("member") LoginDto loginDto,
+                            BindingResult bindingResult, HttpServletRequest request,
+                            @RequestParam(defaultValue = "/") String redirectURL, RedirectAttributes redirectAttributes) {
+        System.out.println("login fail");
+
+
+        if ((Boolean) request.getAttribute("idFail")) bindingResult.reject("idFail");
+        if ((Boolean) request.getAttribute("pwFail")) bindingResult.reject("pwFail");
+
+        log.info("error={}", bindingResult);
+        redirectAttributes.addAttribute(redirectURL);
+        return "/login/loginForm";
+    }
 
 //    @PostMapping("/logout")
 //    public String logout(HttpServletRequest request) {
