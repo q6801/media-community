@@ -13,7 +13,7 @@ public interface MemberService {
     Member findMemberById(String loginId) ;
     Member findMemberByName(String nickName);
     List<Member> findAllMembers();
-    Member login(LoginDto loginDto, BindingResult bindingResult);
-    void signUp(SignUpDto signUpDto, BindingResult bindingResult);
+//    Member login(LoginDto loginDto, BindingResult bindingResult);
+//    void signUp(SignUpDto signUpDto, BindingResult bindingResult);
     void clear();
 }
