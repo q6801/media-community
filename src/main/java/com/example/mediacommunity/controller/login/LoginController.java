@@ -27,27 +27,28 @@ public class LoginController {
         return "login/loginForm";
     }
 
-    @PostMapping("/login")
-    public String login(@Valid @ModelAttribute("member") LoginDto loginDto,
-                        BindingResult bindingResult, HttpServletRequest request,
-                        @RequestParam(defaultValue = "/") String redirectURL) {
+//    @PostMapping("/login")
+//    public String login(@Valid @ModelAttribute("member") LoginDto loginDto,
+//                        BindingResult bindingResult, HttpServletRequest request,
+//                        @RequestParam(defaultValue = "/") String redirectURL) {
+//
+//        Member member = memberService.login(loginDto, bindingResult);
+//        if (bindingResult.hasErrors()) {
+//            log.info("error={}", bindingResult);
+//            return "/login/loginForm";
+//        }
+//        HttpSession httpSession = request.getSession();
+//        httpSession.setAttribute(SessionConst.LOGIN_MEMBER, member);
+//        return "redirect:" + redirectURL;
+//    }
 
-        Member member = memberService.login(loginDto, bindingResult);
-        if (bindingResult.hasErrors()) {
-            log.info("error={}", bindingResult);
-            return "/login/loginForm";
-        }
-        HttpSession httpSession = request.getSession();
-        httpSession.setAttribute(SessionConst.LOGIN_MEMBER, member);
-        return "redirect:" + redirectURL;
-    }
 
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        return "redirect:/";
-    }
+//    @PostMapping("/logout")
+//    public String logout(HttpServletRequest request) {
+//        HttpSession session = request.getSession(false);
+//        if (session != null) {
+//            session.invalidate();
+//        }
+//        return "redirect:/";
+//    }
 }
