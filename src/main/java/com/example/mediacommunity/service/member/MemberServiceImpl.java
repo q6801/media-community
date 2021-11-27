@@ -58,36 +58,36 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Override
-    public Member login(LoginDto loginDto, BindingResult bindingResult) {
-        String loginId = loginDto.getLoginId();
-        Optional<Member> member = memberRepository.findByLoginId(loginId);
-
-        if (member.isEmpty()) {
-            bindingResult.reject("idFail");
-        } else if (!passwordEquals(loginDto, member.get())) {
-            bindingResult.reject("passwordFail");
-        }
-        return member.orElseGet(() -> new Member());
-    }
-
-    private boolean passwordEquals(LoginDto loginDto, Member member) {
-        return passwordEncoder.matches(loginDto.getPassword(), member.getPassword());
-    }
-
-    @Override
-    public void signUp(SignUpDto signUpDto, BindingResult bindingResult) {
-        Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
-        Optional<Member> duplicatedName = memberRepository.findByNickName(signUpDto.getNickname());
-
-        if (bindingResult.hasErrors()) return;                              // blank가 있는 경우
-        if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
-            save(new Member(signUpDto.getLoginId(),
-                    passwordEncoder.encode(signUpDto.getPassword()), signUpDto.getNickname()));
-        } else {
-            bindingResult.reject("signUpFail");
-        }
-    }
+//    @Override
+//    public Member login(LoginDto loginDto, BindingResult bindingResult) {
+//        String loginId = loginDto.getLoginId();
+//        Optional<Member> member = memberRepository.findByLoginId(loginId);
+//
+//        if (member.isEmpty()) {
+//            bindingResult.reject("idFail");
+//        } else if (!passwordEquals(loginDto, member.get())) {
+//            bindingResult.reject("passwordFail");
+//        }
+//        return member.orElseGet(() -> new Member());
+//    }
+//
+//    private boolean passwordEquals(LoginDto loginDto, Member member) {
+//        return passwordEncoder.matches(loginDto.getPassword(), member.getPassword());
+//    }
+//
+//    @Override
+//    public void signUp(SignUpDto signUpDto, BindingResult bindingResult) {
+//        Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
+//        Optional<Member> duplicatedName = memberRepository.findByNickName(signUpDto.getNickname());
+//
+//        if (bindingResult.hasErrors()) return;                              // blank가 있는 경우
+//        if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
+//            save(new Member(signUpDto.getLoginId(),
+//                    passwordEncoder.encode(signUpDto.getPassword()), signUpDto.getNickname()));
+//        } else {
+//            bindingResult.reject("signUpFail");
+//        }
+//    }
 
     @Override
     public void clear() {
