@@ -17,18 +17,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final LoginFailureHandler failureHandler;
 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.formLogin().disable().logout().disable();
-        http.authorizeRequests()
+        http
+            .authorizeRequests()
                 .antMatchers("/login", "/signup", "/", "/boards", "/boards/{^[0-9]+$}").permitAll()
                 .antMatchers("/boards/**").authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login")
                 .usernameParameter("loginId")
+                .failureHandler(failureHandler)
                 .and()
             .logout()
                 .logoutUrl("/logout")
