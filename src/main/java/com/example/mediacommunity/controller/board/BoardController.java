@@ -5,9 +5,14 @@ import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.board.Board;
 import com.example.mediacommunity.domain.board.BoardAddingDto;
 import com.example.mediacommunity.domain.board.BoardEditingDto;
+import com.example.mediacommunity.domain.heart.Heart;
 import com.example.mediacommunity.domain.member.Member;
+import com.example.mediacommunity.domain.reply.Reply;
+import com.example.mediacommunity.domain.reply.ReplyDto;
 import com.example.mediacommunity.service.Pagination;
 import com.example.mediacommunity.service.board.BoardService;
+import com.example.mediacommunity.service.heart.HeartService;
+import com.example.mediacommunity.service.reply.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -29,6 +34,8 @@ public class BoardController {
 
     private final BoardService boardService;
     private final Pagination pagination;
+    private final HeartService heartService;
+    private final ReplyService replyService;
 
     @GetMapping
     public String boards(Model model, @RequestParam(defaultValue = "1") int page) {
@@ -50,14 +57,17 @@ public class BoardController {
 
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
-
-        increaseViewCnt(boardIdx, board);
         model.addAttribute("board", board);
+        increaseViewCnt(boardIdx, board);
         if (compareUserAndWriter(member, board)) {
             model.addAttribute("editPermission", true);
         }
+        insertHeartStatus(boardIdx, model, member);
         rgstrBoardsWithPages(page, model);
 
+        List<Reply> replies = replyService.findAllReplies(boardIdx);
+        model.addAttribute("replies", replies);
+        model.addAttribute("reply", new ReplyDto());
         return "community/board";
     }
 
@@ -73,6 +83,14 @@ public class BoardController {
         return false;
     }
 
+    private void insertHeartStatus(long boardIdx, Model model, Member member) {
+        model.addAttribute("heartNums", heartService.cntHearts(boardIdx));
+        if (member != null && heartService.findTheHeart(new Heart(boardIdx, member.getLoginId())).isPresent())
+            model.addAttribute("heart", true);
+        else
+            model.addAttribute("heart", false);
+    }
+
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("board", new BoardAddingDto());
@@ -80,8 +98,9 @@ public class BoardController {
     }
 
     @PostMapping("/add")
-    public String addBoard(@Valid @ModelAttribute("board") BoardAddingDto boardDto, BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes, @AuthUser Member member) {
+    public String addBoard(@Valid @ModelAttribute("board") BoardAddingDto boardDto,
+                           BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         if(bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "community/addBoard";
@@ -98,7 +117,8 @@ public class BoardController {
     }
 
     @GetMapping("/edit/{boardIdx}")
-    public String editForm(@PathVariable long boardIdx, Model model, @AuthUser Member member) {
+    public String editForm(@PathVariable long boardIdx, Model model,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
 
         Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board not found error"));
         if (compareUserAndWriter(member, board)) {
@@ -130,7 +150,8 @@ public class BoardController {
     }
 
     @PostMapping("/delete/{boardIdx}")
-    public String deleteBoard(@PathVariable Long boardIdx, @AuthUser Member member) {
+    public String deleteBoard(@PathVariable Long boardIdx,
+                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
 

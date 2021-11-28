@@ -90,6 +90,11 @@ public class MemberServiceImpl implements MemberService {
 //    }
 
     @Override
+    public void signOut(Member member) {
+        memberRepository.deleteMember(member);
+    }
+
+    @Override
     public void clear() {
         memberRepository.clear();
     }

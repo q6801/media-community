@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button th:onClick="|location.href='@{/}'|">home</button>
+<li>member id : <span th:text="${member.loginId}"></span></li>
+<li>member nickname : <span th:text="${member.nickname}"></span></li>
+<form th:action="@{/signout}" method="post">
+    <button type="submit">삭제</button>
+</form>
+</body>
+</html>

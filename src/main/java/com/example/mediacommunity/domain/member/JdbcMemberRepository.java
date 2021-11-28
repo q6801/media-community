@@ -52,6 +52,12 @@ public class JdbcMemberRepository implements MemberRepository{
     }
 
     @Override
+    public void deleteMember(Member member) {
+        String sql = "delete from members where loginId = ?";
+        jdbcTemplate.update(sql, member.getLoginId());
+    }
+
+    @Override
     public void clear() {
         jdbcTemplate.update("delete from members");
     }
