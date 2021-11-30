@@ -1,5 +1,6 @@
 package com.example.mediacommunity.controller.login;
 
+import com.example.mediacommunity.annotation.AuthUser;
 import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.member.Member;
 import com.example.mediacommunity.service.member.MemberService;
@@ -17,8 +18,7 @@ public class SignOutController {
     private final MemberService memberService;
 
     @PostMapping("/signout")
-    public String signout(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
-                          HttpSession session) {
+    public String signout(@AuthUser Member member, HttpSession session) {
         if (session != null) {
             session.invalidate();
         }

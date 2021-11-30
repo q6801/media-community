@@ -1,5 +1,6 @@
 package com.example.mediacommunity.controller.member;
 
+import com.example.mediacommunity.annotation.AuthUser;
 import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.member.Member;
 import org.springframework.stereotype.Controller;
@@ -12,8 +13,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 @RequestMapping("/member")
 public class MemberController {
     @GetMapping()
-    public String memberInfo(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
-                             Model model) {
+    public String memberInfo(@AuthUser Member member, Model model) {
         model.addAttribute("member", member);
         return "member/memberInfo";
     }

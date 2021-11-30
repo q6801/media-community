@@ -1,5 +1,6 @@
 package com.example.mediacommunity.controller.board;
 
+import com.example.mediacommunity.annotation.AuthUser;
 import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.member.Member;
 import com.example.mediacommunity.domain.reply.Reply;
@@ -18,7 +19,7 @@ public class ReplyController {
 
     @PostMapping("/{boardIdx}")
     public String reply(@ModelAttribute ReplyDto reply, @RequestParam int page, RedirectAttributes redirectAttributes,
-                        @PathVariable Long boardIdx, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+                        @PathVariable Long boardIdx, @AuthUser Member member) {
         replyService.saveReply(new Reply(boardIdx, reply.getContent(), member.getLoginId()));
         redirectAttributes.addAttribute("page", page);
         return "redirect:/boards/{boardIdx}";

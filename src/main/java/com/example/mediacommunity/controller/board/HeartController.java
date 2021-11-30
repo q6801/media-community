@@ -1,5 +1,6 @@
 package com.example.mediacommunity.controller.board;
 
+import com.example.mediacommunity.annotation.AuthUser;
 import com.example.mediacommunity.constant.SessionConst;
 import com.example.mediacommunity.domain.heart.Heart;
 import com.example.mediacommunity.domain.member.Member;
@@ -17,7 +18,7 @@ public class HeartController {
     private final HeartService heartService;
 
     @PostMapping("/{boardIdx}")
-    public String hitTheLikeButton(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,
+    public String hitTheLikeButton(@AuthUser Member member,
                                    @PathVariable Long boardIdx, Model model, @RequestParam int page, RedirectAttributes redirectAttributes) {
 
         if (likeStatus(member, boardIdx)) {
