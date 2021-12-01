@@ -1,23 +1,24 @@
 package com.example.mediacommunity.config;
 
-import com.example.mediacommunity.service.member.UserService;
+import com.example.mediacommunity.security.CustomOAuth2UserService;
+import com.example.mediacommunity.security.CustomUserDetailsService;
+import com.example.mediacommunity.security.handler.LoginFailureHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserService userService;
+    private final CustomUserDetailsService userService;
     private final PasswordEncoder passwordEncoder;
     private final LoginFailureHandler failureHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
 
     @Override
@@ -31,7 +32,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 .loginPage("/login")
                 .usernameParameter("loginId")
+                .usernameParameter("loginId")
                 .failureHandler(failureHandler)
+                .and()
+            .oauth2Login()
+                .loginPage("/")
+                .userInfoEndpoint()
+                    .userService(customOAuth2UserService)
+                    .and()
+//                .redirectionEndpoint()
+//                    .baseUri("/")
+//                    .and()
                 .and()
             .logout()
                 .logoutUrl("/logout")
