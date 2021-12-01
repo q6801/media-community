@@ -1,6 +1,6 @@
 package com.example.mediacommunity.interceptor;
 
-import com.example.mediacommunity.constant.SessionConst;
+import com.example.mediacommunity.common.constant.SessionConst;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
