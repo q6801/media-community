@@ -1,6 +1,6 @@
-package com.example.mediacommunity.service.board;
+package com.example.mediacommunity.community.service.board;
 
-import com.example.mediacommunity.domain.board.Board;
+import com.example.mediacommunity.community.domain.board.Board;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ class BoardServiceImplTest {
     @Test
     void save() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = new Board("one", timestamp, timestamp, "good", 1);
+        Board board = new Board("one", timestamp, timestamp, "good", 1, "title");
         assertThrows(RuntimeException.class, () -> {
             boardService.save(board);
         });
@@ -34,7 +34,7 @@ class BoardServiceImplTest {
         //given
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board savedBoard = boardService.save(
-                new Board("one", timestamp, timestamp, "test", 1));
+                new Board("one", timestamp, timestamp, "test", 1, "title"));
 
         //when
         Optional<Board> foundBoard = boardService.findBoard(savedBoard.getId());
@@ -62,9 +62,9 @@ class BoardServiceImplTest {
         //given
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board savedBoard1 = boardService.save(
-                new Board("one", timestamp, timestamp, "test", 1));
+                new Board("one", timestamp, timestamp, "test", 1, "title"));
         Board savedBoard2 = boardService.save(
-                new Board("one", timestamp, timestamp, "test", 1));
+                new Board("one", timestamp, timestamp, "test", 1, "title"));
 
         //when
         List<Board> boards = boardService.findBoards("test");
@@ -78,9 +78,9 @@ class BoardServiceImplTest {
         //given
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board savedBoard1 = boardService.save(
-                new Board("one", timestamp, timestamp, "test", 1));
+                new Board("one", timestamp, timestamp, "test", 1, "title"));
         Board savedBoard2 = boardService.save(
-                new Board("one", timestamp, timestamp, "test", 1));
+                new Board("one", timestamp, timestamp, "test", 1, "title"));
 
         //when
         List<Board> boards = boardService.findAllBoards();
@@ -94,10 +94,10 @@ class BoardServiceImplTest {
         //given
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board savedBoard = boardService.save(
-                new Board("one", timestamp, timestamp, "test", 1));
+                new Board("one", timestamp, timestamp, "test", 1, "title"));
 
         //when
-        boardService.modifyBoard(savedBoard.getId(), new Board("hello world!", timestamp, timestamp, "test", 1));
+        boardService.modifyBoard(savedBoard.getId(), new Board("hello world!", timestamp, timestamp, "test", 1, "title"));
         Optional<Board> modifiedBoard = boardService.findBoard(savedBoard.getId());
 
         //then

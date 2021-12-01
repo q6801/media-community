@@ -1,4 +1,4 @@
-package com.example.mediacommunity.domain.board;
+package com.example.mediacommunity.community.domain.board;
 
 
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class JdbcBoardRepositoryTest {
     void saveAndFindById() {
         //
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = new Board("start content", timestamp, timestamp, "test", 1);
+        Board board = new Board("start content", timestamp, timestamp, "test", 1, "title");
 
         // when
         Board savedBoard = boardRepository.save(board);
@@ -40,8 +40,8 @@ class JdbcBoardRepositoryTest {
         String writerId = "test";
 
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board1 = new Board("one", timestamp, timestamp, writerId, 1);
-        Board board2 = new Board("two", timestamp, timestamp, writerId, 10);
+        Board board1 = new Board("one", timestamp, timestamp, writerId, 1, "title");
+        Board board2 = new Board("two", timestamp, timestamp, writerId, 10, "title");
 
         boardRepository.save(board1);
         boardRepository.save(board2);
@@ -53,8 +53,8 @@ class JdbcBoardRepositoryTest {
     @Test
     void findAll() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board1 = new Board("one", timestamp, timestamp, "test", 1);
-        Board board2 = new Board("two", timestamp, timestamp, "test", 10);
+        Board board1 = new Board("one", timestamp, timestamp, "test", 1, "title");
+        Board board2 = new Board("two", timestamp, timestamp, "test", 10, "title");
 
         boardRepository.save(board1);
         boardRepository.save(board2);
