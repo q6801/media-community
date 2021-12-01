@@ -1,18 +1,17 @@
-package com.example.mediacommunity.controller.board;
+package com.example.mediacommunity.community.controller.board;
 
-import com.example.mediacommunity.annotation.AuthUser;
-import com.example.mediacommunity.constant.SessionConst;
-import com.example.mediacommunity.domain.board.Board;
-import com.example.mediacommunity.domain.board.BoardAddingDto;
-import com.example.mediacommunity.domain.board.BoardEditingDto;
-import com.example.mediacommunity.domain.heart.Heart;
-import com.example.mediacommunity.domain.member.Member;
-import com.example.mediacommunity.domain.reply.Reply;
-import com.example.mediacommunity.domain.reply.ReplyDto;
-import com.example.mediacommunity.service.Pagination;
-import com.example.mediacommunity.service.board.BoardService;
-import com.example.mediacommunity.service.heart.HeartService;
-import com.example.mediacommunity.service.reply.ReplyService;
+import com.example.mediacommunity.common.annotation.AuthUser;
+import com.example.mediacommunity.community.domain.board.Board;
+import com.example.mediacommunity.community.domain.board.BoardAddingDto;
+import com.example.mediacommunity.community.domain.board.BoardEditingDto;
+import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.domain.member.Member;
+import com.example.mediacommunity.community.domain.reply.Reply;
+import com.example.mediacommunity.community.domain.reply.ReplyDto;
+import com.example.mediacommunity.community.service.Pagination;
+import com.example.mediacommunity.community.service.board.BoardService;
+import com.example.mediacommunity.community.service.heart.HeartService;
+import com.example.mediacommunity.community.service.reply.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -58,6 +57,7 @@ public class BoardController {
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
         model.addAttribute("board", board);
+        model.addAttribute("member", member);   // 좋아요는 로그인해야 누를 수 있음
         increaseViewCnt(boardIdx, board);
         if (compareUserAndWriter(member, board)) {
             model.addAttribute("editPermission", true);
@@ -100,7 +100,7 @@ public class BoardController {
     @PostMapping("/add")
     public String addBoard(@Valid @ModelAttribute("board") BoardAddingDto boardDto,
                            BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+                           @AuthUser Member member) {
         if(bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "community/addBoard";
@@ -118,7 +118,7 @@ public class BoardController {
 
     @GetMapping("/edit/{boardIdx}")
     public String editForm(@PathVariable long boardIdx, Model model,
-                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+                           @AuthUser Member member) {
 
         Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board not found error"));
         if (compareUserAndWriter(member, board)) {
@@ -151,7 +151,7 @@ public class BoardController {
 
     @PostMapping("/delete/{boardIdx}")
     public String deleteBoard(@PathVariable Long boardIdx,
-                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+                              @AuthUser Member member) {
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
 
