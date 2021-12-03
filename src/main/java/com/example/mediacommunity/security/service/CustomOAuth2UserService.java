@@ -1,11 +1,13 @@
-package com.example.mediacommunity.security;
+package com.example.mediacommunity.security.service;
 
-import com.example.mediacommunity.security.info.OAuth2UserInfo;
-import com.example.mediacommunity.security.info.OAuth2UserInfoFactory;
+import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
+import com.example.mediacommunity.security.userInfo.OAuth2UserInfoFactory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberRepository;
 import com.example.mediacommunity.community.domain.member.UserInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -46,14 +48,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             member = savedMember.get();
         }
         return new UserInfo(member);
-
-//        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("USER")),
-//                oAuth2User.getAttributes(),
-//                userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName());
     }
 
     private Member createMember(OAuth2UserInfo userInfo) {
-        Member member = new Member(userInfo.getId(), "", userInfo.getName());
+        Member member = new Member(userInfo.getId(), "", userInfo.getId());
         return memberRepository.save(member);
     }
 }
