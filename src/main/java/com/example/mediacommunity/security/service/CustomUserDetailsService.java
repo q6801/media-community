@@ -1,4 +1,4 @@
-package com.example.mediacommunity.security;
+package com.example.mediacommunity.security.service;
 
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberRepository;
