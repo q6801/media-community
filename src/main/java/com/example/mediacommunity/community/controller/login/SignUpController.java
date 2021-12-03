@@ -1,7 +1,7 @@
 package com.example.mediacommunity.community.controller.login;
 
 import com.example.mediacommunity.community.domain.member.SignUpDto;
-import com.example.mediacommunity.security.CustomUserDetailsService;
+import com.example.mediacommunity.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
