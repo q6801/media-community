@@ -1,4 +1,4 @@
-package com.example.mediacommunity.security.info;
+package com.example.mediacommunity.security.userInfo;
 
 import java.util.Map;
 
