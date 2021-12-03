@@ -1,6 +1,6 @@
-package com.example.mediacommunity.security.info.impl;
+package com.example.mediacommunity.security.userInfo.impl;
 
-import com.example.mediacommunity.security.info.OAuth2UserInfo;
+import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
 
 import java.util.Map;
 
