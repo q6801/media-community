@@ -35,8 +35,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         System.out.println("oAuth2User = " + oAuth2User);
         System.out.println("userRequest = " + userRequest);
 
+        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, oAuth2User.getAttributes());
+        System.out.println("userInfo = " + userInfo);
 
-        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo("GOOGLE", oAuth2User.getAttributes());
         Optional<Member> savedMember = memberRepository.findByLoginId(userInfo.getId());
         Member member;
         if (savedMember.isEmpty()) {
