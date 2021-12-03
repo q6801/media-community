@@ -1,8 +1,8 @@
 package com.example.mediacommunity.config;
 
-import com.example.mediacommunity.security.CustomOAuth2UserService;
-import com.example.mediacommunity.security.CustomUserDetailsService;
-import com.example.mediacommunity.security.handler.LoginFailureHandler;
+import com.example.mediacommunity.security.service.CustomOAuth2UserService;
+import com.example.mediacommunity.security.service.CustomUserDetailsService;
+import com.example.mediacommunity.security.handler.FormLoginFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService userService;
     private final PasswordEncoder passwordEncoder;
-    private final LoginFailureHandler failureHandler;
+    private final FormLoginFailureHandler failureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
 
 
