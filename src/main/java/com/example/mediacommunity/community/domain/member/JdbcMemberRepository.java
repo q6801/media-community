@@ -18,9 +18,9 @@ public class JdbcMemberRepository implements MemberRepository{
 
     @Override
     public Member save(Member member) {
-        String sql = "insert into members values(?, ?, ?)";
+        String sql = "insert into members values(?, ?, ?, ?)";
         jdbcTemplate.update(sql, member.getLoginId(),
-                member.getPassword(), member.getNickname());
+                member.getPassword(), member.getNickname(), member.getProvider());
         return member;
     }
 
@@ -66,6 +66,7 @@ public class JdbcMemberRepository implements MemberRepository{
         return (rs, rowNum) -> new Member(
                 rs.getString("loginId"),
                 rs.getString("password"),
-                rs.getString("nickname"));
+                rs.getString("nickname"),
+                rs.getString("provider"));
     }
 }
