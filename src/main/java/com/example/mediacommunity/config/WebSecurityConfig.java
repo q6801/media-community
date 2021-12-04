@@ -26,8 +26,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.formLogin().disable().logout().disable();
         http
             .authorizeRequests()
-                .antMatchers("/login", "/signup", "/", "/boards", "/boards/{^[0-9]+$}").permitAll()
-                .antMatchers("/boards/**").authenticated()
+                .antMatchers("/login", "/signup", "/", "/boards").permitAll()
+                .regexMatchers("^/boards\\/[0-9]+.\\w+.\\w+").permitAll()
+                .antMatchers("/**").authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login")
