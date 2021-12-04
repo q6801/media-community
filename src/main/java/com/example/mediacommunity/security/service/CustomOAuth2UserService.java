@@ -4,10 +4,8 @@ import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
 import com.example.mediacommunity.security.userInfo.OAuth2UserInfoFactory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberRepository;
-import com.example.mediacommunity.community.domain.member.UserInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -43,7 +41,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Optional<Member> savedMember = memberRepository.findByLoginId(userInfo.getId());
         Member member;
         if (savedMember.isEmpty()) {
-            member = createMember(userInfo);
+            member = createMember(userInfo, registrationId);
         } else{
             member = savedMember.get();
         }
