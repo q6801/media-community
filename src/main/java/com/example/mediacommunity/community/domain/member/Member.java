@@ -10,6 +10,7 @@ public class Member {
     private String loginId;
     private String password;
     private String nickname;
+    private String provider;
 
     public Member() {};
 }
