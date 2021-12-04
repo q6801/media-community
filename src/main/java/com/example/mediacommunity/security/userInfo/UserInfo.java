@@ -1,5 +1,6 @@
-package com.example.mediacommunity.community.domain.member;
+package com.example.mediacommunity.security.userInfo;
 
+import com.example.mediacommunity.community.domain.member.Member;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +16,7 @@ public class UserInfo extends User implements OAuth2User {
 
     public UserInfo(Member member) {
         super(member.getLoginId(), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        member.setPassword("");
         this.member = member;
     }
 
