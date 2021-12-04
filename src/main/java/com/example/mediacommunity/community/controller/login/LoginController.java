@@ -32,7 +32,7 @@ public class LoginController {
                             @RequestParam(defaultValue = "/") String redirectURL, RedirectAttributes redirectAttributes) {
         System.out.println("login fail");
 
-
+        if ((Boolean) request.getAttribute("providerFail")) bindingResult.reject("providerFail");
         if ((Boolean) request.getAttribute("idFail")) bindingResult.reject("idFail");
         if ((Boolean) request.getAttribute("pwFail")) bindingResult.reject("pwFail");
 
