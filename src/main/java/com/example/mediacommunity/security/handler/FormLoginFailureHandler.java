@@ -1,5 +1,6 @@
 package com.example.mediacommunity.security.handler;
 
+import com.example.mediacommunity.security.BadProviderException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -17,8 +18,11 @@ public class FormLoginFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         Boolean idFail = false;
         Boolean pwFail = false;
+        Boolean providerFail = false;
 
-        if (exception instanceof InternalAuthenticationServiceException) {
+        if (exception instanceof BadProviderException) {
+            providerFail = true;
+        } else if (exception instanceof InternalAuthenticationServiceException) {
             idFail = true;
         } else if (exception instanceof BadCredentialsException) {
             pwFail = true;
@@ -26,6 +30,7 @@ public class FormLoginFailureHandler implements AuthenticationFailureHandler {
 
         request.setAttribute("idFail", idFail);
         request.setAttribute("pwFail", pwFail);
+        request.setAttribute("providerFail", providerFail);
         request.getRequestDispatcher("/loginFail").forward(request, response);
     }
 }
