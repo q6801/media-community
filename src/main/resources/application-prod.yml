@@ -1,0 +1,23 @@
+spring:
+  config:
+    activte:
+      on-profile: "prod"
+  datasource:
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    url: "mysql://media-community-db.cidduoynnhpa.ap-northeast-2.rds.amazonaws.com:3306/community?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
+    username: "q6801"
+    password: "dkakwhsrds"
+#  port: 80
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "prodOauth"
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirectUri: http://dremean.com/login/oauth2/code/kakao
