@@ -38,7 +38,7 @@ public class LoginController {
 
         log.info("error={}", bindingResult);
         redirectAttributes.addAttribute(redirectURL);
-        return "/login/loginForm";
+        return "login/loginForm";
     }
 
 
