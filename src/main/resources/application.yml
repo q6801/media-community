@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    group:
+      "dev": "common, oauth, dev, devOauth"
+      "prod": "common, oauth, prod"
+    active: dev
+
+---
+
+spring:
+  config:
+    activte:
+      on-profile: "common"
+  messages:
+    basename: errors
