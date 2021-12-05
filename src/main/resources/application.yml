@@ -2,8 +2,8 @@ spring:
   profiles:
     group:
       "dev": "common, oauth, dev, devOauth"
-      "prod": "common, oauth, prod"
-    active: dev
+      "prod": "common, oauth, prod, prodOauth"
+    active: prod
 
 ---
 
