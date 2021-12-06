@@ -3,8 +3,12 @@ spring:
     group:
       "dev": "common, oauth, dev, devOauth"
       "prod": "common, oauth, prod, prodOauth"
-    active: prod
+    active: dev
 
+jasypt:
+  encryptor:
+#    password: password
+    bean: jasyptStringEncryptor
 ---
 
 spring:

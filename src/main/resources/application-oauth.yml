@@ -7,12 +7,12 @@ spring:
       client:
         registration:
           google:
-            client-id: 826900381-078ctivsr4j9kpg250vg6j9a7jejla76.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ENC(gGpIGnEuu22aDGSabJqsrJ7vRCscLteWwKoibx1SlXlDZMWq2cu3baQlnlZqVwYM7sN3OrrR61bdLEocRBloOp06PMukUnE1HySmmiVTOOs=)
+            client-secret: ENC(xo+qkuyTZzWevioM4YspvTncviO4VwEin3BlUrTyLGe6jLTA3pDdsd9+9pNSTGak)
             scope: profile, email
           kakao:
-            clientId: 846e578cc2e14ad0325827f9f46b9dd5
-            clientSecret: hXjgvqFdfB6ELDfpKVhJKhb7FeSQBNdn
+            clientId: ENC(rMB410fsgvQ6OfVYmB5zlCx8BYHBRnWz/uDbtt/HABfnAc4aVkqnDL0zTXSX6R16)
+            clientSecret: ENC(rGvG/hkThR4SQkUGgoLTs8ZSaK+ejSHdOD+vOStv0GO+btdq4pbuV01WW+TRbWBY)
             clientAuthentication-method: Post
             scope: profile_nickname, profile_image, account_email
             clientName: Kakao
