@@ -5,11 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-<button th:onClick="|location.href='@{/}'|">home</button>
+<p><button th:onClick="|location.href='@{/}'|">home</button></p>
+<li><img th:src="${member.imageUrl}" alt=""></li>
 <li>member id : <span th:text="${member.loginId}"></span></li>
 <li>member nickname : <span th:text="${member.nickname}"></span></li>
-<form th:action="@{/signout}" method="post">
-    <button type="submit">삭제</button>
-</form>
+<button th:onClick="|location.href='@{/member/edit}'|">변경</button>
 </body>
 </html>
