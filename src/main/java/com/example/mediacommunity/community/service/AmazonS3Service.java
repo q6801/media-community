@@ -2,6 +2,7 @@ package com.example.mediacommunity.community.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,17 +36,12 @@ public class AmazonS3Service {
     }
 
     public String uploadImg(String fileName, MultipartFile multipartFile) throws IOException {
-        File uploadFile = convert(multipartFile);
-        amazonS3.putObject(new PutObjectRequest(bucket, fileName, uploadFile));
+        ObjectMetadata metadata = new ObjectMetadata();
+        String contentType = multipartFile.getContentType();
+        metadata.setContentType(contentType);
+        amazonS3.putObject(new PutObjectRequest(bucket, fileName,
+                multipartFile.getInputStream(), metadata));
         return "uploadS3 success";
-    }
-
-    public File convert(MultipartFile multipartFile) throws IOException{
-        File uploadFile = new File(multipartFile.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(uploadFile);
-        fos.write(multipartFile.getBytes());
-        fos.close();
-        return uploadFile;
     }
 
     public void deleteFile(String bucket, String deleteFile) {
