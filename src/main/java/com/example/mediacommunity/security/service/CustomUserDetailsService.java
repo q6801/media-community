@@ -3,6 +3,7 @@ package com.example.mediacommunity.security.service;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberRepository;
 import com.example.mediacommunity.community.domain.member.SignUpDto;
+import com.example.mediacommunity.community.service.AmazonS3Service;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import com.example.mediacommunity.security.BadProviderException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AmazonS3Service amazonS3Service;
 
     @Override
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
@@ -40,7 +42,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (bindingResult.hasErrors()) return;                              // blank가 있는 경우
         if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
             memberRepository.save(new Member(signUpDto.getLoginId(),
-                    passwordEncoder.encode(signUpDto.getPassword()), signUpDto.getNickname(), "local"));
+                    passwordEncoder.encode(signUpDto.getPassword()),
+                    signUpDto.getNickname(), "local", amazonS3Service.searchDefaultProfile()));
         } else {
             bindingResult.reject("signUpFail");
         }

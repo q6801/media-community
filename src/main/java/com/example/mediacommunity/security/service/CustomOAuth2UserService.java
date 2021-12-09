@@ -1,9 +1,9 @@
 package com.example.mediacommunity.security.service;
 
-import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
-import com.example.mediacommunity.security.userInfo.OAuth2UserInfoFactory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberRepository;
+import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
+import com.example.mediacommunity.security.userInfo.OAuth2UserInfoFactory;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -49,7 +49,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Member createMember(OAuth2UserInfo userInfo, String registrationId) {
-        Member member = new Member(userInfo.getId(), "", userInfo.getId(), registrationId);
+        Member member = new Member(userInfo.getId(), "", userInfo.getId(), registrationId, userInfo.getImageUrl());
         return memberRepository.save(member);
     }
 }

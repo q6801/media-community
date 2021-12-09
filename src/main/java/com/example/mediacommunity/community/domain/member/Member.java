@@ -11,6 +11,7 @@ public class Member {
     private String password;
     private String nickname;
     private String provider;
+    private String imageUrl;
 
     public Member() {};
 }
