@@ -75,7 +75,7 @@ public class MemberServiceImpl implements MemberService {
             return Optional.empty();
         }
 
-        if (foundMember.isEmpty() || compareloginId(loginId, foundMember)) { // 자기 자신이 아니라면
+        if (foundMember.isPresent() && compareloginId(loginId, foundMember)) { // 자기 자신이 아니라면
             bindingResult.reject("nicknameDuplicated");
             return Optional.empty();
         } else {
