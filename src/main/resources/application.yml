@@ -9,6 +9,18 @@ jasypt:
   encryptor:
 #    password: password
     bean: jasyptStringEncryptor
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ENC(8x2SySHHil1bw9KvbsYqZNsbwCaDkYMxDordejUtaq0=)
+      secretKey: ENC(U/twQBZQyRj5KdnFGZHGiZ0g4NpEafjB65rB8NeREptkqRTAS6EjawbDvBIB459ZZosGZL3sW9w=)
+    S3:
+      bucket: dremean
+
+path:
+  img: static/img/
+
 ---
 
 spring:
