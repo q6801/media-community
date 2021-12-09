@@ -17,10 +17,22 @@ public class JdbcMemberRepository implements MemberRepository{
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    public void updateImageURL(String loginId, String url) {
+        String sql = "update members set imageUrl=? where loginId=?";
+        jdbcTemplate.update(sql, url, loginId);
+    }
+
+    @Override
+    public void updateNickname(String loginId, String nickname) {
+        String sql = "update members set nickname=? where loginId=?";
+        jdbcTemplate.update(sql, nickname, loginId);
+    }
+
+    @Override
     public Member save(Member member) {
-        String sql = "insert into members values(?, ?, ?, ?)";
+        String sql = "insert into members values(?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, member.getLoginId(),
-                member.getPassword(), member.getNickname(), member.getProvider());
+                member.getPassword(), member.getNickname(), member.getProvider(), member.getImageUrl());
         return member;
     }
 
@@ -67,6 +79,7 @@ public class JdbcMemberRepository implements MemberRepository{
                 rs.getString("loginId"),
                 rs.getString("password"),
                 rs.getString("nickname"),
-                rs.getString("provider"));
+                rs.getString("provider"),
+                rs.getString("imageUrl"));
     }
 }
