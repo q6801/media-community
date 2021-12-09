@@ -40,7 +40,7 @@ class BoardServiceImplTest {
         //given
         String writerId = "test!!!!";
 
-        Member member1 = new Member(writerId, "test1!", "HelloWorld1", "local");
+        Member member1 = new Member(writerId, "test1!", "HelloWorld1", "local", "");
         memberRepository.save(member1);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board savedBoard = boardService.save(
@@ -72,7 +72,7 @@ class BoardServiceImplTest {
         //given
         String writerId = "test!!!!";
 
-        Member member1 = new Member(writerId, "test1!", "HelloWorld1", "local");
+        Member member1 = new Member(writerId, "test1!", "HelloWorld1", "local", "");
         memberRepository.save(member1);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board savedBoard1 = boardService.save(
@@ -92,7 +92,7 @@ class BoardServiceImplTest {
         //given
         String writerId = "test!!!!";
 
-        Member member1 = new Member(writerId, "test1!", "HelloWorld1", "local");
+        Member member1 = new Member(writerId, "test1!", "HelloWorld1", "local", "");
         memberRepository.save(member1);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board savedBoard1 = boardService.save(
@@ -112,7 +112,7 @@ class BoardServiceImplTest {
         //given
         String writerId = "test!!!!";
 
-        Member member1 = new Member(writerId, "test1!", "HelloWorld1", "local");
+        Member member1 = new Member(writerId, "test1!", "HelloWorld1", "local", "");
         memberRepository.save(member1);
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board savedBoard = boardService.save(

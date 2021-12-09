@@ -21,7 +21,7 @@ class MemberServiceImplTest {
     @Test
     void save() {
         //given
-        Member member = new Member(null, "test12!", "HelloWorld12", "local");
+        Member member = new Member(null, "test12!", "HelloWorld12", "local", "");
 
         //when
 
@@ -33,7 +33,7 @@ class MemberServiceImplTest {
     void findMemberById() {
         //given
         Member savedMember = memberService.save(
-                new Member("test123sfd", "test12!", "helloWorld", "local"));
+                new Member("test123sfd", "test12!", "helloWorld", "local", ""));
 
         //when
         Member foundMember = memberService.findMemberById("test123sfd");
@@ -57,7 +57,7 @@ class MemberServiceImplTest {
     void findMemberByName() {
         //given
         Member savedMember = memberService.save(
-                new Member("test123sfd", "test12!", "helloWorld", "local"));
+                new Member("test123sfd", "test12!", "helloWorld", "local", ""));
 
         //when
         Member foundMember = memberService.findMemberByName("helloWorld");
@@ -70,9 +70,9 @@ class MemberServiceImplTest {
     void findAllMembers() {
         //given
         Member savedMember1 = memberService.save(
-                new Member("test1231", "test12!", "helloWorld1", "local"));
+                new Member("test1231", "test12!", "helloWorld1", "local", ""));
         Member savedMember2 = memberService.save(
-                new Member("test1232", "test12!", "helloWorld2", "local"));
+                new Member("test1232", "test12!", "helloWorld2", "local", ""));
 
         //when
         List<Member> allMembers = memberService.findAllMembers();
