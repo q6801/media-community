@@ -8,6 +8,8 @@ public interface MemberRepository {
     Optional<Member> findByLoginId(String loginId);
     Optional<Member> findByNickName(String nickName);
     List<Member> findAll();
+    void updateImageURL(String loginId, String url);
+    void updateNickname(String loginId, String nickname);
     void deleteMember(Member member);
     void clear();
 }
