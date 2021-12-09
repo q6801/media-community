@@ -1,7 +1,7 @@
 package com.example.mediacommunity.security.userInfo;
 
-import com.example.mediacommunity.security.userInfo.impl.GoogleOAuth2UserInfo;
-import com.example.mediacommunity.security.userInfo.impl.KakaoOAuth2UserInfo;
+import com.example.mediacommunity.security.userInfo.OAuthUserInfoImpl.GoogleOAuth2UserInfo;
+import com.example.mediacommunity.security.userInfo.OAuthUserInfoImpl.KakaoOAuth2UserInfo;
 
 import java.util.Map;
 
