@@ -1,16 +1,19 @@
 package com.example.mediacommunity.community.service.member;
 
 import com.example.mediacommunity.community.domain.member.Member;
+import com.example.mediacommunity.community.domain.member.MemberEditDto;
+import org.springframework.validation.BindingResult;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberService {
     Member save(Member member);
     Member findMemberById(String loginId) ;
     Member findMemberByName(String nickName);
     List<Member> findAllMembers();
-//    Member login(LoginDto loginDto, BindingResult bindingResult);
-//    void signUp(SignUpDto signUpDto, BindingResult bindingResult);
+    Optional<String> updateProfile(String loginId, MemberEditDto member, BindingResult bindingResult) throws IOException;
     void clear();
     void signOut(Member member);
 }
