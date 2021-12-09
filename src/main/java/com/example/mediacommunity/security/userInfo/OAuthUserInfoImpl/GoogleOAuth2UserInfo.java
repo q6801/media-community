@@ -1,4 +1,4 @@
-package com.example.mediacommunity.security.userInfo.impl;
+package com.example.mediacommunity.security.userInfo.OAuthUserInfoImpl;
 
 import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
 

@@ -1,4 +1,4 @@
-package com.example.mediacommunity.security.userInfo.impl;
+package com.example.mediacommunity.security.userInfo.OAuthUserInfoImpl;
 
 import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
 
@@ -30,10 +30,12 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
     @Override
     public String getImageUrl() {
-        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
-        if (properties == null) {
+        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+        Map<String, Object> profile = (Map<String, Object>) account.get("profile");
+        if (profile == null) {
             return null;
         }
-        return properties.get("thumbnail_image").toString();
+        System.out.println("profile = " + profile);
+        return profile.get("thumbnail_image_url").toString();
     }
 }
