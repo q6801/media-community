@@ -4,63 +4,47 @@ import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 class MemberServiceImplTest {
-    @Autowired
-    MemberService memberService;
+    @Mock
+    MemberRepository memberRepository;
 
-    @Test
-    void save() {
-        //given
-        Member member = new Member(null, "test12!", "HelloWorld12", "local", "");
-
-        //when
-
-        //then
-        assertThrows(RuntimeException.class, () -> memberService.save(member));
-    }
+    @InjectMocks
+    MemberServiceImpl memberService;
 
     @Test
     void findMemberById() {
         //given
-        Member savedMember = memberService.save(
-                new Member("test123sfd", "test12!", "helloWorld", "local", ""));
+        Member savedMember = getStubMemberList().get(0);
+        System.out.println("memberRepository = " + memberRepository);
+        given(memberRepository.findByLoginId(savedMember.getLoginId())).willReturn(Optional.of(savedMember));
 
         //when
-        Member foundMember = memberService.findMemberById("test123sfd");
+        Member foundMember = memberService.findMemberById(savedMember.getLoginId());
 
         //then
         Assertions.assertThat(foundMember).isEqualTo(savedMember);
     }
 
     @Test
-    void failToFindMemberById() {
-//        //given
-//        String notMemberId = "test12";
-//        //when
-//        Member foundMember = memberService.findMemberById(notMemberId);
-//
-//        //then
-//        Assertions.assertThat(foundMember).isEqualTo(true);
-    }
-
-    @Test
     void findMemberByName() {
         //given
-        Member savedMember = memberService.save(
-                new Member("test123sfd", "test12!", "helloWorld", "local", ""));
+        Member savedMember = getStubMemberList().get(0);
+        given(memberRepository.findByNickName(savedMember.getNickname())).willReturn(Optional.of(savedMember));
 
         //when
-        Member foundMember = memberService.findMemberByName("helloWorld");
+        Member foundMember = memberService.findMemberByName(savedMember.getNickname());
 
         //then
         Assertions.assertThat(foundMember).isEqualTo(savedMember);
@@ -69,10 +53,9 @@ class MemberServiceImplTest {
     @Test
     void findAllMembers() {
         //given
-        Member savedMember1 = memberService.save(
-                new Member("test1231", "test12!", "helloWorld1", "local", ""));
-        Member savedMember2 = memberService.save(
-                new Member("test1232", "test12!", "helloWorld2", "local", ""));
+        Member savedMember1 = getStubMemberList().get(0);
+        Member savedMember2= getStubMemberList().get(1);
+        given(memberRepository.findAll()).willReturn(getStubMemberList());
 
         //when
         List<Member> allMembers = memberService.findAllMembers();
@@ -80,4 +63,14 @@ class MemberServiceImplTest {
         //then
         Assertions.assertThat(allMembers).contains(savedMember1, savedMember2);
     }
+
+
+
+    private List<Member> getStubMemberList() {
+        return Arrays.asList(
+                new Member("test121", "test1!", "HelloWorld1", "local", ""),
+                new Member("test1232", "test!", "HelloWorld", "local", "")
+        );
+    }
+
 }
