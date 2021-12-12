@@ -85,7 +85,7 @@ public class BoardController {
 
     private void insertHeartStatus(long boardIdx, Model model, Member member) {
         model.addAttribute("heartNums", heartService.cntHearts(boardIdx));
-        if (member != null && heartService.findTheHeart(new Heart(boardIdx, member.getLoginId())).isPresent())
+        if (member != null && heartService.findTheHeart(boardIdx, member.getLoginId()).isPresent())
             model.addAttribute("heart", true);
         else
             model.addAttribute("heart", false);

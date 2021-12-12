@@ -3,7 +3,7 @@ package com.example.mediacommunity.community.domain.heart;
 import java.util.List;
 
 public interface HeartRepository {
-    Heart findTheHeart(Heart heart);
+    Heart findTheHeart(Long boardId, String memberId);
     Heart addHeart(Heart heart);
     List<Heart> findLikingBoards(String memberId);
     List<Heart> findLikingMembers(Long boardId);

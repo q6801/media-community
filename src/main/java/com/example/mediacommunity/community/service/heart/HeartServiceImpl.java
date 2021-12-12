@@ -17,9 +17,9 @@ public class HeartServiceImpl implements HeartService{
     private HeartRepository heartRepository;
 
     @Override
-    public Optional<Heart> findTheHeart(Heart heart) {
+    public Optional<Heart> findTheHeart(Long boardId, String memberId) {
         try {
-            Heart theLikeStatus = heartRepository.findTheHeart(heart);
+            Heart theLikeStatus = heartRepository.findTheHeart(boardId, memberId);
             return Optional.ofNullable(theLikeStatus);
         } catch(DataAccessException e) {
             return Optional.empty();
@@ -30,7 +30,7 @@ public class HeartServiceImpl implements HeartService{
     public Boolean toggleTheHeart(Heart info) {
 
         try {
-            Optional<Heart> theLikeStatus = findTheHeart(info);
+            Optional<Heart> theLikeStatus = findTheHeart(info.getBoardId(), info.getMemberId());
             if (theLikeStatus.isEmpty()) {
                 heartRepository.addHeart(info);
                 return true;

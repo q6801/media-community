@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HeartService {
-    Optional<Heart> findTheHeart(Heart heart);
+    Optional<Heart> findTheHeart(Long boardId, String memberId);
     /**
      * @param heart
      * @return 좋아요 true, 안좋아요는 false

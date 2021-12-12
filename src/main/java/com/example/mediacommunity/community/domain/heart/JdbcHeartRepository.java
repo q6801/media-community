@@ -18,9 +18,9 @@ public class JdbcHeartRepository implements HeartRepository{
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Heart findTheHeart(Heart heart) {
+    public Heart findTheHeart(Long boardId, String memberId) {
         String sql = "select * from heart where boardId=? and memberId=?";
-        return jdbcTemplate.queryForObject(sql, rowMapper(), heart.getBoardId(), heart.getMemberId());
+        return jdbcTemplate.queryForObject(sql, rowMapper(), boardId, memberId);
     }
 
     @Override
