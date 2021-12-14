@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,7 +40,7 @@ class BoardServiceImplTest {
         Optional<Board> foundBoard = boardService.findBoard(board0.getId());
 
         //then
-        Assertions.assertThat(foundBoard.get()).isEqualTo(board0);
+        assertThat(foundBoard.get()).isEqualTo(board0);
 
     }
 
@@ -57,23 +59,25 @@ class BoardServiceImplTest {
         List<Board> boards = boardService.findBoards(boardWriter);
 
         //then
-        Assertions.assertThat(boards).contains(board0, board1);
+        assertThat(boards).contains(board0, board1);
     }
 
     @Test
     void findAllBoards() {
         //given
         Board board0 = getStubBoardList().get(0);
-        Board board1 = getStubBoardList().get(0);
-
-        List<Board> foundBoards = getStubBoardList();
-        given(boardRepository.findAll()).willReturn(foundBoards);
+        Board board1 = getStubBoardList().get(1);
+        given(boardRepository.findAll()).willReturn(getStubBoardList());
+        assertThat(getStubBoardList()).contains(board0, board1);
 
         //when
         List<Board> boards = boardService.findAllBoards();
 
         //then
-        Assertions.assertThat(boards).contains(board0, board1);
+        System.out.println("boards = " + boards);
+        System.out.println("board0 = " + board0);
+        System.out.println("board1 = " + board1);
+        assertThat(boards).contains(board0, board1);
     }
 
     @Test
@@ -88,21 +92,29 @@ class BoardServiceImplTest {
         Board modifiedBoard = boardRepository.findById(board0.getId());
 
         //then
-        Assertions.assertThat(board0).isNotEqualTo(modifiedBoard);
-        Assertions.assertThat(board0.getContent()).isNotEqualTo(modifiedBoard.getContent());
+        assertThat(board0).isNotEqualTo(modifiedBoard);
+        assertThat(board0.getContent()).isNotEqualTo(modifiedBoard.getContent());
     }
 
-    private List<Member> getStubMemberList() {
-        return Collections.singletonList(
-                new Member("test121", "test1!", "HelloWorld1", "local", "")
-        );
+    @Test()
+    void something() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Board.Builder().content(null).build());
     }
+
 
     private List<Board> getStubBoardList() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         return Arrays.asList(
-                new Board("start content", timestamp, timestamp, "test121", 1, "title"),
-                new Board("two", timestamp, timestamp, "test121", 10, "title")
+                new Board.Builder().content("start content")
+                        .createdAt(timestamp).updatedAt(timestamp)
+                        .writerId("test121")
+                        .viewCnt(1).title("title").build(),
+                new Board.Builder().content("start 2")
+                        .createdAt(timestamp).updatedAt(timestamp)
+                        .writerId("test121").viewCnt(10).title("title").build(),
+                new Board.Builder().build()
         );
     }
+
 }

@@ -32,10 +32,11 @@ public class JdbcBoardRepository implements BoardRepository{
         boardMap.put("writerId", board.getWriterId());
         boardMap.put("title", board.getTitle());
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(boardMap));
-        board.setId(key.longValue());
-
+        Board savedBoard = new Board.Builder(board)
+                .id(key.longValue())
+                .build();
         log.info("saved success = {}", board);
-        return board;
+        return savedBoard;
     }
 
     @Override
@@ -92,15 +93,15 @@ public class JdbcBoardRepository implements BoardRepository{
 
     RowMapper<Board> rowMapper() {
         return (rs, rowNum) -> {
-            Board board = new Board(
-                    rs.getString("content"),
-                    rs.getTimestamp("createdAt"),
-                    rs.getTimestamp("updatedAt"),
-                    rs.getString("writerId"),
-                    rs.getInt("viewCnt"),
-                    rs.getString("title")
-            );
-            board.setId(rs.getLong("id"));
+            Board board = new Board.Builder()
+                    .content(rs.getString("content"))
+                    .writerId(rs.getString("writerId"))
+                    .viewCnt(rs.getInt("viewCnt"))
+                    .title(rs.getString("title"))
+                    .id(rs.getLong("id"))
+                    .createdAt(rs.getTimestamp("createdAt"))
+                    .updatedAt(rs.getTimestamp("updatedAt"))
+                    .build();
             return board;
         };
     }

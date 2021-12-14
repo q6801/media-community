@@ -71,9 +71,11 @@ public class BoardController {
         return "community/board";
     }
 
-    private void increaseViewCnt(long boardIdx, Board board) {
+    private Board increaseViewCnt(long boardIdx, Board board) {
         boardService.increaseViewCnt(boardIdx, board.getViewCnt());
-        board.setViewCnt(board.getViewCnt() + 1);
+        return new Board.Builder(board)
+                .viewCnt(board.getViewCnt() + 1)
+                .build();
     }
 
     private boolean compareUserAndWriter(Member member, Board board) {
@@ -112,7 +114,15 @@ public class BoardController {
 
     private Board saveBoardToDB(BoardAddingDto boardDto, Member member) {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = new Board(boardDto.getContent(), timestamp, timestamp, member.getLoginId(), 0, boardDto.getTitle());
+        Board board = new Board
+                .Builder()
+                .content(boardDto.getContent())
+                .writerId(member.getLoginId())
+                .title(boardDto.getTitle())
+                .createdAt(timestamp)
+                .updatedAt(timestamp)
+                .viewCnt(0)
+                .build();
         return boardService.save(board);
     }
 
@@ -143,10 +153,12 @@ public class BoardController {
         Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board not found error"));
         Timestamp updatedTime = Timestamp.valueOf(LocalDateTime.now().withNano(0));
 
-        board.setUpdatedAt(updatedTime);
-        board.setContent(boardDto.getContent());
-        board.setTitle(boardDto.getTitle());
-        boardService.modifyBoard(boardIdx, board);
+        Board modifiedBoard = new Board.Builder(board)
+                .updatedAt(updatedTime)
+                .content(boardDto.getContent())
+                .title(boardDto.getTitle())
+                .build();
+        boardService.modifyBoard(boardIdx, modifiedBoard);
     }
 
     @PostMapping("/delete/{boardIdx}")
