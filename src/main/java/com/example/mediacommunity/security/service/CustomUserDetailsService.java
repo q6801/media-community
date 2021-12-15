@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final AmazonS3Service amazonS3Service;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         Member member = memberRepository.findByLoginId(loginId).orElseThrow(() ->
                 new InternalAuthenticationServiceException("UserService return null member, which means id is wrong"));
@@ -35,9 +37,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userInfo;
     }
 
+    @Transactional
     public void save(SignUpDto signUpDto, BindingResult bindingResult) {
         Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
-        Optional<Member> duplicatedName = memberRepository.findByNickName(signUpDto.getNickname());
+        Optional<Member> duplicatedName = memberRepository.findByNickname(signUpDto.getNickname());
 
         if (bindingResult.hasErrors()) return;                              // blank가 있는 경우
         if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
