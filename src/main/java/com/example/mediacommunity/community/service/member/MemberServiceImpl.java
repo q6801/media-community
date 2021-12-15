@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -22,6 +21,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final AmazonS3Service amazonS3Service;
@@ -106,11 +106,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void signOut(Member member) {
-        memberRepository.deleteMember(member);
+        Member deleteMember = memberRepository.findByLoginId(member.getLoginId())
+                .orElseThrow(() -> new RuntimeException("member 없음"));
+        memberRepository.deleteMember(deleteMember);
     }
 
-    @Override
-    public void clear() {
-        memberRepository.clear();
-    }
 }
