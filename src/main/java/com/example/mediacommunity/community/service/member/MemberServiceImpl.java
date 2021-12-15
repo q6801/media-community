@@ -48,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findMemberByName(String nickName) {
-            Member member = memberRepository.findByNickName(nickName)
+            Member member = memberRepository.findByNickname(nickName)
                     .orElseThrow(() -> new RuntimeException("MemberServiceImpl, findMemberByName"));
             return member;
     }
@@ -64,32 +64,32 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    @Transactional
-    public Optional<String> updateProfile(String loginId, MemberEditDto member, BindingResult bindingResult) throws IOException {
-        MultipartFile file = member.getFile();
-        String newNickname = member.getNickname();
+    public Optional<String> updateProfile(String loginId, MemberEditDto memberEditDto, BindingResult bindingResult) throws IOException {
+        MultipartFile file = memberEditDto.getFile();
+        String newNickname = memberEditDto.getNickname();
+        Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
+        Optional<Member> nameDuplicatedMember = memberRepository.findByNickname(newNickname);
         Optional<String> imageUrl = Optional.empty();
-        Optional<Member> foundMember = memberRepository.findByNickName(newNickname);
 
         if (bindingResult.hasErrors()) {
             return Optional.empty();
         }
 
-        if (foundMember.isPresent() && compareloginId(loginId, foundMember)) { // 자기 자신이 아니라면
+        if (nameDuplicatedMember.isPresent() && compareloginId(loginId, nameDuplicatedMember)) { // 중복인 id가 있고 자기 자신이 아니라면
             bindingResult.reject("nicknameDuplicated");
             return Optional.empty();
         } else {
-            memberRepository.updateNickname(loginId, member.getNickname());
+            member.setNickname(memberEditDto.getNickname());
         }
 
         if(!file.isEmpty()) {
             String ext = extractExt(file.getOriginalFilename());
             String storeFileName = loginId + "Profile" + "." + ext;
 
-            amazonS3Service.uploadImg(path + storeFileName, member.getFile());
+            amazonS3Service.uploadImg(path + storeFileName, memberEditDto.getFile());
             amazonS3Service.searchImage(path, storeFileName);
             imageUrl = Optional.ofNullable(amazonS3Service.searchImage(path, storeFileName));
-            memberRepository.updateImageURL(loginId, imageUrl.get());
+            member.setImageUrl(imageUrl.get());
         }
 
         return imageUrl;
