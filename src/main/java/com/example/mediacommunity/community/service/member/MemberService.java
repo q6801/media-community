@@ -14,6 +14,5 @@ public interface MemberService {
     Member findMemberByName(String nickName);
     List<Member> findAllMembers();
     Optional<String> updateProfile(String loginId, MemberEditDto member, BindingResult bindingResult) throws IOException;
-    void clear();
     void signOut(Member member);
 }
