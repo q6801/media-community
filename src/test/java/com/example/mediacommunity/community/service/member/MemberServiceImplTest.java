@@ -41,7 +41,7 @@ class MemberServiceImplTest {
     void findMemberByName() {
         //given
         Member savedMember = getStubMemberList().get(0);
-        given(memberRepository.findByNickName(savedMember.getNickname())).willReturn(Optional.of(savedMember));
+        given(memberRepository.findByNickname(savedMember.getNickname())).willReturn(Optional.of(savedMember));
 
         //when
         Member foundMember = memberService.findMemberByName(savedMember.getNickname());
