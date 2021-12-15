@@ -1,7 +1,7 @@
 package com.example.mediacommunity.security.handler;
 
 import com.example.mediacommunity.community.domain.member.Member;
-import com.example.mediacommunity.community.domain.member.MemberRepository;
+import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

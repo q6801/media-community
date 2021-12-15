@@ -1,5 +1,6 @@
-package com.example.mediacommunity.community.domain.member;
+package com.example.mediacommunity.community.repository.member;
 
+import com.example.mediacommunity.community.domain.member.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @Transactional
-public class JpaMemberRepository implements MemberRepository{
+public class JpaMemberRepository implements MemberRepository {
     @PersistenceContext
     EntityManager em;
 

@@ -1,7 +1,7 @@
 package com.example.mediacommunity.community.service.reply;
 
 import com.example.mediacommunity.community.domain.reply.Reply;
-import com.example.mediacommunity.community.domain.reply.ReplyRepository;
+import com.example.mediacommunity.community.repository.reply.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

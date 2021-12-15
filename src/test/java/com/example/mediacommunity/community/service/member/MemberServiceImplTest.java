@@ -1,7 +1,7 @@
 package com.example.mediacommunity.community.service.member;
 
 import com.example.mediacommunity.community.domain.member.Member;
-import com.example.mediacommunity.community.domain.member.MemberRepository;
+import com.example.mediacommunity.community.repository.member.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

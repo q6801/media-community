@@ -1,4 +1,6 @@
-package com.example.mediacommunity.community.domain.reply;
+package com.example.mediacommunity.community.repository.reply;
+
+import com.example.mediacommunity.community.domain.reply.Reply;
 
 import java.util.List;
 

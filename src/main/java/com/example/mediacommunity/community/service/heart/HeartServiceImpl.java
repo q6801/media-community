@@ -1,7 +1,7 @@
 package com.example.mediacommunity.community.service.heart;
 
 import com.example.mediacommunity.community.domain.heart.Heart;
-import com.example.mediacommunity.community.domain.heart.HeartRepository;
+import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

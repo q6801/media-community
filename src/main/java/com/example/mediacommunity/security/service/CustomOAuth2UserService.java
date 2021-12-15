@@ -1,7 +1,7 @@
 package com.example.mediacommunity.security.service;
 
 import com.example.mediacommunity.community.domain.member.Member;
-import com.example.mediacommunity.community.domain.member.MemberRepository;
+import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
 import com.example.mediacommunity.security.userInfo.OAuth2UserInfoFactory;
 import com.example.mediacommunity.security.userInfo.UserInfo;

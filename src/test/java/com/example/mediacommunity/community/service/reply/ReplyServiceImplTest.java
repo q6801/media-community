@@ -1,8 +1,7 @@
 package com.example.mediacommunity.community.service.reply;
 
-import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.reply.Reply;
-import com.example.mediacommunity.community.domain.reply.ReplyRepository;
+import com.example.mediacommunity.community.repository.reply.ReplyRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReplyServiceImplTest {

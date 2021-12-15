@@ -1,5 +1,7 @@
-package com.example.mediacommunity.community.domain.heart;
+package com.example.mediacommunity.community.repository.heart;
 
+import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,7 +15,7 @@ import java.util.List;
 
 @Slf4j
 @Repository
-public class JdbcHeartRepository implements HeartRepository{
+public class JdbcHeartRepository implements HeartRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

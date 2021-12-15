@@ -1,4 +1,6 @@
-package com.example.mediacommunity.community.domain.heart;
+package com.example.mediacommunity.community.repository.heart;
+
+import com.example.mediacommunity.community.domain.heart.Heart;
 
 import java.util.List;
 

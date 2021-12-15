@@ -1,4 +1,6 @@
-package com.example.mediacommunity.community.domain.member;
+package com.example.mediacommunity.community.repository.member;
+
+import com.example.mediacommunity.community.domain.member.Member;
 
 import java.util.List;
 import java.util.Optional;

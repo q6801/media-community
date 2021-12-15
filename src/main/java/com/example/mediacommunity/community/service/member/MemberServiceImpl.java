@@ -2,7 +2,7 @@ package com.example.mediacommunity.community.service.member;
 
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
-import com.example.mediacommunity.community.domain.member.MemberRepository;
+import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.community.service.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
