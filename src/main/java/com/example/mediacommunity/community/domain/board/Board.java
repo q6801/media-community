@@ -1,14 +1,24 @@
 package com.example.mediacommunity.community.domain.board;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.util.Assert;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
-//@ToString
+@Entity
 @EqualsAndHashCode
+@NoArgsConstructor
 public class Board {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String content;
     private Timestamp createdAt;
@@ -17,27 +27,26 @@ public class Board {
     private int viewCnt;
     private String title;
 
+    public void updateBoardWithDto(BoardEditingDto updateParam) {
+        this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
+        this.content = updateParam.getContent();
+        this.title = updateParam.getTitle();
+    }
+
+    public void increaseViewCnt() {
+        this.viewCnt += 1;
+    }
+
     public static class Builder {
         private String content;
         private String writerId;
         private int viewCnt;
         private String title;
-
         private Timestamp createdAt;
         private Timestamp updatedAt;
         private Long id;
 
         public Builder() {
-        }
-
-        public Builder(Board board) {
-            this.content = board.getContent();
-            this.writerId = board.getWriterId();
-            this.title = board.getTitle();
-            this.viewCnt = board.getViewCnt();
-            this.id = board.getId();
-            this.createdAt = board.getCreatedAt();
-            this.updatedAt = board.getUpdatedAt();
         }
 
         public Builder content(String val) {
