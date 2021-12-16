@@ -58,7 +58,8 @@ public class BoardController {
                 .orElseThrow(() -> new RuntimeException("board finding error"));
         model.addAttribute("board", board);
         model.addAttribute("member", member);   // 좋아요는 로그인해야 누를 수 있음
-        increaseViewCnt(boardIdx, board);
+
+        boardService.increaseViewCnt(boardIdx, board.getViewCnt());
         if (compareUserAndWriter(member, board)) {
             model.addAttribute("editPermission", true);
         }
@@ -69,13 +70,6 @@ public class BoardController {
         model.addAttribute("replies", replies);
         model.addAttribute("reply", new ReplyDto());
         return "community/board";
-    }
-
-    private Board increaseViewCnt(long boardIdx, Board board) {
-        boardService.increaseViewCnt(boardIdx, board.getViewCnt());
-        return new Board.Builder(board)
-                .viewCnt(board.getViewCnt() + 1)
-                .build();
     }
 
     private boolean compareUserAndWriter(Member member, Board board) {
@@ -145,20 +139,8 @@ public class BoardController {
             log.info("errors={}", bindingResult);
             return "community/editBoard";
         }
-        updateBoardToDB(boardIdx, boardDto);
+        boardService.modifyBoard(boardIdx, boardDto);
         return "redirect:/boards/{boardIdx}";
-    }
-
-    private void updateBoardToDB(long boardIdx, BoardEditingDto boardDto) {
-        Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board not found error"));
-        Timestamp updatedTime = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-
-        Board modifiedBoard = new Board.Builder(board)
-                .updatedAt(updatedTime)
-                .content(boardDto.getContent())
-                .title(boardDto.getTitle())
-                .build();
-        boardService.modifyBoard(boardIdx, modifiedBoard);
     }
 
     @PostMapping("/delete/{boardIdx}")
