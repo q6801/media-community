@@ -1,12 +1,14 @@
 package com.example.mediacommunity.community.service.board;
 
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardRepository;
+import com.example.mediacommunity.community.domain.board.BoardEditingDto;
+import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.Pagination;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@Transactional
 public class BoardServiceImpl implements BoardService{
     @Autowired
     BoardRepository boardRepository;
@@ -67,9 +70,10 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void modifyBoard(Long boardIdx, Board updateParam) {
+    public void modifyBoard(Long boardIdx, BoardEditingDto updateParam) {
         try {
-            boardRepository.update(boardIdx, updateParam);
+            Board board = boardRepository.findById(boardIdx);
+            board.updateBoardWithDto(updateParam);
         } catch(RuntimeException e) {
             log.warn("class: BoardServiceImpl, method: modifyBoard, {}", e);
         }
@@ -78,7 +82,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public void increaseViewCnt(Long id, int viewCnt) {
         try {
-            boardRepository.increaseViewCnt(id, viewCnt);
+            boardRepository.findById(id).increaseViewCnt();
         } catch(RuntimeException e) {
             log.warn("class: BoardServiceImpl, method: increaseViewCnt, {}", e);
         }
