@@ -1,5 +1,6 @@
-package com.example.mediacommunity.community.domain.reply;
+package com.example.mediacommunity.community.repository.reply;
 
+import com.example.mediacommunity.community.domain.reply.Reply;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcReplyRepository implements ReplyRepository{
+public class JdbcReplyRepository implements ReplyRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
