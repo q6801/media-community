@@ -2,17 +2,13 @@ package com.example.mediacommunity.community.domain.reply;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -21,11 +17,12 @@ public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    private Long boardId;
+
     private String content;
-//    private String replyer;
+
     @UpdateTimestamp
     private Timestamp createdAt;
+
     @CreationTimestamp
     private Timestamp updatedAt;
 
@@ -62,8 +59,6 @@ public class Reply {
     }
 
     public Reply(String content) {
-//        this.boardId = boardId;
         this.content = content;
-//        this.replyer = replyer;
     }
 }
