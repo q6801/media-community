@@ -18,17 +18,27 @@ public class JpaMemberRepository implements MemberRepository {
     @PersistenceContext
     EntityManager em;
 
-//    @Override
-//    public void updateImageURL(String loginId, String url) {
+    /**
+     * jpa에서는 update 메서드가 필요 없다.
+     * @param loginId
+     * @param url
+     */
+    @Override
+    public void updateImageURL(String loginId, String url) {
 //        String sql = "update members set imageUrl=? where loginId=?";
 //        jdbcTemplate.update(sql, url, loginId);
-//    }
+    }
 
-//    @Override
-//    public void updateNickname(String loginId, String nickname) {
+    /**
+     * jpa에서는 update 메서드가 필요 없다.
+     * @param loginId
+     * @param nickname
+     */
+    @Override
+    public void updateNickname(String loginId, String nickname) {
 //        String sql = "update members set nickname=? where loginId=?";
 //        jdbcTemplate.update(sql, nickname, loginId);
-//    }
+    }
 
     @Override
     public Member save(Member member) {
