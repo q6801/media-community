@@ -8,4 +8,5 @@ import java.util.List;
 public interface ReplyService {
     Reply saveReply(Reply reply);
     List<Reply> findAllReplies(Long boardId);
+    void reply(Long boardId, String memberId, String content);
 }
