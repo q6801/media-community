@@ -3,9 +3,10 @@ package com.example.mediacommunity.community.repository.heart;
 import com.example.mediacommunity.community.domain.heart.Heart;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HeartRepository {
-    Heart findTheHeart(Long boardId, String memberId);
+    Optional<Heart> findTheHeart(Long boardId, String memberId);
     Heart addHeart(Heart heart);
     List<Heart> findLikingBoards(String memberId);
     List<Heart> findLikingMembers(Long boardId);
