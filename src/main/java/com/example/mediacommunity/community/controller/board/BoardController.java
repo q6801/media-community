@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -34,7 +35,6 @@ public class BoardController {
     private final BoardService boardService;
     private final Pagination pagination;
     private final HeartService heartService;
-    private final ReplyService replyService;
 
     @GetMapping
     public String boards(Model model, @RequestParam(defaultValue = "1") int page) {
@@ -52,28 +52,27 @@ public class BoardController {
 
     @GetMapping("/{boardIdx}")
     public String board(@PathVariable long boardIdx, Model model, @RequestParam(defaultValue = "1") int page,
-                        @AuthUser Member member) {
+                        @AuthUser Member authUser) {
 
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
         model.addAttribute("board", board);
-        model.addAttribute("member", member);   // 좋아요는 로그인해야 누를 수 있음
 
+        if (authUser != null) {
+            model.addAttribute("memberAuth", authUser);   // 좋아요는 로그인해야 누를 수 있음
+        }
         boardService.increaseViewCnt(boardIdx, board.getViewCnt());
-        if (compareUserAndWriter(member, board)) {
+        if (compareUserAndWriter(authUser, board)) {
             model.addAttribute("editPermission", true);
         }
-        insertHeartStatus(boardIdx, model, member);
+        insertHeartStatus(board, model, authUser);
         rgstrBoardsWithPages(page, model);
 
-        List<Reply> replies = replyService.findAllReplies(boardIdx);
-        model.addAttribute("replies", replies);
-        model.addAttribute("reply", new ReplyDto());
         return "community/board";
     }
 
     private boolean compareUserAndWriter(Member member, Board board) {
-        if (member != null  && member.getLoginId().equals(board.getWriterId())) {
+        if (member != null  && board.getMember().equals(member)) {
             return true;
         }
         return false;
