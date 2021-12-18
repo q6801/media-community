@@ -79,9 +79,10 @@ public class BoardController {
         return false;
     }
 
-    private void insertHeartStatus(long boardIdx, Model model, Member member) {
-        model.addAttribute("heartNums", heartService.cntHearts(boardIdx));
-        if (member != null && heartService.findTheHeart(boardIdx, member.getLoginId()).isPresent())
+    private void insertHeartStatus(Board board, Model model, Member member) {
+        model.addAttribute("heartNums", heartService.cntHearts(board.getId()));
+        Optional<Heart> heart = heartService.findTheHeart(board.getId(), member.getLoginId());
+        if (member != null && heart.isPresent())
             model.addAttribute("heart", true);
         else
             model.addAttribute("heart", false);
@@ -108,15 +109,13 @@ public class BoardController {
 
     private Board saveBoardToDB(BoardAddingDto boardDto, Member member) {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = new Board
-                .Builder()
+        Board board = new Board.Builder()
                 .content(boardDto.getContent())
-                .writerId(member.getLoginId())
                 .title(boardDto.getTitle())
                 .createdAt(timestamp)
                 .updatedAt(timestamp)
-                .viewCnt(0)
-                .build();
+                .viewCnt(0).build();
+        board.setMember(member);
         return boardService.save(board);
     }
 
@@ -144,11 +143,9 @@ public class BoardController {
     }
 
     @PostMapping("/delete/{boardIdx}")
-    public String deleteBoard(@PathVariable Long boardIdx,
-                              @AuthUser Member member) {
+    public String deleteBoard(@PathVariable Long boardIdx, @AuthUser Member member) {
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
-
         if (compareUserAndWriter(member, board)) {
             boardService.deleteBoard(boardIdx);
         }
