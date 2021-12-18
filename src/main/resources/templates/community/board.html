@@ -14,7 +14,7 @@
       <thead>
       <tr>
         <th>title</th>
-        <th>writerId</th>
+        <th>writer</th>
         <th>좋아요 수</th>
         <th>viewCnt</th>
         <th>createdAt</th>
@@ -25,7 +25,7 @@
       <tbody>
       <tr>
         <td th:text="${board.title}"></td>
-        <td th:text="${board.writerId}"></td>
+        <td th:text="${board.member.nickname}"></td>
         <td th:text="${heartNums}"></td>
         <td th:text="${board.viewCnt}"></td>
         <td th:text="${board.createdAt}"></td>
@@ -42,7 +42,7 @@
       </form>
     </div>
 
-    <form th:action="@{|/heart/${board.id}|(page=*{page})}" method="post" th:if="${member}">
+    <form th:action="@{|/heart/${board.id}|(page=*{page})}" method="post" th:if="${memberAuth}">
       <div th:text="${heart}"></div>
       <button th:if="!${heart}">좋아요</button>
       <button th:if="${heart}">안좋아요</button>
@@ -69,7 +69,7 @@
       </thead>
       <tbody>
         <tr th:each="reply : ${replies}">
-          <td th:text="${reply.replyer}"></td>
+          <td th:text="${reply.member.nickname}"></td>
           <td th:text="${reply.content}"></td>
           <td th:text="${reply.createdAt}"></td>
           <td th:text="${reply.updatedAt}"></td>
@@ -83,7 +83,7 @@
       <thead>
       <tr>
         <th>title</th>
-        <th>writerId</th>
+        <th>writer</th>
         <th>viewCnt</th>
         <th>createdAt</th>
         <th>updatedAt</th>
@@ -92,7 +92,7 @@
       <tbody>
       <tr th:each="board, boardStat:${boards}">
         <td th:classappend="${board.id} == __${boardIdx}__ ? page"><a href="" th:href="@{|/boards/${board.id}|(page=*{page})}" th:text="${board.title}"></a></td>
-        <td th:text="${board.writerId}"></td>
+        <td th:text="${board.member.nickname}"></td>
         <td th:text="${board.viewCnt}"></td>
         <td th:text="${board.createdAt}"></td>
         <td th:text="${board.updatedAt}"></td>
