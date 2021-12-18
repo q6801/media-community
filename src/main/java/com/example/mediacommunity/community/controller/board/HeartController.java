@@ -30,6 +30,6 @@ public class HeartController {
     }
 
     private Boolean likeStatus(Member member, Long boardIdx) {
-        return heartService.toggleTheHeart(new Heart(boardIdx, member.getLoginId()));
+        return heartService.toggleTheHeart(boardIdx, member.getLoginId());
     }
 }
