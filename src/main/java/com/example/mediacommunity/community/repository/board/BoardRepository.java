@@ -11,8 +11,8 @@ public interface BoardRepository {
     List<Board> findByWriterId(String writerId);
     List<Board> findBoards(Pagination pagination);
     List<Board> findAll();
-//    void update(Long BoardIdx, Board updateParam);
-//    void increaseViewCnt(Long id, int viewCnt);
+    void update(Long BoardIdx, Board updateParam);
+    void increaseViewCnt(Long id, int viewCnt);
     void delete(Long id);
     int getTotalBoardsNum();
 }

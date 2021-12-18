@@ -49,15 +49,23 @@ public class JpaBoardRepository implements BoardRepository {
                 .getResultList();
     }
 
-//    @Override
-//    public void update(Long BoardIdx, Board updateParam) {
-//
-//    }
+    /**
+     * jpa에서는 update 메서드가 필요 없다.
+     * @param BoardIdx
+     * @param updateParam
+     */
+    @Override
+    public void update(Long BoardIdx, Board updateParam) {
+    }
 
-//    @Override
-//    public void increaseViewCnt(Long id, int viewCnt) {
-//
-//    }
+    /**
+     * board 도메인 메서드로 대체
+     * @param id
+     * @param viewCnt
+     */
+    @Override
+    public void increaseViewCnt(Long id, int viewCnt) {
+    }
 
     @Override
     public void delete(Long id) {
