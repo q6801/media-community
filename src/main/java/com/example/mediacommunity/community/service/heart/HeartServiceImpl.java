@@ -1,38 +1,46 @@
 package com.example.mediacommunity.community.service.heart;
 
+import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.heart.HeartRepository;
+import com.example.mediacommunity.community.service.board.BoardService;
+import com.example.mediacommunity.community.service.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class HeartServiceImpl implements HeartService{
-    @Autowired
-    private HeartRepository heartRepository;
+    private final HeartRepository heartRepository;
+    private final BoardService boardService;
+    private final MemberService memberService;
 
     @Override
     public Optional<Heart> findTheHeart(Long boardId, String memberId) {
-        try {
-            Heart theLikeStatus = heartRepository.findTheHeart(boardId, memberId);
-            return Optional.ofNullable(theLikeStatus);
-        } catch(DataAccessException e) {
-            return Optional.empty();
-        }
+        return heartRepository.findTheHeart(boardId, memberId);
     }
 
     @Override
-    public Boolean toggleTheHeart(Heart info) {
-
+    public Boolean toggleTheHeart(Long boardId, String memberId) {
         try {
-            Optional<Heart> theLikeStatus = findTheHeart(info.getBoardId(), info.getMemberId());
+            Board board = boardService.findBoard(boardId).orElseThrow();
+            Member member = memberService.findMemberById(memberId);
+            Optional<Heart> theLikeStatus = findTheHeart(boardId, memberId);
+
             if (theLikeStatus.isEmpty()) {
-                heartRepository.addHeart(info);
+                Heart heart = new Heart();
+                heart.setBoard(board);
+                heart.setMember(member);
+                heartRepository.addHeart(heart);
                 return true;
             } else {
                 heartRepository.deleteHeart(theLikeStatus.get().getId());
