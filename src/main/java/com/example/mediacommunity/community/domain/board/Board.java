@@ -1,16 +1,18 @@
 package com.example.mediacommunity.community.domain.board;
 
+import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.domain.member.Member;
+import com.example.mediacommunity.community.domain.reply.Reply;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.util.Assert;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,9 +25,27 @@ public class Board {
     private String content;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-    private String writerId;
     private int viewCnt;
     private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writerId")
+    private Member member;
+
+    @OneToMany(mappedBy="board", fetch = FetchType.LAZY)
+    private List<Reply> replies = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    private List<Heart> hearts = new ArrayList<>();
+
+    public void setMember(Member member) {
+
+        if (this.member != null) {
+            this.member.getBoards().remove(this);
+        }
+        this.member = member;
+        member.getBoards().add(this);   // 주인이 아니라서 저장 시 사용 안됨
+    }
 
     public void updateBoardWithDto(BoardEditingDto updateParam) {
         this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
@@ -54,11 +74,11 @@ public class Board {
             content = val;
             return this;
         }
-        public Builder writerId(String val) {
-            Assert.hasText(val, "writerId must not be empty");
-            writerId = val;
-            return this;
-        }
+//        public Builder writerId(String val) {
+//            Assert.hasText(val, "writerId must not be empty");
+//            writerId = val;
+//            return this;
+//        }
         public Builder title(String val) {
             Assert.hasText(val, "title must not be empty");
             title = val;
@@ -95,7 +115,7 @@ public class Board {
 
     private Board(Builder builder) {
         this.content = builder.content;
-        this.writerId = builder.writerId;
+//        this.writerId = builder.writerId;
         this.viewCnt = builder.viewCnt;
         this.title = builder.title;
         this.id = builder.id;
