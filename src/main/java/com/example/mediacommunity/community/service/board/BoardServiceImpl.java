@@ -42,13 +42,13 @@ public class BoardServiceImpl implements BoardService{
         }
     }
 
-    @Override
-    public Board createBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId);
-        board.getReplies().isEmpty();               // 강제로 replies와 member를 만들기 위해 사용
-        board.getMember().getNickname();
-        return board;
-    }
+//    @Override
+//    public Board createBoard(Long boardId) {
+//        Board board = boardRepository.findById(boardId);
+////        board.getReplies().isEmpty();               // 강제로 replies와 member를 만들기 위해 사용
+////        board.getMember().getNickname();
+//        return board;
+//    }
 
     @Override
     public List<Board> findBoards(String writerId) {
