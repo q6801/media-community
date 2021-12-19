@@ -1,8 +1,11 @@
 package com.example.mediacommunity.community.repository.board;
 
 import com.example.mediacommunity.community.domain.board.Board;
+import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
+import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.community.service.Pagination;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +15,10 @@ import java.util.List;
 
 @Repository
 @Transactional
+@RequiredArgsConstructor
 public class JpaBoardRepository implements BoardRepository {
+    private final MemberRepository memberRepository;
+
     @PersistenceContext
     EntityManager em;
 
@@ -30,9 +36,8 @@ public class JpaBoardRepository implements BoardRepository {
 
     @Override
     public List<Board> findByWriterId(String writerId) {
-        return em.createQuery("select b from Board b where b.writerId = :writerId", Board.class)
-                .setParameter("writerId", writerId)
-                .getResultList();
+        Member member = memberRepository.findByLoginId(writerId).orElseThrow();
+        return member.getBoards();
     }
 
     @Override

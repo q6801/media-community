@@ -1,7 +1,10 @@
 package com.example.mediacommunity.community.repository.reply;
 
+import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.reply.Reply;
+import com.example.mediacommunity.community.repository.board.BoardRepository;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +14,10 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class JpaReplyRepository implements ReplyRepository{
+@RequiredArgsConstructor
+public class JpaReplyRepository implements ReplyRepository {
+    private final BoardRepository boardRepository;
+
     @PersistenceContext
     EntityManager em;
 
@@ -23,8 +29,7 @@ public class JpaReplyRepository implements ReplyRepository{
 
     @Override
     public List<Reply> findAllReplies(Long boardId) {
-        return em.createQuery("select r from Reply r where r.boardId=:boardId", Reply.class)
-                .setParameter("boardId", boardId)
-                .getResultList();
+        Board board = boardRepository.findById(boardId);
+        return board.getReplies();
     }
 }
