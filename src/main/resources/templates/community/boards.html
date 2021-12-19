@@ -13,7 +13,7 @@
             <thead>
                 <tr>
                     <th>title</th>
-                    <th>writerId</th>
+                    <th>writer</th>
                     <th>viewCnt</th>
                     <th>createdAt</th>
                     <th>updatedAt</th>
@@ -22,7 +22,7 @@
             <tbody>
                 <tr th:each="board, boardStat:${boards}">
                     <td><a href="" th:href="@{|/boards/${board.id}|(page=*{page})}" th:text="${board.title}"></a></td>
-                    <td th:text="${board.writerId}"></td>
+                    <td th:text="${board.member.nickname}"></td>
                     <td th:text="${board.viewCnt}"></td>
                     <td th:text="${board.createdAt}"></td>
                     <td th:text="${board.updatedAt}"></td>
