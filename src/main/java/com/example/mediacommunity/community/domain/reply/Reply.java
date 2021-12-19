@@ -2,6 +2,8 @@ package com.example.mediacommunity.community.domain.reply;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,7 +14,7 @@ import java.sql.Timestamp;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +28,18 @@ public class Reply {
     @CreationTimestamp
     private Timestamp updatedAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "replyer")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "boardId")
     private Board board;
+
+    @Builder
+    public Reply(String content) {
+        this.content = content;
+    }
 
     public void setReplyer(Member member) {
         if (this.member != null) {
@@ -51,14 +58,10 @@ public class Reply {
     }
 
     public static Reply createReply(Member member, Board board, String content) {
-        Reply reply = new Reply();
+        Reply reply = Reply.builder()
+                .content(content).build();
         reply.setReplyer(member);
         reply.setBoard(board);
-        reply.content = content;
         return reply;
-    }
-
-    public Reply(String content) {
-        this.content = content;
     }
 }

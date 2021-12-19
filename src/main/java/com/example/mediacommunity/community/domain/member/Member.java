@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name="Members")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     @Id
     private String loginId;
@@ -31,7 +31,8 @@ public class Member {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Heart> hearts = new ArrayList<>();
 
-    public Member(String loginId, String password, String nickname, String provider, String imageUrl) {
+    @Builder
+    private Member(String loginId, String password, String nickname, String provider, String imageUrl) {
         this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;

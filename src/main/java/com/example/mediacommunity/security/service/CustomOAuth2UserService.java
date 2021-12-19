@@ -51,7 +51,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Member createMember(OAuth2UserInfo userInfo, String registrationId) {
-        Member member = new Member(userInfo.getId(), "", userInfo.getId(), registrationId, userInfo.getImageUrl());
+        Member member = Member.builder()
+                .loginId(userInfo.getId())
+                .password("")
+                .nickname(userInfo.getId())
+                .provider(registrationId)
+                .imageUrl(userInfo.getImageUrl()).build();
         return memberRepository.save(member);
     }
 }

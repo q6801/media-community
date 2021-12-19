@@ -14,14 +14,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Entity
+@Getter
 @EqualsAndHashCode
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
     private String content;
     private Timestamp createdAt;
     private Timestamp updatedAt;
@@ -38,8 +39,16 @@ public class Board {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Heart> hearts = new ArrayList<>();
 
-    public void setMember(Member member) {
+    @Builder
+    private Board(String content, int viewCnt, String title, Timestamp createdAt, Timestamp updatedAt) {
+        this.content = content;
+        this.viewCnt = viewCnt;
+        this.title = title;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
+    public void setMember(Member member) {
         if (this.member != null) {
             this.member.getBoards().remove(this);
         }
@@ -55,71 +64,5 @@ public class Board {
 
     public void increaseViewCnt() {
         this.viewCnt += 1;
-    }
-
-    public static class Builder {
-        private String content;
-        private String writerId;
-        private int viewCnt;
-        private String title;
-        private Timestamp createdAt;
-        private Timestamp updatedAt;
-        private Long id;
-
-        public Builder() {
-        }
-
-        public Builder content(String val) {
-            Assert.hasText(val, "content must not be empty");
-            content = val;
-            return this;
-        }
-//        public Builder writerId(String val) {
-//            Assert.hasText(val, "writerId must not be empty");
-//            writerId = val;
-//            return this;
-//        }
-        public Builder title(String val) {
-            Assert.hasText(val, "title must not be empty");
-            title = val;
-            return this;
-        }
-        public Builder id(Long val) {
-            Assert.notNull(val, "id must not be empty");
-            id = val;
-            return this;
-        }
-
-        public Builder createdAt(Timestamp val) {
-            Assert.notNull(val, "createdAt must not be empty");
-            createdAt = val;
-            return this;
-        }
-
-        public Builder updatedAt(Timestamp val) {
-            Assert.notNull(val, "updatedAt must not be empty");
-            updatedAt = val;
-            return this;
-        }
-
-        public Builder viewCnt(int val) {
-            Assert.notNull(val, "viewCnt must not be empty");
-            viewCnt = val;
-            return this;
-        }
-
-        public Board build() {
-            return new Board(this);
-        }
-    }
-
-    private Board(Builder builder) {
-        this.content = builder.content;
-//        this.writerId = builder.writerId;
-        this.viewCnt = builder.viewCnt;
-        this.title = builder.title;
-        this.id = builder.id;
-        this.createdAt = builder.createdAt;
-        this.updatedAt = builder.updatedAt;
     }
 }

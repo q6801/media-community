@@ -44,9 +44,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         if (bindingResult.hasErrors()) return;                              // blank가 있는 경우
         if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
-            memberRepository.save(new Member(signUpDto.getLoginId(),
-                    passwordEncoder.encode(signUpDto.getPassword()),
-                    signUpDto.getNickname(), "local", amazonS3Service.searchDefaultProfile()));
+            memberRepository.save(Member.builder()
+                    .loginId(signUpDto.getLoginId())
+                    .password(signUpDto.getPassword())
+                    .nickname(signUpDto.getNickname())
+                    .provider("local")
+                    .imageUrl(amazonS3Service.searchDefaultProfile())
+                    .build());
         } else {
             bindingResult.reject("signUpFail");
         }
