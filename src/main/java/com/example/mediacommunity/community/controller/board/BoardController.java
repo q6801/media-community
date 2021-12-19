@@ -35,6 +35,7 @@ public class BoardController {
     private final BoardService boardService;
     private final Pagination pagination;
     private final HeartService heartService;
+    private final ReplyService replyService;
 
     @GetMapping
     public String boards(Model model, @RequestParam(defaultValue = "1") int page) {
@@ -54,8 +55,11 @@ public class BoardController {
     public String board(@PathVariable long boardIdx, Model model, @RequestParam(defaultValue = "1") int page,
                         @AuthUser Member authUser) {
 
-        Board board = boardService.findBoard(boardIdx)
-                .orElseThrow(() -> new RuntimeException("board finding error"));
+        List<Reply> replies = replyService.findAllReplies(boardIdx);
+        Board board = boardService.findBoard(boardIdx).orElseThrow();
+
+        model.addAttribute("replies", replies);
+        model.addAttribute("reply", new ReplyDto());    // add, edit때 입력을 받기 위해 넣어둠
         model.addAttribute("board", board);
 
         if (authUser != null) {
@@ -80,8 +84,7 @@ public class BoardController {
 
     private void insertHeartStatus(Board board, Model model, Member member) {
         model.addAttribute("heartNums", heartService.cntHearts(board.getId()));
-        Optional<Heart> heart = heartService.findTheHeart(board.getId(), member.getLoginId());
-        if (member != null && heart.isPresent())
+        if (member != null && heartService.findTheHeart(board.getId(), member.getLoginId()).isPresent())
             model.addAttribute("heart", true);
         else
             model.addAttribute("heart", false);
@@ -108,7 +111,7 @@ public class BoardController {
 
     private Board saveBoardToDB(BoardAddingDto boardDto, Member member) {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = new Board.Builder()
+        Board board = Board.builder()
                 .content(boardDto.getContent())
                 .title(boardDto.getTitle())
                 .createdAt(timestamp)

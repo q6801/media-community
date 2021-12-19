@@ -8,10 +8,12 @@ import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ReplyServiceImpl implements ReplyService {
 
