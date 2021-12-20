@@ -78,12 +78,12 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void modifyBoard(Long boardIdx, BoardEditingDto updateParam) {
+    public void modifyBoardUsingDto(Long boardIdx, BoardEditingDto updateParam) {
         try {
             Board board = boardRepository.findById(boardIdx);
             board.updateBoardWithDto(updateParam);
         } catch(RuntimeException e) {
-            log.warn("class: BoardServiceImpl, method: modifyBoard, {}", e);
+            log.warn("class: BoardServiceImpl, method: modifyBoardUsingDto, {}", e);
         }
     }
 

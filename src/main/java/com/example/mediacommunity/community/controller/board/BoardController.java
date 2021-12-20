@@ -4,7 +4,6 @@ import com.example.mediacommunity.common.annotation.AuthUser;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.board.BoardEditingDto;
-import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
 import com.example.mediacommunity.community.domain.reply.ReplyDto;
@@ -24,7 +23,6 @@ import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -140,7 +138,7 @@ public class BoardController {
             log.info("errors={}", bindingResult);
             return "community/editBoard";
         }
-        boardService.modifyBoard(boardIdx, boardDto);
+        boardService.modifyBoardUsingDto(boardIdx, boardDto);
         return "redirect:/boards/{boardIdx}";
     }
 
