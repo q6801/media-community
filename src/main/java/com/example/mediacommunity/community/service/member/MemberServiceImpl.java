@@ -64,6 +64,20 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Boolean updateNickname(String loginId, String newNickname) {
+        Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
+        Optional<Member> nameDuplicatedMember = memberRepository.findByNickname(newNickname);
+
+        if (nameDuplicatedMember.isPresent() && compareloginId(loginId, nameDuplicatedMember)) { // 중복인 id가 있고 자기 자신이 아니라면
+            return false;
+        } else {
+            member.setNickname(newNickname);
+        }
+        return true;
+    }
+
+
+    @Override
     public Optional<String> updateProfile(String loginId, MemberEditDto memberEditDto, BindingResult bindingResult) throws IOException {
         MultipartFile file = memberEditDto.getFile();
         String newNickname = memberEditDto.getNickname();
