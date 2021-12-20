@@ -1,5 +1,6 @@
 package com.example.mediacommunity.community.service.member;
 
+import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
 import org.assertj.core.api.Assertions;
@@ -9,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +30,7 @@ class MemberServiceImplTest {
     void findMemberById() {
         //given
         Member savedMember = getStubMemberList().get(0);
+        savedMember.setBoards(getStubBoardList());
         System.out.println("memberRepository = " + memberRepository);
         given(memberRepository.findByLoginId(savedMember.getLoginId())).willReturn(Optional.of(savedMember));
 
@@ -65,7 +69,18 @@ class MemberServiceImplTest {
     }
 
 
-
+    private List<Board> getStubBoardList() {
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
+        return Arrays.asList(
+                Board.builder().content("start content")
+                        .createdAt(timestamp).updatedAt(timestamp)
+                        .viewCnt(1).title("title").build(),
+                Board.builder().content("start 2")
+                        .createdAt(timestamp).updatedAt(timestamp)
+                        .viewCnt(10).title("title").build(),
+                Board.builder().build()
+        );
+    }
     private List<Member> getStubMemberList() {
         return Arrays.asList(
                 new Member("test121", "test1!", "HelloWorld1", "local", ""),
