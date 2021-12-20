@@ -27,8 +27,11 @@ public class SignUpController {
 
     @PostMapping
     public String signUp(@Valid @ModelAttribute("member") SignUpDto signUpDto, BindingResult bindingResult) {
-        userService.save(signUpDto, bindingResult);
         if (bindingResult.hasErrors()) {
+            return "login/signUpForm";
+        }
+        if (!userService.save(signUpDto)) {
+            bindingResult.reject("signUpFail");
             return "login/signUpForm";
         }
         return "redirect:/";

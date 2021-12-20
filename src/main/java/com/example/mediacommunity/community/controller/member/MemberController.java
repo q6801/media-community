@@ -45,14 +45,15 @@ public class MemberController {
     public String editMemberInfo(@AuthUser Member member, @Valid @ModelAttribute MemberEditDto memberEditDto,
                                  BindingResult bindingResult, HttpSession session, Model model) throws ServletException, IOException {
 
-        Optional<String> imageUrl = memberService.updateProfile(member.getLoginId(), memberEditDto, bindingResult);
-        imageUrl.ifPresentOrElse(url -> {
-            model.addAttribute("imageUrl", url);
-        }, () -> {
-            model.addAttribute("imageUrl", member.getImageUrl());
-        });
         if (bindingResult.hasErrors()) {
             return "member/memberEdit";
+        }
+        Optional<String> imageUrl = memberService.updateProfile(member.getLoginId(), memberEditDto);
+        if (imageUrl.isEmpty()) {
+            bindingResult.reject("nicknameDuplicated");
+            return "member/memberEdit";
+        } else {
+            model.addAttribute("imageUrl", imageUrl.get());
         }
         session.invalidate();
         return "redirect:/";

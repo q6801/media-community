@@ -76,37 +76,35 @@ public class MemberServiceImpl implements MemberService {
         return true;
     }
 
-
+    /***
+     * 닉네임 변경에 실패해면 null, 아니면 imageUrl
+     * @param loginId
+     * @param memberEditDto
+     * @return imageUrl
+     * @throws IOException
+     */
     @Override
-    public Optional<String> updateProfile(String loginId, MemberEditDto memberEditDto, BindingResult bindingResult) throws IOException {
+    public Optional<String> updateProfile(String loginId, MemberEditDto memberEditDto) throws IOException {
         MultipartFile file = memberEditDto.getFile();
         String newNickname = memberEditDto.getNickname();
         Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
-        Optional<Member> nameDuplicatedMember = memberRepository.findByNickname(newNickname);
-        Optional<String> imageUrl = Optional.empty();
+        String imageUrl;
 
-        if (bindingResult.hasErrors()) {
+        if (!updateNickname(loginId, newNickname)) {
             return Optional.empty();
-        }
-
-        if (nameDuplicatedMember.isPresent() && compareloginId(loginId, nameDuplicatedMember)) { // 중복인 id가 있고 자기 자신이 아니라면
-            bindingResult.reject("nicknameDuplicated");
-            return Optional.empty();
-        } else {
-            member.setNickname(memberEditDto.getNickname());
         }
 
         if(!file.isEmpty()) {
             String ext = extractExt(file.getOriginalFilename());
             String storeFileName = loginId + "Profile" + "." + ext;
-
             amazonS3Service.uploadImg(path + storeFileName, memberEditDto.getFile());
             amazonS3Service.searchImage(path, storeFileName);
-            imageUrl = Optional.ofNullable(amazonS3Service.searchImage(path, storeFileName));
-            member.setImageUrl(imageUrl.get());
+            imageUrl = amazonS3Service.searchImage(path, storeFileName);
+            member.setImageUrl(imageUrl);
+        } else {
+            imageUrl = member.getImageUrl();
         }
-
-        return imageUrl;
+        return Optional.ofNullable(imageUrl);
     }
 
     private boolean compareloginId(String loginId, Optional<Member> foundMember) {

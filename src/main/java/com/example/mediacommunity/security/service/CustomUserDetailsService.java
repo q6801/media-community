@@ -22,7 +22,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
     private final AmazonS3Service amazonS3Service;
 
     @Override
@@ -38,11 +37,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Transactional
-    public void save(SignUpDto signUpDto, BindingResult bindingResult) {
+    public Boolean save(SignUpDto signUpDto) {
         Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
         Optional<Member> duplicatedName = memberRepository.findByNickname(signUpDto.getNickname());
 
-        if (bindingResult.hasErrors()) return;                              // blank가 있는 경우
         if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
             memberRepository.save(Member.builder()
                     .loginId(signUpDto.getLoginId())
@@ -51,8 +49,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                     .provider("local")
                     .imageUrl(amazonS3Service.searchDefaultProfile())
                     .build());
-        } else {
-            bindingResult.reject("signUpFail");
+            return true;
         }
+        return false;
     }
 }
