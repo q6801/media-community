@@ -78,14 +78,14 @@ class BoardServiceImplTest {
     }
 
 //    @Test
-//    void modifyBoard() {
+//    void modifyBoardUsingDto() {
 //        //given
 //        Board board0 = getStubBoardList().get(0);
 //        Board board0Alpha = getStubBoardList().get(1);
 //        given(boardRepository.findById(board0.getId())).willReturn(board0Alpha);
 //
 //        //when
-//        boardService.modifyBoard(board0.getId(), board0Alpha);
+//        boardService.modifyBoardUsingDto(board0.getId(), board0Alpha);
 //        Board modifiedBoard = boardRepository.findById(board0.getId());
 //
 //        //then
