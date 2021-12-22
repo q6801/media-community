@@ -25,7 +25,8 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
     @Override
     public String getEmail() {
-        return attributes.get("account_email").toString();
+        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+        return account.get("email").toString();
     }
 
     @Override
