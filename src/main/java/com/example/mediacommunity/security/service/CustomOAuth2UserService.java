@@ -27,37 +27,19 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
-
         String registrationId = userRequest.getClientRegistration().getRegistrationId();                // google
-        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()         // sub
-                .getUserInfoEndpoint().getUserNameAttributeName();
-
-        System.out.println("userNameAttributeName = " + userNameAttributeName);
-        System.out.println("registrationId = " + registrationId);
-        System.out.println("oAuth2User = " + oAuth2User);
-        System.out.println("userRequest = " + userRequest);
-
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, oAuth2User.getAttributes());
         System.out.println("userInfo = " + userInfo);
 
         Optional<Member> savedMember = memberRepository.findByLoginId(userInfo.getId());
         Member member;
         if (savedMember.isEmpty()) {
-            member = createMember(userInfo, registrationId);
+            member = Member.createOAuth2Member(userInfo, registrationId);
+            memberRepository.save(member);
         } else{
             member = savedMember.get();
         }
         return new UserInfo(member);
-    }
-
-    private Member createMember(OAuth2UserInfo userInfo, String registrationId) {
-        Member member = Member.builder()
-                .loginId(userInfo.getId())
-                .password("")
-                .nickname(userInfo.getId())
-                .provider(registrationId)
-                .imageUrl(userInfo.getImageUrl()).build();
-        return memberRepository.save(member);
     }
 }
 
