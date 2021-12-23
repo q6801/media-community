@@ -6,6 +6,7 @@ import com.example.mediacommunity.community.repository.EmailConfirmationTokenRep
 import com.example.mediacommunity.community.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ public class EmailConfirmationTokenService {
         emailTokenRepository.delete(emailToken);
     }
 
+    @Async
     public void saveAndSendEmailToken(String memberId, String emailAddress) {
         Member member = memberService.findMemberById(memberId);
 
