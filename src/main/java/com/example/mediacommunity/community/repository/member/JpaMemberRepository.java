@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Slf4j
 @Repository
-@Transactional
 public class JpaMemberRepository implements MemberRepository {
     @PersistenceContext
     EntityManager em;
@@ -41,10 +40,9 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member save(Member member) {
+    public void save(Member member) {
         em.persist(member);
         log.debug("member : {}", member);
-        return member;
     }
 
     @Override

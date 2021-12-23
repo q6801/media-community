@@ -36,7 +36,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member save(Member member) {
         try {
-            return memberRepository.save(member);
+            memberRepository.save(member);
+            return member;
         } catch (DataAccessException e) {
             log.warn("class: MemberServiceImpl, method: save, ", e);
             throw new RuntimeException("saveBoard failed");
