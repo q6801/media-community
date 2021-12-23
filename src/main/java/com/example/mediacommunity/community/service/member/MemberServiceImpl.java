@@ -2,15 +2,19 @@ package com.example.mediacommunity.community.service.member;
 
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
+import com.example.mediacommunity.community.domain.member.RoleType;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.community.service.AmazonS3Service;
+import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -121,6 +125,18 @@ public class MemberServiceImpl implements MemberService {
         Member deleteMember = memberRepository.findByLoginId(member.getLoginId())
                 .orElseThrow(() -> new RuntimeException("member 없음"));
         memberRepository.deleteMember(deleteMember);
+    }
+
+    @Override
+    public void updateMemberRoleToUser(String memberId) {
+        Member member = memberRepository.findByLoginId(memberId).orElseThrow();
+        member.setRoleType(RoleType.USER);
+
+        UserInfo userInfo = new UserInfo(member);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(userInfo, auth.getCredentials(), userInfo.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
 }
