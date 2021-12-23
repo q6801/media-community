@@ -24,8 +24,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         System.out.println("authentication = " + authentication);
-        Member member = ((UserInfo) authentication.getPrincipal()).getMember();
-        if (memberRepository.findByLoginId(member.getLoginId()).isEmpty()) {
+        if (memberRepository.findByLoginId(((UserInfo)authentication.getPrincipal()).getUsername()).isEmpty()) {
             request.getRequestDispatcher("/fuck").forward(request, response);
         } else {
             request.getRequestDispatcher("/").forward(request, response);
