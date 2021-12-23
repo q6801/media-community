@@ -15,8 +15,9 @@ public class UserInfo extends User implements OAuth2User {
     private Map<String, Object> attributes;
 
     public UserInfo(Member member) {
-        super(member.getLoginId(), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
-        member.setPassword("");
+        super(member.getLoginId(), member.getPassword(),
+                List.of(new SimpleGrantedAuthority(member.getRoleType().getCode())));
+        member.hidePassword();
         this.member = member;
     }
 
