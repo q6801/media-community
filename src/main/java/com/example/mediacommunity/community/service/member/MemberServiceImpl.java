@@ -122,8 +122,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void signOut(Member member) {
-        Member deleteMember = memberRepository.findByLoginId(member.getLoginId())
+    public void signOut(String memberId) {
+        Member deleteMember = memberRepository.findByLoginId(memberId)
                 .orElseThrow(() -> new RuntimeException("member 없음"));
         memberRepository.deleteMember(deleteMember);
     }
