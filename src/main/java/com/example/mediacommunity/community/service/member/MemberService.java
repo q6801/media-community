@@ -15,4 +15,5 @@ public interface MemberService {
     Boolean updateNickname(String loginId, String newNickname);
     Optional<String> updateProfile(String loginId, MemberEditDto member) throws IOException;
     void signOut(Member member);
+    void updateMemberRoleToUser(String memberId);
 }
