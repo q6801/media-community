@@ -21,6 +21,16 @@
     <p><button>변경</button></p>
 </form>
 
+<td th:if="${role.equals('GUEST')}">
+    <form th:action="@{/wait-email}" method="post">
+        <input type="email" name="email"/></p>
+        <button type="submit">이메일 인증하기</button>
+    </form>
+</td>
+<td th:unless="${role.equals('GUEST')}">
+    <span>이메일 인증이 완료된 계정입니다.</span>
+</td>
+
 </br>
 
 <form th:action="@{/signout}" method="post">
