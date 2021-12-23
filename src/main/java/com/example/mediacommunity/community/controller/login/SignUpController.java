@@ -30,7 +30,7 @@ public class SignUpController {
         if (bindingResult.hasErrors()) {
             return "login/signUpForm";
         }
-        if (!userService.save(signUpDto)) {
+        if (!userService.saveForSignUp(signUpDto)) {
             bindingResult.reject("signUpFail");
             return "login/signUpForm";
         }
