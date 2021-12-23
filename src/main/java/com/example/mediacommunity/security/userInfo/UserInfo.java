@@ -28,4 +28,9 @@ public class UserInfo extends User implements OAuth2User {
         return getUsername();
     }
 
+    public String getRole() {
+        System.out.println(getAuthorities().stream().map(auth -> auth.getAuthority()).findFirst());
+        return getAuthorities().stream().map(auth -> auth.getAuthority()).findFirst().orElseThrow().substring(5);
+    }
+
 }
