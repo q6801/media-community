@@ -1,11 +1,13 @@
 package com.example.mediacommunity.community.controller.member;
 
-import com.example.mediacommunity.common.annotation.AuthUser;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
+import com.example.mediacommunity.community.domain.member.RoleType;
 import com.example.mediacommunity.community.service.member.MemberService;
+import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,27 +30,32 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping()
-    public String memberInfo(@AuthUser Member member, Model model) {
-        model.addAttribute("member", member);
+    public String memberInfo(@AuthenticationPrincipal UserInfo userInfo, Model model) {
+        Member authUser = memberService.findMemberById(userInfo.getUsername());
+        model.addAttribute("member", authUser);
         return "member/memberInfo";
     }
 
     @GetMapping("/edit")
-    public String editMemberForm(@AuthUser Member member, Model model) {
-        model.addAttribute("imageUrl", member.getImageUrl());
-        model.addAttribute("memberEditDto", new MemberEditDto(null, member.getNickname()));
-        model.addAttribute("role", member.getRoleType().getCode());
+    public String editMemberForm(@AuthenticationPrincipal UserInfo userInfo, Model model) {
+        Member authUser = memberService.findMemberById(userInfo.getUsername());
+        model.addAttribute("imageUrl", authUser.getImageUrl());
+        model.addAttribute("memberEditDto", new MemberEditDto(null, authUser.getNickname()));
+        model.addAttribute("role", authUser.getRoleType().getCode());
         return "member/memberEdit";
     }
 
     @PostMapping("/edit")
-    public String editMemberInfo(@AuthUser Member member, @Valid @ModelAttribute MemberEditDto memberEditDto,
+    public String editMemberInfo(@AuthenticationPrincipal UserInfo userInfo, @Valid @ModelAttribute MemberEditDto memberEditDto,
                                  BindingResult bindingResult, HttpSession session, Model model) throws ServletException, IOException {
 
+        String role = userInfo.getRole();
+        System.out.println("role = " + role);
+        model.addAttribute("role", role);
         if (bindingResult.hasErrors()) {
             return "member/memberEdit";
         }
-        Optional<String> imageUrl = memberService.updateProfile(member.getLoginId(), memberEditDto);
+        Optional<String> imageUrl = memberService.updateProfile(userInfo.getUsername(), memberEditDto);
         if (imageUrl.isEmpty()) {
             bindingResult.reject("nicknameDuplicated");
             return "member/memberEdit";
@@ -58,6 +65,4 @@ public class MemberController {
         session.invalidate();
         return "redirect:/";
     }
-
-
 }

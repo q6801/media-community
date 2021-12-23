@@ -1,6 +1,5 @@
 package com.example.mediacommunity.community.controller.board;
 
-import com.example.mediacommunity.common.annotation.AuthUser;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.board.BoardEditingDto;
@@ -10,9 +9,12 @@ import com.example.mediacommunity.community.domain.reply.ReplyDto;
 import com.example.mediacommunity.community.service.Pagination;
 import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.heart.HeartService;
+import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.community.service.reply.ReplyService;
+import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +36,7 @@ public class BoardController {
     private final Pagination pagination;
     private final HeartService heartService;
     private final ReplyService replyService;
+    private final MemberService memberService;
 
     @GetMapping
     public String boards(Model model, @RequestParam(defaultValue = "1") int page) {
@@ -51,8 +54,8 @@ public class BoardController {
 
     @GetMapping("/{boardIdx}")
     public String board(@PathVariable long boardIdx, Model model, @RequestParam(defaultValue = "1") int page,
-                        @AuthUser Member authUser) {
-
+                        @AuthenticationPrincipal UserInfo userInfo) {
+        Member authUser = memberService.findMemberById(userInfo.getUsername());
         List<Reply> replies = replyService.findAllReplies(boardIdx);
         Board board = boardService.findBoard(boardIdx).orElseThrow();
 
@@ -97,12 +100,13 @@ public class BoardController {
     @PostMapping("/add")
     public String addBoard(@Valid @ModelAttribute("board") BoardAddingDto boardDto,
                            BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                           @AuthUser Member member) {
+                           @AuthenticationPrincipal UserInfo userInfo) {
+        Member authUser = memberService.findMemberById(userInfo.getUsername());
         if(bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "community/addBoard";
         }
-        Board savedBoard = saveBoardToDB(boardDto, member);
+        Board savedBoard = saveBoardToDB(boardDto, authUser);
         redirectAttributes.addAttribute("boardIdx", savedBoard.getId());
         return "redirect:/boards/{boardIdx}";
     }
@@ -121,10 +125,10 @@ public class BoardController {
 
     @GetMapping("/edit/{boardIdx}")
     public String editForm(@PathVariable long boardIdx, Model model,
-                           @AuthUser Member member) {
-
+                           @AuthenticationPrincipal UserInfo userInfo) {
+        Member authUser = memberService.findMemberById(userInfo.getUsername());
         Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board not found error"));
-        if (compareUserAndWriter(member, board)) {
+        if (compareUserAndWriter(authUser, board)) {
             model.addAttribute("board", board);
             return "community/editBoard";
         }
@@ -143,10 +147,11 @@ public class BoardController {
     }
 
     @PostMapping("/delete/{boardIdx}")
-    public String deleteBoard(@PathVariable Long boardIdx, @AuthUser Member member) {
+    public String deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
+        Member authUser = memberService.findMemberById(userInfo.getUsername());
         Board board = boardService.findBoard(boardIdx)
                 .orElseThrow(() -> new RuntimeException("board finding error"));
-        if (compareUserAndWriter(member, board)) {
+        if (compareUserAndWriter(authUser, board)) {
             boardService.deleteBoard(boardIdx);
         }
         return "redirect:/boards";
