@@ -36,8 +36,8 @@ public class MemberController {
     @GetMapping("/edit")
     public String editMemberForm(@AuthUser Member member, Model model) {
         model.addAttribute("imageUrl", member.getImageUrl());
-        model.addAttribute("memberEditDto",
-                new MemberEditDto(null, member.getNickname()));
+        model.addAttribute("memberEditDto", new MemberEditDto(null, member.getNickname()));
+        model.addAttribute("role", member.getRoleType().getCode());
         return "member/memberEdit";
     }
 
