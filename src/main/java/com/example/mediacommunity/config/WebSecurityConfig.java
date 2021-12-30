@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/login", "/signup", "/", "/boards").permitAll()
                 .regexMatchers("^/boards\\/[0-9]+.\\w+.\\w+").permitAll()
-                .antMatchers("/**").authenticated()
+//                .antMatchers("/**").authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login")
@@ -52,7 +52,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .logout()
                 .logoutUrl("/logout")
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/")
+            .and().csrf().disable()
+        ;
     }
 
     @Override
