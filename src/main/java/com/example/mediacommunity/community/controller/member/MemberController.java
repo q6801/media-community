@@ -62,7 +62,6 @@ public class MemberController {
         } else {
             model.addAttribute("imageUrl", imageUrl.get());
         }
-        session.invalidate();
         return "redirect:/";
     }
 }
