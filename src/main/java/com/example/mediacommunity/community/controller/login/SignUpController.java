@@ -1,6 +1,7 @@
 package com.example.mediacommunity.community.controller.login;
 
 import com.example.mediacommunity.community.domain.member.SignUpDto;
+import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/signup")
 public class SignUpController {
-    private final CustomUserDetailsService userService;
+    private final MemberService memberService;
 
     @GetMapping
     public String signUpForm(Model model) {
@@ -30,7 +31,7 @@ public class SignUpController {
         if (bindingResult.hasErrors()) {
             return "login/signUpForm";
         }
-        if (!userService.saveForSignUp(signUpDto)) {
+        if (!memberService.encodeAndSave(signUpDto)) {
             bindingResult.reject("signUpFail");
             return "login/signUpForm";
         }

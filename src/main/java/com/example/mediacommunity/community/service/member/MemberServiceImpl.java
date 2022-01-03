@@ -3,6 +3,7 @@ package com.example.mediacommunity.community.service.member;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
 import com.example.mediacommunity.community.domain.member.RoleType;
+import com.example.mediacommunity.community.domain.member.SignUpDto;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.community.service.AmazonS3Service;
 import com.example.mediacommunity.security.userInfo.UserInfo;
@@ -13,6 +14,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,19 +31,24 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final AmazonS3Service amazonS3Service;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${path.img}")
     private String path;
 
+
     @Override
-    public Member save(Member member) {
-        try {
-            memberRepository.save(member);
-            return member;
-        } catch (DataAccessException e) {
-            log.warn("class: MemberServiceImpl, method: save, ", e);
-            throw new RuntimeException("saveBoard failed");
+    public Boolean encodeAndSave(SignUpDto signUpDto) {
+        Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
+        Optional<Member> duplicatedName = memberRepository.findByNickname(signUpDto.getNickname());
+
+        if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
+            Member localMember = Member.createLocalMember(signUpDto, passwordEncoder,
+                    amazonS3Service.searchDefaultProfile());
+            memberRepository.save(localMember);
+            return true;
         }
+        return false;
     }
 
     @Override

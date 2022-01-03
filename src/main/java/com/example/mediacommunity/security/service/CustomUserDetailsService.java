@@ -24,7 +24,6 @@ import java.util.Optional;
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final AmazonS3Service amazonS3Service;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -36,19 +35,5 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         UserInfo userInfo = new UserInfo(member);
         return userInfo;
-    }
-
-    @Transactional
-    public Boolean saveForSignUp(SignUpDto signUpDto) {
-        Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
-        Optional<Member> duplicatedName = memberRepository.findByNickname(signUpDto.getNickname());
-
-        if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
-            Member localMember = Member.createLocalMember(signUpDto, passwordEncoder,
-                    amazonS3Service.searchDefaultProfile());
-            memberRepository.save(localMember);
-            return true;
-        }
-        return false;
     }
 }
