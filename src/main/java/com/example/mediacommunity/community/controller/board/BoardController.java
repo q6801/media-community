@@ -106,22 +106,13 @@ public class BoardController {
             log.info("errors={}", bindingResult);
             return "community/addBoard";
         }
-        Board savedBoard = saveBoardToDB(boardDto, authUser);
+        Board savedBoard = Board.convertBoardAddingDtoToBoard(boardDto, authUser);
+        boardService.save(savedBoard);
+
         redirectAttributes.addAttribute("boardIdx", savedBoard.getId());
         return "redirect:/boards/{boardIdx}";
     }
 
-    private Board saveBoardToDB(BoardAddingDto boardDto, Member member) {
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = Board.builder()
-                .content(boardDto.getContent())
-                .title(boardDto.getTitle())
-                .createdAt(timestamp)
-                .updatedAt(timestamp)
-                .viewCnt(0).build();
-        board.setMember(member);
-        return boardService.save(board);
-    }
 
     @GetMapping("/edit/{boardIdx}")
     public String editForm(@PathVariable long boardIdx, Model model,

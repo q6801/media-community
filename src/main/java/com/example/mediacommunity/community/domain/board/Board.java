@@ -56,6 +56,18 @@ public class Board {
         member.getBoards().add(this);   // 주인이 아니라서 저장 시 사용 안됨
     }
 
+    public static Board convertBoardAddingDtoToBoard(BoardAddingDto boardDto, Member member) {
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
+        Board board = Board.builder()
+                .content(boardDto.getContent())
+                .title(boardDto.getTitle())
+                .createdAt(timestamp)
+                .updatedAt(timestamp)
+                .viewCnt(0).build();
+        board.setMember(member);
+        return board;
+    }
+
     public void updateBoardWithDto(BoardEditingDto updateParam) {
         this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         this.content = updateParam.getContent();
