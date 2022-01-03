@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<body>
+
+<p>Going to connect to the WebSocket at /endpoint. Check Console</p>
+
+<div th:if="${msgRoom}">
+      <div th:text="${msgRoom}"></div>
+</div>
+
+<input id="msg" type="text">
+<button onclick="ss()">Send</button>
+</body>
+
+<script type="text/javascript">
+      var webSocket = new WebSocket("ws://localhost:8080/ws/chat");
+      webSocket.onopen = function(message) {
+            processOpen(message);
+      };
+      webSocket.onmessage = function(message) {
+          processMessage(message);
+      };
+      webSocket.onclose = function(message) {
+          processClose(message);
+      };
+      webSocket.onerror = function(message) {
+          processError(message);
+      };
+
+
+      function processOpen(message) {
+          console.log("JS: Server Connected... "+message);
+      }
+      function processMessage(message) {
+          console.log("Getting a mess: "+message);
+          console.log("Getting a mess: "+message.data);
+      }
+      function processClose(message) {
+          console.log("JS: Client disconnected... "+message);
+      }
+      function processError(message) { //
+          console.log("Error occured: "+message);
+      }
+
+      function ss() {
+          let msg = document.getElementById("msg");
+
+          console.log(msg.value);
+          webSocket.send(`{
+            "messageType": "ENTER",
+            "roomId": "roomName",
+            "sender":"fuck",
+            "message":"fuckkkkkkkkk"
+          }`);
+          msg.value = '';
+      }
+</script>
+
+</html>

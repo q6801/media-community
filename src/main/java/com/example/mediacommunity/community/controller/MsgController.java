@@ -19,7 +19,7 @@ public class MsgController {
     public String createRoom(@RequestParam String name, Model model) {
         // TODO : name is Summoner Name
         model.addAttribute("msgRoom", msgService.createRoom(name));
-        return "fuck";
+        return "chat";
     }
 
     @GetMapping("/fucklkkkk")
