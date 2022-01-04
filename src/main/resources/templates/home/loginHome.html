@@ -9,6 +9,7 @@
   <a th:text="|${nickname}님 환영합니다.|" th:href="@{/member}">대충 닉네임</a>
 </div>
 <button th:onclick="|location.href='@{/boards}'|">게시판으로 이동</button>
+<button th:onclick="|location.href='@{/chat/rooms}'|">채팅방으로 이동</button>
 <form th:action="@{/logout}" method="post">
   <button type="submit">로그 아웃</button>
 </form>
