@@ -3,15 +3,12 @@ package com.example.mediacommunity.community.domain;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 public class Message {
-    public enum Messagetype {
-        ENTER, COMM
-    };
-
-    private Messagetype messageType;
-    private String roomId;
-    private String sender;
+    private UUID roomId;
+    private String writer;
     private String message;
 }
