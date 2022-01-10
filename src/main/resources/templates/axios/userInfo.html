@@ -40,8 +40,8 @@
 
 <main>
   <div class="container">
-    <div id='boards'></div>
-    <button onClick='location.href="/addBoard"' class='mb-5 btn btn-outline-secondary'>글 쓰기</button>
+    <div id='user-info'></div>
+    <button id='edit-member' th:onclick="|location.href='@{/editMember}'|">회원 정보 수정</button>
   </div>
 
   <div th:replace="~{axios/footer :: footer}"></div>
@@ -52,6 +52,6 @@
 
 <!--  사용자 js -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type='text/javascript' th:src="@{/js/boards.js}"></script>
+<script type='text/javascript' th:src="@{/js/userInfo.js}"></script>
 <script type='text/javascript' th:src="@{/js/header.js}"></script>
 </html>

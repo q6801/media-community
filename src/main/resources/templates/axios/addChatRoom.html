@@ -40,10 +40,16 @@
 
 <main>
   <div class="container">
-    <div id='boards'></div>
-    <button onClick='location.href="/addBoard"' class='mb-5 btn btn-outline-secondary'>글 쓰기</button>
-  </div>
-
+      <form action="" id="room-form">
+        <div class="col-12 mt-5">
+            <label for="loginId" class="form-label">roomName</label>
+            <input type="text" class="form-control" id="roomName" placeholder="room name">
+        </div>
+        <div class="col-12">
+            <button type="submit">전송</button>
+        </div>
+      </form>
+    </div>
   <div th:replace="~{axios/footer :: footer}"></div>
 </main>
 
@@ -52,6 +58,6 @@
 
 <!--  사용자 js -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type='text/javascript' th:src="@{/js/boards.js}"></script>
 <script type='text/javascript' th:src="@{/js/header.js}"></script>
+<script type='text/javascript' th:src="@{/js/addChatRoom.js}"></script>
 </html>

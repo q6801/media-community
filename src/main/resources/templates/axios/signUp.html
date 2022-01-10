@@ -40,8 +40,21 @@
 
 <main>
   <div class="container">
-    <div id='boards'></div>
-    <button onClick='location.href="/addBoard"' class='mb-5 btn btn-outline-secondary'>글 쓰기</button>
+    <div class="col-12 mt-5">
+      <label for="loginId" class="form-label">id</label>
+      <input type="text" class="form-control" id="loginId" placeholder="loginId">
+    </div>
+    <div class="col-12">
+      <label for="password" class="form-label">password</label>
+      <input type="text" class="form-control" id="password" placeholder="password">
+    </div>
+    <div class="col-12">
+      <label for="nickname" class="form-label">nickname</label>
+      <input type="text" class="form-control" id="nickname" placeholder="nickname">
+    </div>
+    <div class="col-12">
+      <button id="sign-up">전송</button>
+    </div>
   </div>
 
   <div th:replace="~{axios/footer :: footer}"></div>
@@ -52,6 +65,6 @@
 
 <!--  사용자 js -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type='text/javascript' th:src="@{/js/boards.js}"></script>
 <script type='text/javascript' th:src="@{/js/header.js}"></script>
+<script type='text/javascript' th:src="@{/js/signUp.js}"></script>
 </html>
