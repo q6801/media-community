@@ -1,5 +1,7 @@
 package com.example.mediacommunity.community.service.member;
 
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.UserNotExistException;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
 import com.example.mediacommunity.community.domain.member.RoleType;
@@ -52,17 +54,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findMemberById(String loginId) throws DataAccessException{
+    public Member findMemberById(String loginId) {
         Member member = memberRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new RuntimeException("MemberServiceImpl, findMemberById"));
+                .orElseThrow(() -> new UserNotExistException(ExceptionEnum.USER_NOT_EXIST));
         return member;
     }
 
     @Override
     public Member findMemberByName(String nickName) {
-            Member member = memberRepository.findByNickname(nickName)
-                    .orElseThrow(() -> new RuntimeException("MemberServiceImpl, findMemberByName"));
-            return member;
+        Member member = memberRepository.findByNickname(nickName)
+                .orElseThrow(() -> new UserNotExistException(ExceptionEnum.USER_NOT_EXIST));
+        return member;
     }
 
     @Override
@@ -73,19 +75,6 @@ public class MemberServiceImpl implements MemberService {
             log.warn("class: MemberServiceImpl, method: findAllMembers, ", e);
             return new ArrayList<>();
         }
-    }
-
-    @Override
-    public Boolean updateNickname(String loginId, String newNickname) {
-        Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
-        Optional<Member> nameDuplicatedMember = memberRepository.findByNickname(newNickname);
-
-        if (nameDuplicatedMember.isPresent() && compareloginId(loginId, nameDuplicatedMember)) { // 중복인 id가 있고 자기 자신이 아니라면
-            return false;
-        } else {
-            member.setNickname(newNickname);
-        }
-        return true;
     }
 
     /***
@@ -102,7 +91,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
         String imageUrl;
 
-        if (!updateNickname(loginId, newNickname)) {
+        if (!updateNickname(member, newNickname)) {
             return Optional.empty();
         }
 
@@ -117,6 +106,17 @@ public class MemberServiceImpl implements MemberService {
             imageUrl = member.getImageUrl();
         }
         return Optional.ofNullable(imageUrl);
+    }
+
+    public Boolean updateNickname(Member member, String newNickname) {
+        Optional<Member> nameDuplicatedMember = memberRepository.findByNickname(newNickname);
+
+        if (nameDuplicatedMember.isPresent() && compareloginId(member.getLoginId(), nameDuplicatedMember)) { // 중복인 id가 있고 자기 자신이 아니라면
+            return false;
+        } else {
+            member.setNickname(newNickname);
+        }
+        return true;
     }
 
     private boolean compareloginId(String loginId, Optional<Member> foundMember) {

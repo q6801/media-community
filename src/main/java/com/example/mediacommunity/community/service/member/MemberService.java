@@ -13,7 +13,6 @@ public interface MemberService {
     Member findMemberById(String loginId) ;
     Member findMemberByName(String nickName);
     List<Member> findAllMembers();
-    Boolean updateNickname(String loginId, String newNickname);
     Optional<String> updateProfile(String loginId, MemberEditDto member) throws IOException;
     void signOut(String memberId);
     void updateMemberRoleToUser(String memberId);
