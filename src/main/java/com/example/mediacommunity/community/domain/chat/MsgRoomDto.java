@@ -1,4 +1,4 @@
-package com.example.mediacommunity.community.domain;
+package com.example.mediacommunity.community.domain.chat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
