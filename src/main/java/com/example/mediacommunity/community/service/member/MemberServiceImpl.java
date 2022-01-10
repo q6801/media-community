@@ -106,7 +106,7 @@ public class MemberServiceImpl implements MemberService {
             return Optional.empty();
         }
 
-        if(!file.isEmpty()) {
+        if(file != null) {
             String ext = extractExt(file.getOriginalFilename());
             String storeFileName = loginId + "Profile" + "." + ext;
             amazonS3Service.uploadImg(path + storeFileName, memberEditDto.getFile());
