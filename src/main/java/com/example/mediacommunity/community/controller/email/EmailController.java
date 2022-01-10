@@ -1,4 +1,4 @@
-package com.example.mediacommunity.community.controller;
+package com.example.mediacommunity.community.controller.email;
 
 import com.example.mediacommunity.community.service.EmailConfirmationTokenService;
 import com.example.mediacommunity.community.service.member.MemberService;
@@ -26,12 +26,18 @@ public class EmailController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /***
+     * 수정 필요
+     * @param userInfo
+     * @param token
+     * @return
+     */
     @GetMapping("/confirm-email")
     public String confirmEmailToken(@AuthenticationPrincipal UserInfo userInfo, @RequestParam UUID token) {
         if (emailTokenService.confirmEmail(token)) {
             memberService.updateMemberRoleToUser(userInfo.getUsername());
-            return "redirect:/member";
+            return "redirect:/user";
         }
-        return "redirect:/member";
+        return "redirect:/user";
     }
 }
