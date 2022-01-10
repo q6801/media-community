@@ -1,6 +1,10 @@
 package com.example.mediacommunity.security.handler;
 
+import com.example.mediacommunity.Exception.ApiErrorResponse;
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.UserNotExistException;
 import com.example.mediacommunity.security.BadProviderException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -21,16 +25,23 @@ public class FormLoginFailureHandler implements AuthenticationFailureHandler {
         Boolean providerFail = false;
 
         if (exception instanceof BadProviderException) {
-            providerFail = true;
+            setResponse(response, ExceptionEnum.BAD_PROVIDER);
         } else if (exception instanceof InternalAuthenticationServiceException) {
-            idFail = true;
+            setResponse(response, ExceptionEnum.USER_NOT_EXIST);
         } else if (exception instanceof BadCredentialsException) {
-            pwFail = true;
+            setResponse(response, ExceptionEnum.BAD_PASSWORD);
         }
+    }
 
-        request.setAttribute("idFail", idFail);
-        request.setAttribute("pwFail", pwFail);
-        request.setAttribute("providerFail", providerFail);
-        request.getRequestDispatcher("/loginFail").forward(request, response);
+    private void setResponse(HttpServletResponse response, ExceptionEnum exceptionEnum) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(exceptionEnum.getCode(), exceptionEnum.getMessage());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String responseJson = objectMapper.writeValueAsString(apiErrorResponse);
+
+        response.getWriter().print(responseJson);
     }
 }
