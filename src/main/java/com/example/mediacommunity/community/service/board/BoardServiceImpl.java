@@ -1,7 +1,7 @@
 package com.example.mediacommunity.community.service.board;
 
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardEditingDto;
+import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.Pagination;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +78,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void modifyBoardUsingDto(Long boardIdx, BoardEditingDto updateParam) {
+    public void modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam) {
         try {
             Board board = boardRepository.findById(boardIdx);
             board.updateBoardWithDto(updateParam);
