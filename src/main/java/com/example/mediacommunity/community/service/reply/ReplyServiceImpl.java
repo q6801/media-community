@@ -32,11 +32,12 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public void reply(Long boardId, String memberId, String content) {
+    public Reply reply(Long boardId, String memberId, String content) {
         Board board = boardService.findBoard(boardId)
                 .orElseThrow(() -> new RuntimeException("board 없음"));
         Member member = memberService.findMemberById(memberId);
         Reply reply = Reply.createReply(member, board, content);
         replyRepository.saveReply(reply);
+        return reply;
     }
 }
