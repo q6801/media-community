@@ -1,6 +1,6 @@
 package com.example.mediacommunity.community.service;
 
-import com.example.mediacommunity.community.domain.MsgRoom;
+import com.example.mediacommunity.community.domain.chat.MsgRoom;
 import com.example.mediacommunity.community.repository.MsgRoomRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +35,4 @@ public class MsgService {
         return msgRoomRepository.findAllRoom();
     }
 
-//    public <T> void sendMessage(WebSocketSession session, T message) {
-//        try {
-//            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
-//        } catch (IOException e) {
-//            log.error(e.getMessage(), e);
-//        }
-//    }
 }
