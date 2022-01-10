@@ -1,4 +1,4 @@
-package com.example.mediacommunity.community.domain;
+package com.example.mediacommunity.community.domain.email;
 
 import com.example.mediacommunity.community.domain.member.Member;
 import lombok.AccessLevel;
