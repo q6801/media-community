@@ -1,6 +1,6 @@
 package com.example.mediacommunity.community.repository;
 
-import com.example.mediacommunity.community.domain.EmailConfirmationToken;
+import com.example.mediacommunity.community.domain.email.EmailConfirmationToken;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

@@ -1,6 +1,6 @@
 package com.example.mediacommunity.community.service;
 
-import com.example.mediacommunity.community.domain.EmailConfirmationToken;
+import com.example.mediacommunity.community.domain.email.EmailConfirmationToken;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.EmailConfirmationTokenRepository;
 import com.example.mediacommunity.community.service.member.MemberService;
