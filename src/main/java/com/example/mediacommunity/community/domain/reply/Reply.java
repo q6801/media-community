@@ -64,4 +64,8 @@ public class Reply {
         reply.setBoard(board);
         return reply;
     }
+
+    public ReplyInfoDto convertReplyToReplyInfoDto() {
+        return new ReplyInfoDto(this.member.getNickname(), this.content, this.createdAt, this.updatedAt);
+    }
 }
