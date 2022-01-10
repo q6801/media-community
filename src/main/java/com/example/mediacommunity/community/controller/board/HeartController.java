@@ -1,40 +1,34 @@
 package com.example.mediacommunity.community.controller.board;
 
-import com.example.mediacommunity.community.domain.member.Member;
+import com.example.mediacommunity.community.domain.heart.HeartInfoDto;
 import com.example.mediacommunity.community.service.heart.HeartService;
-import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/heart")
+@RestController
 @RequiredArgsConstructor
 public class HeartController {
     private final HeartService heartService;
-    private final MemberService memberService;
 
-    @PostMapping("/{boardIdx}")
-    public String hitTheLikeButton(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long boardIdx,
-                                   Model model, @RequestParam int page, RedirectAttributes redirectAttributes) {
-        Member authUser = memberService.findMemberById(userInfo.getUsername());
-        if (likeStatus(authUser, boardIdx)) {
-            model.addAttribute("heart", true);
-        } else {
-            model.addAttribute("heart", false);
+    @GetMapping("boardInfo/{boardIdx}/hearts")
+    public HeartInfoDto hearts(@PathVariable long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
+        Long cnt = heartService.cntHearts(boardIdx);
+        Boolean pushed = false;
+        if (userInfo != null && heartService.findTheHeart(boardIdx, userInfo.getUsername()).isPresent()) {
+            pushed = true;
         }
-        redirectAttributes.addAttribute("page", page);
-        return "redirect:/boards/{boardIdx}";
+        return new HeartInfoDto(cnt, pushed);
     }
 
-    private Boolean likeStatus(Member member, Long boardIdx) {
-        return heartService.toggleTheHeart(boardIdx, member.getLoginId());
+    @PutMapping("board/{boardIdx}/heart")
+    public HeartInfoDto hitTheLikeButton(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long boardIdx) {
+        Boolean pushed = heartService.toggleTheHeart(boardIdx, userInfo.getUsername());
+        Long cnt = heartService.cntHearts(boardIdx);
+        return new HeartInfoDto(cnt, pushed);
     }
 }
