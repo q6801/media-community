@@ -68,10 +68,15 @@ public class Board {
         return board;
     }
 
-    public void updateBoardWithDto(BoardEditingDto updateParam) {
+    public void updateBoardWithDto(BoardAddingDto updateParam) {
         this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         this.content = updateParam.getContent();
         this.title = updateParam.getTitle();
+    }
+
+    public BoardInfoDto convertBoardToBoardInfoDto() {
+        return new BoardInfoDto(this.id, this.content, this.createdAt,
+                this.updatedAt, this.viewCnt, this.title, this.member.getNickname());
     }
 
     public void increaseViewCnt() {
