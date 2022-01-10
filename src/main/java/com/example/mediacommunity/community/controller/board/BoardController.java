@@ -2,149 +2,98 @@ package com.example.mediacommunity.community.controller.board;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
-import com.example.mediacommunity.community.domain.board.BoardEditingDto;
+import com.example.mediacommunity.community.domain.board.BoardInfoDto;
 import com.example.mediacommunity.community.domain.member.Member;
-import com.example.mediacommunity.community.domain.reply.Reply;
-import com.example.mediacommunity.community.domain.reply.ReplyDto;
 import com.example.mediacommunity.community.service.Pagination;
 import com.example.mediacommunity.community.service.board.BoardService;
-import com.example.mediacommunity.community.service.heart.HeartService;
 import com.example.mediacommunity.community.service.member.MemberService;
-import com.example.mediacommunity.community.service.reply.ReplyService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/boards")
 public class BoardController {
 
     private final BoardService boardService;
     private final Pagination pagination;
-    private final HeartService heartService;
-    private final ReplyService replyService;
     private final MemberService memberService;
 
-    @GetMapping
-    public String boards(Model model, @RequestParam(defaultValue = "1") int page) {
-        rgstrBoardsWithPages(page, model);
-        return "community/boards";
-    }
-
-    private void rgstrBoardsWithPages(int page, Model model) {
+    @GetMapping("/boards")
+    public Map<String, Object> boards(@RequestParam(defaultValue = "1") int page) {
         int totalBoardsNum = boardService.getTotalBoardsNum();
+
         pagination.pageInfo(page, totalBoardsNum);
         List<Board> boards = boardService.findBoards(pagination);
-        model.addAttribute("boards", boards);
-        model.addAttribute("pagination", pagination);
+
+        List<BoardInfoDto> boardInfoDtos = boards.stream()
+                .map(board -> board.convertBoardToBoardInfoDto())
+                .collect(Collectors.toList());
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("boards", boardInfoDtos);
+        map.put("pagination", pagination);
+
+        return map;
     }
 
-    @GetMapping("/{boardIdx}")
-    public String board(@PathVariable long boardIdx, Model model, @RequestParam(defaultValue = "1") int page,
-                        @AuthenticationPrincipal UserInfo userInfo) {
-        Member authUser = memberService.findMemberById(userInfo.getUsername());
-        List<Reply> replies = replyService.findAllReplies(boardIdx);
+    @GetMapping("boardInfo/{boardIdx}")
+    public BoardInfoDto board(@PathVariable long boardIdx) {
         Board board = boardService.findBoard(boardIdx).orElseThrow();
-
-        model.addAttribute("replies", replies);
-        model.addAttribute("reply", new ReplyDto());    // add, edit때 입력을 받기 위해 넣어둠
-        model.addAttribute("board", board);
-
-        if (authUser != null) {
-            model.addAttribute("memberAuth", authUser);   // 좋아요는 로그인해야 누를 수 있음
-        }
         boardService.increaseViewCnt(boardIdx, board.getViewCnt());
-        if (compareUserAndWriter(authUser, board)) {
-            model.addAttribute("editPermission", true);
-        }
-        insertHeartStatus(board, model, authUser);
-        rgstrBoardsWithPages(page, model);
-
-        return "community/board";
+        return board.convertBoardToBoardInfoDto();
     }
 
-    private boolean compareUserAndWriter(Member member, Board board) {
+    @PostMapping("/board")
+    public ResponseEntity<?> addBoard(@RequestBody BoardAddingDto boardDto, @AuthenticationPrincipal UserInfo userInfo) {
+        Member member = memberService.findMemberById(userInfo.getUsername());
+        Board board = Board.convertBoardAddingDtoToBoard(boardDto, member);
+        boardService.save(board);
+
+        Map<String, Long> result = new HashMap<>();
+        result.put("boardIdx", board.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    @PutMapping("/board/{boardIdx}")
+    public ResponseEntity<?> editBoard(@RequestBody BoardAddingDto boardDto, @PathVariable Long boardIdx,
+                                       @AuthenticationPrincipal UserInfo userInfo) {
+        Member member = memberService.findMemberById(userInfo.getUsername());
+        Board board = Board.convertBoardAddingDtoToBoard(boardDto, member);
+
+        if (userEqualsToWriter(member, board)) {
+            boardService.modifyBoardUsingDto(boardIdx, boardDto);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+        throw new RuntimeException();
+    }
+
+
+    private boolean userEqualsToWriter(Member member, Board board) {
         if (member != null  && board.getMember().equals(member)) {
             return true;
         }
         return false;
     }
 
-    private void insertHeartStatus(Board board, Model model, Member member) {
-        model.addAttribute("heartNums", heartService.cntHearts(board.getId()));
-        if (member != null && heartService.findTheHeart(board.getId(), member.getLoginId()).isPresent())
-            model.addAttribute("heart", true);
-        else
-            model.addAttribute("heart", false);
-    }
-
-    @GetMapping("/add")
-    public String addForm(Model model) {
-        model.addAttribute("board", new BoardAddingDto());
-        return "community/addBoard";
-    }
-
-    @PostMapping("/add")
-    public String addBoard(@Valid @ModelAttribute("board") BoardAddingDto boardDto,
-                           BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                           @AuthenticationPrincipal UserInfo userInfo) {
-        Member authUser = memberService.findMemberById(userInfo.getUsername());
-        if(bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "community/addBoard";
-        }
-        Board savedBoard = Board.convertBoardAddingDtoToBoard(boardDto, authUser);
-        boardService.save(savedBoard);
-
-        redirectAttributes.addAttribute("boardIdx", savedBoard.getId());
-        return "redirect:/boards/{boardIdx}";
-    }
-
-
-    @GetMapping("/edit/{boardIdx}")
-    public String editForm(@PathVariable long boardIdx, Model model,
-                           @AuthenticationPrincipal UserInfo userInfo) {
-        Member authUser = memberService.findMemberById(userInfo.getUsername());
-        Board board = boardService.findBoard(boardIdx).orElseThrow(() -> new RuntimeException("board not found error"));
-        if (compareUserAndWriter(authUser, board)) {
-            model.addAttribute("board", board);
-            return "community/editBoard";
-        }
-        return "redirect:/boards";
-    }
-
-    @PostMapping("/edit/{boardIdx}")
-    public String editBoard(@PathVariable long boardIdx, @Valid @ModelAttribute("board") BoardEditingDto boardDto,
-                            BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            log.info("errors={}", bindingResult);
-            return "community/editBoard";
-        }
-        boardService.modifyBoardUsingDto(boardIdx, boardDto);
-        return "redirect:/boards/{boardIdx}";
-    }
-
-    @PostMapping("/delete/{boardIdx}")
-    public String deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
-        Member authUser = memberService.findMemberById(userInfo.getUsername());
-        Board board = boardService.findBoard(boardIdx)
-                .orElseThrow(() -> new RuntimeException("board finding error"));
-        if (compareUserAndWriter(authUser, board)) {
-            boardService.deleteBoard(boardIdx);
-        }
-        return "redirect:/boards";
-    }
+//    @PostMapping("/delete/{boardIdx}")
+//    public String deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
+//        Member authUser = memberService.findMemberById(userInfo.getUsername());
+//        Board board = boardService.findBoard(boardIdx)
+//                .orElseThrow(() -> new RuntimeException("board finding error"));
+//        if (compareUserAndWriter(authUser, board)) {
+//            boardService.deleteBoard(boardIdx);
+//        }
+//        return "redirect:/boards";
+//    }
 }
