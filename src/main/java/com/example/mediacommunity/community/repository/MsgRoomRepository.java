@@ -1,9 +1,8 @@
 package com.example.mediacommunity.community.repository;
 
-import com.example.mediacommunity.community.domain.MsgRoom;
+import com.example.mediacommunity.community.domain.chat.MsgRoom;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
