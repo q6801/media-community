@@ -29,6 +29,12 @@ public class HeartServiceImpl implements HeartService{
         return heartRepository.findTheHeart(boardId, memberId);
     }
 
+    /**
+     *
+     * @param boardId
+     * @param memberId
+     * @return heart pushed여부 (true면 이제 누른것)
+     */
     @Override
     public Boolean toggleTheHeart(Long boardId, String memberId) {
         try {
