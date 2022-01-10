@@ -1,5 +1,6 @@
 axios.get('/memberInfo')
     .then(function(response) {
+        console.log('res : ' +  response)
         let user = document.querySelector('#user');
         let welcome = document.createElement('a')
 
@@ -18,6 +19,9 @@ axios.get('/memberInfo')
         user.appendChild(logout_btn)
     })
     .catch(function(err) {
+        console.log('err : ' +  err.response.data.errorCode)
+        console.log('err : ' +  err.response.data.errorMessage)
+
         let user = document.querySelector('#user');
         let login_btn = document.createElement('a');
 
