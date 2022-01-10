@@ -1,16 +1,10 @@
-package com.example.mediacommunity.community.controller;
+package com.example.mediacommunity.community.controller.chat;
 
-import com.example.mediacommunity.community.domain.Message;
-import com.example.mediacommunity.community.domain.MsgRoom;
-import com.example.mediacommunity.community.service.MsgService;
+import com.example.mediacommunity.community.domain.chat.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
