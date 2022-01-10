@@ -1,7 +1,7 @@
 package com.example.mediacommunity.community.service.board;
 
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardEditingDto;
+import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.service.Pagination;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public interface BoardService {
     List<Board> findBoards(String writerId);
     List<Board> findBoards(Pagination pagination);
     List<Board> findAllBoards();
-    void modifyBoardUsingDto(Long BoardIdx, BoardEditingDto updateParam);
+    void modifyBoardUsingDto(Long BoardIdx, BoardAddingDto updateParam);
     void increaseViewCnt(Long id, int viewCnt);
     void deleteBoard(Long id);
     int getTotalBoardsNum();
