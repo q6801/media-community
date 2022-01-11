@@ -1,6 +1,8 @@
 package com.example.mediacommunity.community.service.heart;
 
+import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +31,14 @@ class HeartServiceImplTest {
     @Test
     void findTheHeart() {
         //given
+        Board board = getStubBoardList().get(0);
+        Member member = getStubMemberList().get(0);
         Heart heart = getStubHearts().get(0);
-        given(heartRepository.findTheHeart(heart.getBoardId(), heart.getMemberId())).willReturn(heart);
+
+        given(heartRepository.findTheHeart(board.getId(), member.getLoginId())).willReturn(Optional.of(heart));
 
         //when
-        Optional<Heart> foundHeart = heartService.findTheHeart(heart.getBoardId(), heart.getMemberId());
+        Optional<Heart> foundHeart = heartService.findTheHeart(board.getId(), member.getLoginId());
 
         //then
         assertThat(heart).isEqualTo(foundHeart.get());
@@ -40,29 +47,59 @@ class HeartServiceImplTest {
     @Test
     void toggleTheHeart() {
         //given
-        Heart notPushedHeart = getStubHearts().get(0);
-        Heart pushedHeart = getStubHearts().get(1);
-        given(heartRepository.findTheHeart(pushedHeart.getBoardId(), pushedHeart.getMemberId())).willReturn(pushedHeart);
-        given(heartRepository.findTheHeart(notPushedHeart.getBoardId(), notPushedHeart.getMemberId())).willThrow(new DataAccessException("error") {
-            @Override
-            public String getMessage() {
-                return super.getMessage();
-            }
-        });
+        Member member = getStubMemberList().get(0);
+        Board board = getStubBoardList().get(0);
+        Heart pushedHeart = getStubHearts().get(0);
+
+        given(heartRepository.findTheHeart(board.getId(), member.getLoginId()))
+                .willReturn(Optional.of(pushedHeart));
 
         //when
-        Boolean pushed = heartService.toggleTheHeart(notPushedHeart);
-        Boolean notPushed = heartService.toggleTheHeart(pushedHeart);
+        Boolean pushed = heartService.toggleTheHeart(board.getId(), member.getLoginId());
 
         //then
         assertThat(pushed).isEqualTo(true);
-        assertThat(notPushed).isEqualTo(false);
+    }
+
+
+    private List<Board> getStubBoardList() {
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
+        return Arrays.asList(
+                Board.builder().content("start content")
+                        .createdAt(timestamp).updatedAt(timestamp)
+                        .viewCnt(1).title("title").build(),
+                Board.builder().content("start 2")
+                        .createdAt(timestamp).updatedAt(timestamp)
+                        .viewCnt(10).title("title").build(),
+                Board.builder().build()
+        );
+    }
+
+    private List<Member> getStubMemberList() {
+        return Arrays.asList(
+                Member.builder()
+                        .loginId("test121")
+                        .imageUrl("")
+                        .nickname("test1!")
+                        .password("password0").build(),
+                Member.builder()
+                        .loginId("test1232")
+                        .imageUrl("")
+                        .nickname("test!")
+                        .password("password1").build()
+        );
     }
 
     private List<Heart> getStubHearts() {
-        return Arrays.asList(
-                new Heart(12323L, "test123123"),
-                new Heart(3223L, "test121232")
-        );
+        Heart heart0 = Heart.builder().build();
+        Heart heart1 = Heart.builder().build();
+
+        heart0.setMember(getStubMemberList().get(0));
+        heart0.setBoard(getStubBoardList().get(0));
+
+        heart1.setMember(getStubMemberList().get(1));
+        heart1.setBoard(getStubBoardList().get(1));
+
+        return Arrays.asList(heart0, heart1);
     }
 }
