@@ -81,10 +81,19 @@ class MemberServiceImplTest {
                 Board.builder().build()
         );
     }
+
     private List<Member> getStubMemberList() {
         return Arrays.asList(
-                new Member("test121", "test1!", "HelloWorld1", "local", ""),
-                new Member("test1232", "test!", "HelloWorld", "local", "")
+                Member.builder()
+                        .loginId("test121")
+                        .imageUrl("")
+                        .nickname("test1!")
+                        .password("password0").build(),
+                Member.builder()
+                        .loginId("test1232")
+                        .imageUrl("")
+                        .nickname("test!")
+                        .password("password1").build()
         );
     }
 
