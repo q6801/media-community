@@ -1,5 +1,8 @@
 package com.example.mediacommunity.community.service.reply;
 
+import com.example.mediacommunity.community.domain.board.Board;
+import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
 import com.example.mediacommunity.community.repository.reply.ReplyRepository;
 import org.assertj.core.api.Assertions;
@@ -10,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,20 +29,56 @@ class ReplyServiceImplTest {
     @Test
     void findALlReplies() {
         //given
+        Board board = getStubBoardList().get(0);
+        Member member = getStubMemberList().get(0);
         Reply reply = getStubReplies().get(0);
-        BDDMockito.given(replyService.findAllReplies(reply.getBoardId())).willReturn(getStubReplies());
+        reply.setReplyer(member);
+        reply.setBoard(board);
+
+        BDDMockito.given(replyService.findAllReplies(board.getId())).willReturn(getStubReplies());
 
         //when
-        List<Reply> allReplies = replyService.findAllReplies(reply.getBoardId());
+        List<Reply> allReplies = replyService.findAllReplies(board.getId());
 
         //then
         Assertions.assertThat(allReplies).contains(reply);
     }
 
-    private List<Reply> getStubReplies() {
+    private List<Board> getStubBoardList() {
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         return Arrays.asList(
-                new Reply(12323L, "hello world!!", "test123123"),
-                new Reply(3223L, "hello world12!!", "test121232")
+                Board.builder().content("start content")
+                        .createdAt(timestamp).updatedAt(timestamp)
+                        .viewCnt(1).title("title").build(),
+                Board.builder().content("start 2")
+                        .createdAt(timestamp).updatedAt(timestamp)
+                        .viewCnt(10).title("title").build(),
+                Board.builder().build()
+        );
+    }
+
+    private List<Member> getStubMemberList() {
+        return Arrays.asList(
+                Member.builder()
+                        .loginId("test121")
+                        .imageUrl("")
+                        .nickname("test1!")
+                        .password("password0").build(),
+                Member.builder()
+                        .loginId("test1232")
+                        .imageUrl("")
+                        .nickname("test!")
+                        .password("password1").build()
+        );
+    }
+
+    private List<Reply> getStubReplies() {
+        Reply reply0 = Reply.builder()
+                .content("hello world!!").build();
+        Reply reply1 = Reply.builder()
+                .content("hello world12!!").build();
+        return Arrays.asList(
+                reply0, reply1
         );
     }
 
