@@ -93,12 +93,6 @@ class BoardServiceImplTest {
 //        assertThat(board0.getContent()).isNotEqualTo(modifiedBoard.getContent());
 //    }
 
-    @Test()
-    void something() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new Board.Builder().content(null).build());
-    }
-
 
     private List<Board> getStubBoardList() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
