@@ -4,6 +4,8 @@ import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.heart.HeartRepository;
+import com.example.mediacommunity.community.service.board.BoardService;
+import com.example.mediacommunity.community.service.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +26,10 @@ import static org.mockito.BDDMockito.*;
 class HeartServiceImplTest {
     @Mock
     HeartRepository heartRepository;
+    @Mock
+    BoardService boardService;
+    @Mock
+    MemberService memberService;
 
     @InjectMocks
     HeartServiceImpl heartService;
@@ -53,12 +59,14 @@ class HeartServiceImplTest {
 
         given(heartRepository.findTheHeart(board.getId(), member.getLoginId()))
                 .willReturn(Optional.of(pushedHeart));
+        given(boardService.findBoard(board.getId())).willReturn(Optional.of(board));
+        given(memberService.findMemberById(member.getLoginId())).willReturn(member);
 
         //when
         Boolean pushed = heartService.toggleTheHeart(board.getId(), member.getLoginId());
 
         //then
-        assertThat(pushed).isEqualTo(true);
+        assertThat(pushed).isEqualTo(false);
     }
 
 

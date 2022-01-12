@@ -65,7 +65,7 @@ class MemberServiceImplTest {
         List<Member> allMembers = memberService.findAllMembers();
 
         //then
-        Assertions.assertThat(allMembers).contains(savedMember1, savedMember2);
+        Assertions.assertThat(allMembers.size()).isEqualTo(2);
     }
 
 

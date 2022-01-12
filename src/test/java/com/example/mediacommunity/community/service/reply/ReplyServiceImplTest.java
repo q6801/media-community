@@ -1,7 +1,6 @@
 package com.example.mediacommunity.community.service.reply;
 
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
 import com.example.mediacommunity.community.repository.reply.ReplyRepository;
@@ -35,13 +34,13 @@ class ReplyServiceImplTest {
         reply.setReplyer(member);
         reply.setBoard(board);
 
-        BDDMockito.given(replyService.findAllReplies(board.getId())).willReturn(getStubReplies());
+        BDDMockito.given(replyService.findAllReplies(board.getId())).willReturn(Arrays.asList(reply));
 
         //when
         List<Reply> allReplies = replyService.findAllReplies(board.getId());
 
         //then
-        Assertions.assertThat(allReplies).contains(reply);
+        Assertions.assertThat(allReplies.size()).isEqualTo(1);
     }
 
     private List<Board> getStubBoardList() {
