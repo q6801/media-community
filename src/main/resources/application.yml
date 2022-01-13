@@ -16,7 +16,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: q6801234@gmail.com
-    password: mhferfocahuyyvil
+    password: ENC(jmjVhoBw0LRKDpVN7CnPoiFV6Ad4sI0ifrS4VlJT9AU=)
     properties:
       mail:
         smtp:
@@ -33,7 +33,7 @@ logging.level:
 
 jasypt:
   encryptor:
-#    password: password
+    password: appdkaghghk
     bean: jasyptStringEncryptor
 
 cloud:

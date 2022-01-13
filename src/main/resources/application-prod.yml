@@ -6,7 +6,7 @@ spring:
     driver-class-name: "com.mysql.cj.jdbc.Driver"
     url: "jdbc:mysql://media-community-db.cidduoynnhpa.ap-northeast-2.rds.amazonaws.com:3306/community?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
     username: "q6801"
-    password: "dkakwhsrds"
+    password: "ENC(cEbFjyIRWamKyEuiVg1Q6SRsgpjrmHNP)"
 
 ---
 
