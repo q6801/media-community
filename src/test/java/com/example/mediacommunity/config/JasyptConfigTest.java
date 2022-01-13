@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class JasyptConfigTest {
     @Test
     public void jasypt_encrypt_decrypt_test() {
-        String plainText = "hXjgvqFdfB6ELDfpKVhJKhb7FeSQBNdn";
+        String plainText = "hello world";
 
         StandardPBEStringEncryptor jasypt = new StandardPBEStringEncryptor();
         jasypt.setPassword("password");
