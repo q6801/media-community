@@ -12,5 +12,5 @@ sign_up_btn.addEventListener('click', function() {
     })
     .then(function(res) {
         window.location.replace('/')
-    })    
+    })
 })
