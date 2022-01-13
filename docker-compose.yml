@@ -1,13 +1,12 @@
-version: '3'
 
 services:
     jenkins:
-        image: jenkins/jenkins:lts
+        image: getintodevops/jenkins-withdocker:lts
         container_name: jenkins_cicd
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - /jenkins:/var/jenkins_home
         ports:
             - "9090:8080"
-        privileged: true
+            - "50000:50000"
         user: root
