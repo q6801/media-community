@@ -12,5 +12,13 @@ sign_up_btn.addEventListener('click', function() {
     })
     .then(function(res) {
         window.location.replace('/')
+    }).catch(function(err) {
+        console.log('err : ' +  err.response.data.errorCode)
+        console.log('err : ' +  err.response.data.errorMessage)
+
+        pw.value = ''
+
+        let error_dom = document.querySelector('#error')
+        error_dom.innerText = err.response.data.errorMessage
     })
 })
