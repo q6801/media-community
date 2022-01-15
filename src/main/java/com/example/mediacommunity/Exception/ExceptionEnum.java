@@ -9,9 +9,10 @@ public enum ExceptionEnum {
     BAD_PASSWORD("auth-0003", "잘못된 비밀번호"),
     USER_ALREADY_EXIST("auth-004", "이미 존재하는 id이다."),
     BAD_PROVIDER("auth-005", "잘못된 provider이다."),
+    NICKNAME_ALREADY_EXIST("auth-006", "이미 존재하는 nickname이다."),
+    BLANK_EXIST("common-001", "값을 다 넣어주세요"),
 
     ;
-    
 
     private String code;
     private String message;
