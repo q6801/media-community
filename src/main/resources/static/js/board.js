@@ -82,6 +82,7 @@ axios.get('/boardInfo/' + board_id + '/hearts')
         button.addEventListener('click', function () {
             axios.put('/board/' + board_id + '/heart')
                 .then(function(response) {
+                    console.log('pushed : ' + response.data)
                     let pushedHeart = response.data
                     button.removeAttribute('class')
 
