@@ -6,15 +6,17 @@ import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.community.service.Pagination;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-@Transactional
 @RequiredArgsConstructor
 public class JpaBoardRepository implements BoardRepository {
     private final MemberRepository memberRepository;
@@ -29,29 +31,40 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public Board findById(Long id) {
-        Board board = em.find(Board.class, id);
-        return board;
+    public Optional<Board> findBoardById(Long id) {
+        try {
+            Board board = em.find(Board.class, id);
+            return Optional.of(board);
+        } catch(DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public List<Board> findByWriterId(String writerId) {
-        Member member = memberRepository.findByLoginId(writerId).orElseThrow();
+    public List<Board> findByWriterId(Member member) {
         return member.getBoards();
     }
 
     @Override
     public List<Board> findBoards(Pagination pagination) {
-        return em.createQuery("select b from Board b order by b.updatedAt desc", Board.class)
-                .setFirstResult(pagination.getStartingBoardNumInPage())
-                .setMaxResults(pagination.getOnePageBoardsNum())
-                .getResultList();
+        try {
+            return em.createQuery("select b from Board b order by b.updatedAt desc", Board.class)
+                    .setFirstResult(pagination.getStartingBoardNumInPage())
+                    .setMaxResults(pagination.getOnePageBoardsNum())
+                    .getResultList();
+        } catch(DataAccessException e) {
+            return new ArrayList<>();
+        }
     }
 
     @Override
     public List<Board> findAll() {
-        return em.createQuery("select b from Board b ", Board.class)
-                .getResultList();
+        try {
+            return em.createQuery("select b from Board b ", Board.class)
+                    .getResultList();
+        } catch (DataAccessException e) {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -73,8 +86,7 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public void delete(Long id) {
-        Board board = em.find(Board.class, id);
+    public void delete(Board board) {
         em.remove(board);
     }
 

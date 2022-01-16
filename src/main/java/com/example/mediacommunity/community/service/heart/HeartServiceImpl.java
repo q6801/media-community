@@ -26,7 +26,9 @@ public class HeartServiceImpl implements HeartService{
 
     @Override
     public Optional<Heart> findTheHeart(Long boardId, String memberId) {
-        return heartRepository.findTheHeart(boardId, memberId);
+        Board board = boardService.findBoardById(boardId);
+        Member member = memberService.findMemberById(memberId);
+        return heartRepository.findTheHeart(board, member);
     }
 
     /**
@@ -37,39 +39,38 @@ public class HeartServiceImpl implements HeartService{
      */
     @Override
     public Boolean toggleTheHeart(Long boardId, String memberId) {
-        try {
-            Board board = boardService.findBoard(boardId).orElseThrow();
-            Member member = memberService.findMemberById(memberId);
-            Optional<Heart> theLikeStatus = findTheHeart(boardId, memberId);
+        Board board = boardService.findBoardById(boardId);
+        Member member = memberService.findMemberById(memberId);
+        Optional<Heart> theLikeStatus = heartRepository.findTheHeart(board, member);
 
-            if (theLikeStatus.isEmpty()) {
-                Heart heart = Heart.builder().build();
-                heart.setBoard(board);
-                heart.setMember(member);
-                heartRepository.addHeart(heart);
-                return true;
-            } else {
-                heartRepository.deleteHeart(theLikeStatus.get().getId());
-                return false;
-            }
-        } catch (DataAccessException e) {
-            log.warn("class: HeartServiceImpl, method: hitTheLikeButton, {}", e);
-            throw new RuntimeException("toggle heart failed");
+        if (theLikeStatus.isEmpty()) {
+            Heart heart = Heart.builder().build();
+            heart.setBoard(board);
+            heart.setMember(member);
+            heartRepository.addHeart(heart);
+            return true;
+        } else {
+            board.getHearts().remove(theLikeStatus.get());
+            heartRepository.deleteHeart(theLikeStatus.get());
+            return false;
         }
     }
 
     @Override
     public List<Heart> findLikingBoards(String memberId) {
-        return heartRepository.findLikingBoards(memberId);
+        Member member = memberService.findMemberById(memberId);
+        return heartRepository.findLikingBoards(member);
     }
 
     @Override
     public List<Heart> findLikingMembers(Long boardId) {
-        return heartRepository.findLikingMembers(boardId);
+        Board board = boardService.findBoardById(boardId);
+        return heartRepository.findLikingMembers(board);
     }
 
     @Override
     public Long cntHearts(Long boardId) {
-        return heartRepository.cntHearts(boardId);
+        Board board = boardService.findBoardById(boardId);
+        return heartRepository.cntHearts(board);
     }
 }

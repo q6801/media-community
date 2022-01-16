@@ -2,17 +2,16 @@ package com.example.mediacommunity.community.service.board;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
+import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.Pagination;
+import com.example.mediacommunity.community.service.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -20,45 +19,23 @@ import java.util.Optional;
 public class BoardServiceImpl implements BoardService{
     @Autowired
     BoardRepository boardRepository;
+    MemberService memberService;
 
     @Override
     public Board save(Board board) {
-        try {
-            return boardRepository.save(board);
-        } catch(DataAccessException e) {
-            log.warn("class: BoardServiceImpl, method: save, ", e);
-            throw new RuntimeException("saveBoard failed");
-        }
+        return boardRepository.save(board);
     }
 
     @Override
-    public Optional<Board> findBoard(Long id) {
-        try{
-            Board board = boardRepository.findById(id);
-            return Optional.ofNullable(board);
-        } catch(DataAccessException e) {
-            log.warn("class: BoardServiceImpl, method: findBoard, {}", e);
-            return Optional.empty();
-        }
+    public Board findBoardById(Long id) {
+        return boardRepository.findBoardById(id).orElseThrow();
     }
 
-//    @Override
-//    public Board createBoard(Long boardId) {
-//        Board board = boardRepository.findById(boardId);
-////        board.getReplies().isEmpty();               // 강제로 replies와 member를 만들기 위해 사용
-////        board.getMember().getNickname();
-//        return board;
-//    }
 
     @Override
-    public List<Board> findBoards(String writerId) {
-        try {
-            List<Board> boards = boardRepository.findByWriterId(writerId);
-            return boards;
-        } catch(DataAccessException e) {
-            log.warn("class: BoardServiceImpl, method: findBoards, {}", e);
-            return new ArrayList<>();
-        }
+    public List<Board> findByWriterId(String writerId) {
+        Member member = memberService.findMemberById(writerId);
+        return boardRepository.findByWriterId(member);
     }
 
     @Override
@@ -68,41 +45,25 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<Board> findAllBoards() {
-        try {
-            List<Board> boards = boardRepository.findAll();
-            return boards;
-        } catch(DataAccessException e) {
-            log.warn("class: BoardServiceImpl, method: findAllBoards, {}", e);
-            return new ArrayList<>();
-        }
+        return boardRepository.findAll();
     }
 
     @Override
     public void modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam) {
-        try {
-            Board board = boardRepository.findById(boardIdx);
-            board.updateBoardWithDto(updateParam);
-        } catch(RuntimeException e) {
-            log.warn("class: BoardServiceImpl, method: modifyBoardUsingDto, {}", e);
-        }
+        Board board = boardRepository.findBoardById(boardIdx).orElseThrow();
+        board.updateBoardWithDto(updateParam);
     }
 
     @Override
     public void increaseViewCnt(Long id, int viewCnt) {
-        try {
-            boardRepository.findById(id).increaseViewCnt();
-        } catch(RuntimeException e) {
-            log.warn("class: BoardServiceImpl, method: increaseViewCnt, {}", e);
-        }
+        boardRepository.findBoardById(id)
+            .orElseThrow().increaseViewCnt();
     }
 
     @Override
     public void deleteBoard(Long id) {
-        try {
-            boardRepository.delete(id);
-        } catch(RuntimeException e) {
-            log.warn("class: BoardServiceImpl, method: deleteBoard, {}", e);
-        }
+        Board board = boardRepository.findBoardById(id).orElseThrow();
+        boardRepository.delete(board);
     }
 
     @Override

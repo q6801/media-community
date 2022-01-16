@@ -65,26 +65,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findMemberById(String loginId) {
-        Member member = memberRepository.findByLoginId(loginId)
+        return memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new UserNotExistException(ExceptionEnum.USER_NOT_EXIST));
-        return member;
     }
 
     @Override
     public Member findMemberByName(String nickName) {
-        Member member = memberRepository.findByNickname(nickName)
+        return memberRepository.findByNickname(nickName)
                 .orElseThrow(() -> new UserNotExistException(ExceptionEnum.USER_NOT_EXIST));
-        return member;
     }
 
     @Override
     public List<Member> findAllMembers() {
-        try {
-            return memberRepository.findAll();
-        } catch (DataAccessException e) {
-            log.warn("class: MemberServiceImpl, method: findAllMembers, ", e);
-            return new ArrayList<>();
-        }
+        return memberRepository.findAll();
     }
 
     /***

@@ -33,10 +33,10 @@
 //        // when
 //        memberRepository.save(member);
 //        Board savedBoard = boardRepository.save(board);
-//        Board findBoard = boardRepository.findById(savedBoard.getId());
+//        Board findBoardById = boardRepository.findById(savedBoard.getId());
 //
 //        //then
-//        assertThat(savedBoard).isEqualTo(findBoard);
+//        assertThat(savedBoard).isEqualTo(findBoardById);
 //    }
 //
 //    @Test

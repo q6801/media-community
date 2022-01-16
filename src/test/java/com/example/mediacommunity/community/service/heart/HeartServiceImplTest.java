@@ -41,7 +41,7 @@ class HeartServiceImplTest {
         Member member = getStubMemberList().get(0);
         Heart heart = getStubHearts().get(0);
 
-        given(heartRepository.findTheHeart(board.getId(), member.getLoginId())).willReturn(Optional.of(heart));
+        given(heartRepository.findTheHeart(board, member)).willReturn(Optional.of(heart));
 
         //when
         Optional<Heart> foundHeart = heartService.findTheHeart(board.getId(), member.getLoginId());
@@ -57,9 +57,9 @@ class HeartServiceImplTest {
         Board board = getStubBoardList().get(0);
         Heart pushedHeart = getStubHearts().get(0);
 
-        given(heartRepository.findTheHeart(board.getId(), member.getLoginId()))
+        given(heartRepository.findTheHeart(board, member))
                 .willReturn(Optional.of(pushedHeart));
-        given(boardService.findBoard(board.getId())).willReturn(Optional.of(board));
+        given(boardService.findBoardById(board.getId())).willReturn(board);
         given(memberService.findMemberById(member.getLoginId())).willReturn(member);
 
         //when
