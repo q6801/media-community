@@ -1,6 +1,7 @@
 package com.example.mediacommunity.community.domain.member;
 
 import com.example.mediacommunity.community.domain.board.Board;
+import com.example.mediacommunity.community.domain.email.EmailConfirmationToken;
 import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.reply.Reply;
 import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
@@ -32,11 +33,14 @@ public class Member {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Board> boards = new ArrayList<>();
 
-    @OneToMany(mappedBy="member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy= "member", fetch = FetchType.LAZY)
     private List<Reply> replies = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Heart> hearts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<EmailConfirmationToken> emailTokens = new ArrayList<>();
 
     @Builder
     private Member(String loginId, String password, String nickname, String imageUrl) {
