@@ -23,9 +23,9 @@ public class EmailConfirmationTokenService {
     private final MemberService memberService;
 
 
-    public EmailConfirmationToken findById(UUID id) {
-        return emailTokenRepository.findById(id);
-    }
+//    public EmailConfirmationToken findById(UUID id) {
+//        return emailTokenRepository.findRecentMail(id);
+//    }
 
     public void save(EmailConfirmationToken emailToken) {
         emailTokenRepository.save(emailToken);
@@ -39,25 +39,36 @@ public class EmailConfirmationTokenService {
     public void saveAndSendEmailToken(String memberId, String emailAddress) {
         Member member = memberService.findMemberById(memberId);
 
-        EmailConfirmationToken emailToken = EmailConfirmationToken.createEmailToken(member);
+        EmailConfirmationToken emailToken = EmailConfirmationToken.createEmailToken(member, emailAddress);
         emailTokenRepository.save(emailToken);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(emailAddress);
         mailMessage.setSubject("[media community] 회원 가입 이메일 인증");
-        mailMessage.setText("http://localhost:8080/confirm-email?token=" + emailToken.getId());
+        mailMessage.setText("입력 번호 : " + emailToken.getRandomNum() + " ");
         emailSenderService.sendMail(mailMessage);
-
-        member.setEmail(emailAddress);  // 관리가 되나?
     }
 
-    public boolean confirmEmail(UUID token) {
-        EmailConfirmationToken emailToken = emailTokenRepository.findById(token);
-        boolean expired = emailToken.getExpiredAt().before(Timestamp.valueOf(LocalDateTime.now()));
-        if (emailToken.isExpired() || expired) {
-            return false;
+    public boolean confirmEmail(String memberId, int verifyingNum) {
+        Member member = memberService.findMemberById(memberId);
+        EmailConfirmationToken emailToken = emailTokenRepository.findRecentMail(member).orElseThrow();
+
+        if (notUsedOrExpired(emailToken) &&
+                emailToken.getRandomNum() == verifyingNum) {
+            member.setEmail(emailToken.getEmailAddress());
+            memberService.updateMemberRoleToUser(memberId);
+            emailToken.useToken();
+            return true;
         }
-        emailToken.useToken();
-        return true;
+        return false;
+    }
+
+    private boolean notUsedOrExpired(EmailConfirmationToken emailToken) {
+        boolean expired = emailToken.getExpiredAt().before(Timestamp.valueOf(LocalDateTime.now()));
+
+        if (!(emailToken.isUsed() || expired)) {
+            return true;
+        }
+        return false;
     }
 }
