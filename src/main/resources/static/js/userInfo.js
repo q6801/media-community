@@ -28,7 +28,10 @@ axios.get('/memberInfo')
 
         card_body.appendChild(card_text0)
         card_body.appendChild(card_text1)
-        if (memberInfo.email != '') {
+
+
+        if (memberInfo.email !== null) {
+            console.log(memberInfo.email)
             let card_text2 = document.createElement('p')
             card_text2.innerText = memberInfo.email
             card_body.appendChild(card_text2)
