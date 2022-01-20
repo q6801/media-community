@@ -31,6 +31,13 @@ logging.level:
   org.hibernate.SQL: debug
 
 
+server:
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: kurento
+    key-store-type: JKS
+    key-alias: kurento-selfsigned
+
 jasypt:
   encryptor:
     password: appdkaghghk
