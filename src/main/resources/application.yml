@@ -27,6 +27,7 @@ spring:
           timeout: 5000
           writetimeout: 5000
 
+
 logging.level:
   org.hibernate.SQL: debug
 
