@@ -27,9 +27,17 @@ spring:
           timeout: 5000
           writetimeout: 5000
 
+server:
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: kurento
+    key-store-type: JKS
+    key-alias: kurento-selfsigned
 
 logging.level:
   org.hibernate.SQL: debug
+
+
 
 
 jasypt:
