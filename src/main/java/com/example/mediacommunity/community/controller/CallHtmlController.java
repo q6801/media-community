@@ -70,4 +70,9 @@ public class CallHtmlController {
     public String editMemberForm() {
         return "axios/editMember";
     }
+
+    @GetMapping("/stream")
+    public String stream() {
+        return "axios/kurento-one2many";
+    }
 }
