@@ -40,7 +40,10 @@
 
 <main>
     <div class="container">
-        <p>이메일 전송됨</p>
+        <video id="localVideo" autoplay width="480px"></video>
+        <p id="waiting"></p>
+        <button id="presenter">presenter</button>
+        <button id="viewer">viewer</button>
     </div>
 
     <div th:replace="~{axios/footer :: footer}"></div>
@@ -51,5 +54,8 @@
 
 <!--  사용자 js -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type='text/javascript' th:src="@{/js/header.js}"></script>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
+<script src="/js/kurento-utils.min.js"></script>
+<script th:src="@{/js/kurento-one2many.js}"></script>
 </html>

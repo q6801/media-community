@@ -49,7 +49,7 @@ public class BoardController {
 
     @GetMapping("boardInfo/{boardIdx}")
     public BoardInfoDto board(@PathVariable long boardIdx) {
-        Board board = boardService.findBoard(boardIdx).orElseThrow();
+        Board board = boardService.findBoardById(boardIdx);
         boardService.increaseViewCnt(boardIdx, board.getViewCnt());
         return board.convertBoardToBoardInfoDto();
     }
@@ -89,7 +89,7 @@ public class BoardController {
 //    @PostMapping("/delete/{boardIdx}")
 //    public String deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
 //        Member authUser = memberService.findMemberById(userInfo.getUsername());
-//        Board board = boardService.findBoard(boardIdx)
+//        Board board = boardService.findBoardById(boardIdx)
 //                .orElseThrow(() -> new RuntimeException("board finding error"));
 //        if (compareUserAndWriter(authUser, board)) {
 //            boardService.deleteBoard(boardIdx);

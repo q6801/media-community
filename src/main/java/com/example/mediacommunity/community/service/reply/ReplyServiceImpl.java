@@ -28,15 +28,16 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public List<Reply> findAllReplies(Long boardId) {
-        return replyRepository.findAllReplies(boardId);
+        Board board = boardService.findBoardById(boardId);
+        return replyRepository.findAllReplies(board);
     }
 
     @Override
     public Reply reply(Long boardId, String memberId, String content) {
-        Board board = boardService.findBoard(boardId)
-                .orElseThrow(() -> new RuntimeException("board 없음"));
+        Board board = boardService.findBoardById(boardId);
         Member member = memberService.findMemberById(memberId);
         Reply reply = Reply.createReply(member, board, content);
+
         replyRepository.saveReply(reply);
         return reply;
     }

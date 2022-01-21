@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,10 +60,9 @@ public class JpaMemberRepository implements MemberRepository {
     @Override
     public Optional<Member> findByNickname(String nickname) {
         try {
-            Optional<Member> member = em.createQuery("select m from Member m where m.nickname = :nickname", Member.class)
+            return em.createQuery("select m from Member m where m.nickname = :nickname", Member.class)
                     .setParameter("nickname", nickname)
                     .getResultList().stream().findFirst();
-            return member;
         } catch(DataAccessException e) {
             return Optional.empty();
         }
@@ -70,8 +70,12 @@ public class JpaMemberRepository implements MemberRepository {
 
     @Override
     public List<Member> findAll() {
-        return em.createQuery("select m from Member m", Member.class)
-                .getResultList();
+        try {
+            return em.createQuery("select m from Member m", Member.class)
+                    .getResultList();
+        } catch(DataAccessException e) {
+            return new ArrayList<>();
+        }
     }
 
     @Override

@@ -13,10 +13,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,13 +29,13 @@ class BoardServiceImplTest {
     void findBoard() {
         //given
         Board board0 = getStubBoardList().get(0);
-        given(boardRepository.findById(board0.getId())).willReturn(board0);
+        given(boardRepository.findBoardById(board0.getId())).willReturn(Optional.of(board0));
 
         //when
-        Optional<Board> foundBoard = boardService.findBoard(board0.getId());
+        Board foundBoard = boardService.findBoardById(board0.getId());
 
         //then
-        assertThat(foundBoard.get()).isEqualTo(board0);
+        assertThat(foundBoard).isEqualTo(board0);
 
     }
 

@@ -1,5 +1,7 @@
 package com.example.mediacommunity.community.controller.email;
 
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.BadValueException;
 import com.example.mediacommunity.community.service.EmailConfirmationTokenService;
 import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
@@ -19,25 +21,19 @@ public class EmailController {
     private final EmailConfirmationTokenService emailTokenService;
     private final MemberService memberService;
 
-    @PostMapping("/wait-email")
+    @PostMapping("/email")
     public ResponseEntity<?> sendEmailToken(@AuthenticationPrincipal UserInfo userInfo, @RequestBody Map<String, String> email) {
         System.out.println("email = " + email);
         emailTokenService.saveAndSendEmailToken(userInfo.getUsername(), email.get("email"));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    /***
-     * 수정 필요
-     * @param userInfo
-     * @param token
-     * @return
-     */
-    @GetMapping("/confirm-email")
-    public String confirmEmailToken(@AuthenticationPrincipal UserInfo userInfo, @RequestParam UUID token) {
-        if (emailTokenService.confirmEmail(token)) {
+    @PostMapping("/confirm-email")
+    public  ResponseEntity<?> confirmEmailToken(@AuthenticationPrincipal UserInfo userInfo, @RequestBody Map<String, Integer> verifyingNum) {
+        if (emailTokenService.confirmEmail(userInfo.getUsername(), verifyingNum.get("verifyingNum"))) {
             memberService.updateMemberRoleToUser(userInfo.getUsername());
-            return "redirect:/user";
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
-        return "redirect:/user";
+        throw new BadValueException(ExceptionEnum.BAD_VALUE);
     }
 }

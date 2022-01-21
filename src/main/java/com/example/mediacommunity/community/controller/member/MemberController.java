@@ -49,10 +49,8 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpDto signUpDto) {
-        if (!memberService.encodeAndSave(signUpDto)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }
-        throw new RuntimeException();
+        memberService.encodeAndSave(signUpDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/member")

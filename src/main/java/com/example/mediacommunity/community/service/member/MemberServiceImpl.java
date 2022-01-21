@@ -1,6 +1,9 @@
 package com.example.mediacommunity.community.service.member;
 
 import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.BlankExistException;
+import com.example.mediacommunity.Exception.custom.NicknameAlreadyExistException;
+import com.example.mediacommunity.Exception.custom.UserAlreadyExistException;
 import com.example.mediacommunity.Exception.custom.UserNotExistException;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
@@ -40,41 +43,41 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public Boolean encodeAndSave(SignUpDto signUpDto) {
-        Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
-        Optional<Member> duplicatedName = memberRepository.findByNickname(signUpDto.getNickname());
-
-        if (duplicatedId.isEmpty() && duplicatedName.isEmpty()) {                 // id가 중복되지 않는 경우
-            Member localMember = Member.createLocalMember(signUpDto, passwordEncoder,
-                    amazonS3Service.searchDefaultProfile());
-            memberRepository.save(localMember);
-            return true;
+    public void encodeAndSave(SignUpDto signUpDto) {
+        if (signUpDto.getLoginId().isBlank() || signUpDto.getPassword().isBlank() || signUpDto.getNickname().isBlank()) {
+            throw new BlankExistException(ExceptionEnum.BLANK_EXIST);
         }
-        return false;
+
+        Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
+        duplicatedId.ifPresent((d) -> {
+            throw new UserAlreadyExistException(ExceptionEnum.USER_ALREADY_EXIST);
+        });
+
+        Optional<Member> duplicatedName = memberRepository.findByNickname(signUpDto.getNickname());
+        duplicatedName.ifPresent((d) -> {
+            throw new NicknameAlreadyExistException(ExceptionEnum.NICKNAME_ALREADY_EXIST);
+        });
+
+        Member localMember = Member.createLocalMember(signUpDto, passwordEncoder,
+                amazonS3Service.searchDefaultProfile());
+        memberRepository.save(localMember);
     }
 
     @Override
     public Member findMemberById(String loginId) {
-        Member member = memberRepository.findByLoginId(loginId)
+        return memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new UserNotExistException(ExceptionEnum.USER_NOT_EXIST));
-        return member;
     }
 
     @Override
     public Member findMemberByName(String nickName) {
-        Member member = memberRepository.findByNickname(nickName)
+        return memberRepository.findByNickname(nickName)
                 .orElseThrow(() -> new UserNotExistException(ExceptionEnum.USER_NOT_EXIST));
-        return member;
     }
 
     @Override
     public List<Member> findAllMembers() {
-        try {
-            return memberRepository.findAll();
-        } catch (DataAccessException e) {
-            log.warn("class: MemberServiceImpl, method: findAllMembers, ", e);
-            return new ArrayList<>();
-        }
+        return memberRepository.findAll();
     }
 
     /***

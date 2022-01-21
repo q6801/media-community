@@ -2,6 +2,7 @@ package com.example.mediacommunity.community.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class CallHtmlController {
@@ -50,10 +51,9 @@ public class CallHtmlController {
         return "axios/userInfo";
     }
 
-
-    @GetMapping("/wait-email")
+    @GetMapping("/confirm-email")
     public String waitEmail() {
-        return "axios/waitEmail";
+        return "axios/confirmEmail";
     }
 
     @GetMapping("/login")
@@ -69,5 +69,10 @@ public class CallHtmlController {
     @GetMapping("/editMember")
     public String editMemberForm() {
         return "axios/editMember";
+    }
+
+    @GetMapping("/stream")
+    public String stream() {
+        return "axios/kurento-one2many";
     }
 }

@@ -5,7 +5,10 @@ import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
+import com.example.mediacommunity.community.service.board.BoardService;
+import com.example.mediacommunity.community.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,20 +18,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
 @RequiredArgsConstructor
 public class JpaHeartRepository implements HeartRepository{
-    private final BoardRepository boardRepository;
-    private final MemberRepository memberRepository;
 
     @PersistenceContext
     EntityManager em;
 
     @Override
-    public Optional<Heart> findTheHeart(Long boardId, String memberId) {
-        Board board = boardRepository.findById(boardId);
-        Member member = memberRepository.findByLoginId(memberId).orElseThrow();
-        return board.getHearts().stream().filter((heart) -> heart.getMember().equals(member)).findFirst();
+    public Optional<Heart> findTheHeart(Board board, Member member) {
+        try {
+            return board.getHearts().stream()
+                    .filter((heart) -> heart.getMember().equals(member)).findFirst();
+        } catch(DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -38,25 +41,22 @@ public class JpaHeartRepository implements HeartRepository{
     }
 
     @Override
-    public List<Heart> findLikingBoards(String memberId) {
-        Member member = memberRepository.findByLoginId(memberId).orElseThrow();
+    public List<Heart> findLikingBoards(Member member) {
         return member.getHearts();
     }
 
     @Override
-    public List<Heart> findLikingMembers(Long boardId) {
-        Board board = boardRepository.findById(boardId);
+    public List<Heart> findLikingMembers(Board board) {
         return board.getHearts();
     }
 
     @Override
-    public Long cntHearts(Long boardId) {
-        return Long.valueOf(findLikingMembers(boardId).size());
+    public Long cntHearts(Board board) {
+        return Long.valueOf(findLikingMembers(board).size());
     }
 
     @Override
-    public void deleteHeart(Long id) {
-        Heart heart = em.find(Heart.class, id);
+    public void deleteHeart(Heart heart) {
         em.remove(heart);
     }
 }
