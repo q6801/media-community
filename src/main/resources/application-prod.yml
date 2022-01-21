@@ -8,6 +8,12 @@ spring:
     username: "q6801"
     password: "ENC(cEbFjyIRWamKyEuiVg1Q6SRsgpjrmHNP)"
 
+server:
+  ssl:
+    enable: true
+    key-store: /home/ubuntu/keystore.p12
+    key-store-type: PKCS12
+    key-store-password: "ENC(1JlWi0IGV6Yyn9OmLgdoorYpF76Ltwif)"
 ---
 
 spring:
