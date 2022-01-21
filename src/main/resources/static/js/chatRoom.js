@@ -11,7 +11,7 @@ axios.get('/memberInfo')
         console.log('username : ' + username);
         console.log('roomId : ' + roomId);
 
-        var webSocket = new WebSocket("ws://localhost:8080/ws/chat");
+        var webSocket = new WebSocket("wss://localhost:8080/ws/chat");
         var client = Stomp.over(webSocket);
         console.log(client);
 
