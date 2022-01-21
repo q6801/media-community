@@ -14,7 +14,7 @@ let waiting = document.querySelector('#waiting')
 //};
 let pcConfig = {
     'iceServers': [{
-        urls: 'numb.viagenie.ca',
+        urls: 'turn:numb.viagenie.ca',
         username: "q6801234@gmail.com",
         credential: "dltmdgns7"
       }]
