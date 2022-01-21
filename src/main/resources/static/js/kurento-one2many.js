@@ -5,11 +5,13 @@ let presenter_dom = document.querySelector('#presenter')
 let viewer_dom = document.querySelector('#viewer')
 let waiting = document.querySelector('#waiting')
 
-let pcConfig = {
-    'iceServers': [{
-        'urls': 'stun:stun.l.google.com:19302'
-      }]
-}
+let pcConfig = let pcConfig = {
+    iceServers: [
+      { urls: "stun:stun.l.google.com:19302" },
+      { urls: "turn:0.peerjs.com:3478", username: "peerjs", credential: "peerjsp" }
+    ],
+    sdpSemantics: "unified-plan"
+};
 
 
 window.onload = function() {
