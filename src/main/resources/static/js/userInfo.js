@@ -33,7 +33,7 @@ axios.get('/memberInfo')
         if (memberInfo.email !== null) {
             console.log(memberInfo.email)
             let card_text2 = document.createElement('p')
-            card_text2.innerText = memberInfo.email
+            card_text2.innerText = 'email : ' + memberInfo.email
             card_body.appendChild(card_text2)
         } else {
             let card_text2 = document.createElement('p')
@@ -48,10 +48,10 @@ axios.get('/memberInfo')
             card_body.appendChild(btn)
 
             btn.addEventListener('click', function() {
-                axios.post('/wait-email', {
+                axios.post('/email', {
                     email: email_input.value
                 }).then(function(res) {
-                    window.location.replace('/wait-email')
+                    window.location.replace('/confirm-email')
                 })
             })
         }
