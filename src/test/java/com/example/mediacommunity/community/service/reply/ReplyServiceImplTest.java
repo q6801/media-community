@@ -4,6 +4,7 @@ import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
 import com.example.mediacommunity.community.repository.reply.ReplyRepository;
+import com.example.mediacommunity.community.service.board.BoardService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,8 @@ import java.util.List;
 class ReplyServiceImplTest {
     @Mock
     ReplyRepository replyRepository;
+    @Mock
+    BoardService boardService;
 
     @InjectMocks
     ReplyServiceImpl replyService;
@@ -34,7 +37,8 @@ class ReplyServiceImplTest {
         reply.setReplyer(member);
         reply.setBoard(board);
 
-        BDDMockito.given(replyService.findAllReplies(board.getId())).willReturn(Arrays.asList(reply));
+        BDDMockito.given(replyRepository.findAllReplies(board)).willReturn(Arrays.asList(reply));
+        BDDMockito.given(boardService.findBoardById(board.getId())).willReturn(board);
 
         //when
         List<Reply> allReplies = replyService.findAllReplies(board.getId());

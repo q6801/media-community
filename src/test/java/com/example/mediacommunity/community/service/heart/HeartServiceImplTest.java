@@ -36,18 +36,21 @@ class HeartServiceImplTest {
 
     @Test
     void findTheHeart() {
-        //given
-        Board board = getStubBoardList().get(0);
+//given
         Member member = getStubMemberList().get(0);
-        Heart heart = getStubHearts().get(0);
+        Board board = getStubBoardList().get(0);
+        Heart pushedHeart = getStubHearts().get(0);
 
-        given(heartRepository.findTheHeart(board, member)).willReturn(Optional.of(heart));
+        given(heartRepository.findTheHeart(board, member))
+                .willReturn(Optional.of(pushedHeart));
+        given(boardService.findBoardById(board.getId())).willReturn(board);
+        given(memberService.findMemberById(member.getLoginId())).willReturn(member);
 
         //when
         Optional<Heart> foundHeart = heartService.findTheHeart(board.getId(), member.getLoginId());
 
         //then
-        assertThat(heart).isEqualTo(foundHeart.get());
+        assertThat(pushedHeart).isEqualTo(foundHeart.get());
     }
 
     @Test
