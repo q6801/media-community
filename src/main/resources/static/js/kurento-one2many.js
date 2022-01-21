@@ -5,6 +5,12 @@ let presenter_dom = document.querySelector('#presenter')
 let viewer_dom = document.querySelector('#viewer')
 let waiting = document.querySelector('#waiting')
 
+let pcConfig = {
+    'iceServers': [{
+        'urls': 'stun:stun.l.google.com:19302'
+      }]
+}
+
 
 window.onload = function() {
 	video = document.getElementById('localVideo');
@@ -77,7 +83,9 @@ function presenter() {
 	if (!webRtcPeer) {
 		var options = {
 			localVideo : video,
-			onicecandidate : onIceCandidate
+			onicecandidate : onIceCandidate,
+			configuration : pcConfig
+
 		}
 		webRtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
 				function(error) {
