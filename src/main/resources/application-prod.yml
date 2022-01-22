@@ -13,7 +13,7 @@ server:
     enable: true
     key-store: /home/ubuntu/keystore.p12
     key-store-type: PKCS12
-    key-store-password: "ENC(1JlWi0IGV6Yyn9OmLgdoorYpF76Ltwif)"
+    key-store-password: ENC(1FGPcfMNAfUPjtyPyiKbn2ofOrVr1nYt)
 ---
 
 spring:
