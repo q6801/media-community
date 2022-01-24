@@ -120,6 +120,9 @@ public class CallHandler extends TextWebSocketHandler {
       presenterUserSession.setWebRtcEndpoint(new WebRtcEndpoint.Builder(pipeline).build());
 
       WebRtcEndpoint presenterWebRtc = presenterUserSession.getWebRtcEndpoint();
+      presenterWebRtc.setStunServerAddress("stun.l.google.com");
+      presenterWebRtc.setStunServerPort(19302);
+      presenterWebRtc.setTurnUrl("q6801:turndkagh@34.64.213.114:3478");
 
       presenterWebRtc.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
 
@@ -184,6 +187,9 @@ public class CallHandler extends TextWebSocketHandler {
       viewers.put(session.getId(), viewer);
 
       WebRtcEndpoint nextWebRtc = new WebRtcEndpoint.Builder(pipeline).build();
+      nextWebRtc.setStunServerAddress("stun.l.google.com");
+      nextWebRtc.setStunServerPort(19302);
+      nextWebRtc.setTurnUrl("q6801:turndkagh@34.64.213.114:3478");
 
       nextWebRtc.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
 
