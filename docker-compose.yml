@@ -7,6 +7,7 @@ services:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - /jenkins:/var/jenkins_home
+            - /home/ubuntu/media-community-cert:/var/media-community-cert
         ports:
             - "9090:8080"
             - "50000:50000"
