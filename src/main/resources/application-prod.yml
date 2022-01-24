@@ -11,7 +11,7 @@ spring:
 server:
   ssl:
     enable: true
-    key-store: /var/jenkins_home/workspace/media-community/media-community-cert/keystore.p12
+    key-store: /var/jenkins_home/workspace/media-community/media-community-certyyyyyyyyyyyyyyy/keystore.p12
 #    key-store: /jenkins/workspace/media-community/media-community-cert/keystore.p12
     key-store-type: PKCS12
     key-store-password: ENC(1FGPcfMNAfUPjtyPyiKbn2ofOrVr1nYt)
