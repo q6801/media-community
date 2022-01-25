@@ -44,8 +44,8 @@ cloud:
     S3:
       bucket: dremean
 
-path:
-  img: static/img/
+server:
+  port: 8000
 
 ---
 
