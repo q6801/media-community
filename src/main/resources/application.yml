@@ -36,6 +36,9 @@ jasypt:
     password: appdkaghghk
     bean: jasyptStringEncryptor
 
+kms:
+  url:
+
 cloud:
   aws:
     credentials:
