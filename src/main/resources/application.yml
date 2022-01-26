@@ -37,7 +37,7 @@ jasypt:
     bean: jasyptStringEncryptor
 
 kms:
-  url:
+  url: ws://13.209.253.79:8888/kurento
 
 cloud:
   aws:
