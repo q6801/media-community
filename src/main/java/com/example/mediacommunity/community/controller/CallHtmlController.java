@@ -75,4 +75,14 @@ public class CallHtmlController {
     public String stream() {
         return "axios/kurento-one2many";
     }
+
+    @GetMapping("/presenter")
+    public String presenter() {
+        return "axios/presenter";
+    }
+
+    @GetMapping("/viewer")
+    public String viewer() {
+        return "axios/viewer";
+    }
 }
