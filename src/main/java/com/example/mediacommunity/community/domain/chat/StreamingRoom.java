@@ -1,13 +1,9 @@
 package com.example.mediacommunity.community.domain.chat;
 
-import com.example.mediacommunity.community.service.MsgService;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.socket.WebSocketSession;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -16,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class MsgRoom {
+public class StreamingRoom {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -27,4 +23,6 @@ public class MsgRoom {
     @Column(nullable = false)
     private String roomName;
 
+    @Column(nullable = false)
+    private String presenter;
 }
