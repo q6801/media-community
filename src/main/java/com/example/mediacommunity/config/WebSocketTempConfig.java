@@ -13,13 +13,13 @@ import org.springframework.web.socket.server.standard.ServletServerContainerFact
 public class WebSocketTempConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(handler(), "/helloworld").setAllowedOrigins("*");
+//        registry.addHandler(handler(), "/helloworld").setAllowedOrigins("*");
     }
 
-    @Bean
-    public CallHandler handler() {
-        return new CallHandler();
-    }
+//    @Bean
+//    public CallHandler handler() {
+//        return new CallHandler();
+//    }
 
     @Bean
     public KurentoClient kurentoClient() {
