@@ -13,8 +13,14 @@ window.onload = function() {
 	video = document.getElementById('localVideo');
 }
 
-window.onbeforeunload = function() {
-	ws.close();
+window.onbeforeunload = function(e) {
+	e.preventDefault();
+	axios.delete('/streaming-room').then(function(res) {
+		connect_status.innerText = '방송 종료됨~'
+	})
+	stop();
+	webSocket.close();
+	// e.returnValue = ""
 }
 
 presenter_dom.addEventListener('click', function() {
@@ -126,15 +132,6 @@ function dispose() {
 
 function sendMessage(message) {
 	var jsonMessage = JSON.stringify(message);
-	client.send("/pub/streaming/" + message.id, {}, jsonMessage);
-
-//	ws.send(jsonMessage);
-}
-
-function videoWaiting() {
-    let div = document.createElement('div');
-    div.setAttribute('id', 'loading')
-    div.innerText = 'video 로딩중 ~'
-    waiting.appendChild(div)
+	client.send("/pub/streaming/" + message.id + "/" + presenter_id, {}, jsonMessage);
 }
 
