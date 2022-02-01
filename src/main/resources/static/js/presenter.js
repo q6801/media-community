@@ -1,9 +1,13 @@
 //const ws = new WebSocket('wss://' + location.host + '/helloworld');
 var video;
 var webRtcPeer;
-let presenter_dom = document.querySelector('#presenter')
-let waiting = document.querySelector('#waiting')
 
+let presenter_dom = document.querySelector('#presenter')
+let finish_streaming = document.querySelector('#finish-streaming')
+let connect_status = document.querySelector('#connect-status')
+let pathArr = window.location.pathname.split('/');
+let presenter_id = pathArr[1]
+console.log('pathArr : ' + pathArr)
 
 window.onload = function() {
 	video = document.getElementById('localVideo');
@@ -118,7 +122,6 @@ function dispose() {
 		webRtcPeer.dispose();
 		webRtcPeer = null;
 	}
-	hideVideoWaiting();
 }
 
 function sendMessage(message) {
@@ -134,11 +137,4 @@ function videoWaiting() {
     div.innerText = 'video 로딩중 ~'
     waiting.appendChild(div)
 }
-
-function hideVideoWaiting() {
-    console.log('hide waiting')
-    let div = document.querySelector('#loading')
-    div.parentNode.removeChild(div)
-}
-
 
