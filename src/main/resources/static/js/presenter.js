@@ -66,18 +66,6 @@ function presenterResponse(message) {
 	}
 }
 
-function viewerResponse(message) {
-	if (message.response != 'accepted') {
-		var errorMsg = message.message ? message.message : 'Unknow error';
-		console.info('Call not accepted for the following reason: ' + errorMsg);
-		dispose();
-	} else {
-		webRtcPeer.processAnswer(message.sdpAnswer, function(error) {
-			if (error)
-				return console.error(error);
-		});
-	}
-}
 
 
 function presenter() {
