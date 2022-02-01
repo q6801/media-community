@@ -31,22 +31,17 @@ let webSocket = new WebSocket('wss://' + location.host + '/ws/stream');
 let client = Stomp.over(webSocket);
 
 client.connect({}, function() {
-    client.subscribe("/sub/message/presenterResponse", function(message) {
+    client.subscribe("/user/sub/message/presenterResponse", function(message) {
         let parsedMessage = JSON.parse(message.body);
         presenterResponse(parsedMessage);
     })
-//    client.subscribe("/sub/message/viewerResponse", function(message) {
-//            let parsedMessage = JSON.parse(message.body);
-//            viewerResponse(parsedMessage);
-//        })
-    client.subscribe("/sub/message/iceCandidate/p", function(message) {
+    client.subscribe("/user/sub/message/iceCandidate", function(message) {
         let parsedMessage = JSON.parse(message.body);
         webRtcPeer.addIceCandidate(parsedMessage.candidate, function(error) {
             if (error) return console.error('Error adding candidate: ' + error);
         });
     })
-    client.subscribe("/sub/message/stopCommunication", function(message) {
-        let parsedMessage = JSON.parse(message.body);
+    client.subscribe("/user/sub/message/stopCommunication", function(message) {
         dispose();
     })
 })
