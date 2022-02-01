@@ -92,7 +92,41 @@ function presenter() {
 					webRtcPeer.generateOffer(onOfferPresenter);
 				});
         console.log('wrp')
-
+		
+		let roomName = document.querySelector('#room-name')
+		webRtcPeer.peerConnection.onconnectionstatechange = function(ev) {
+			switch(webRtcPeer.peerConnection.connectionState) {
+			  case "new":
+			  case "connecting":
+				console.log("Connecting...");
+				connect_status.innerText = '연결 시도중~'
+				break;
+			  case "connected":
+				console.log("Online");
+				axios.post('/streaming-room', {
+					roomName: roomName.value
+				}).then(function(res) {
+					connect_status.innerText = '방 생성 완료~'
+				})
+				break;
+			  case "disconnected":
+				console.log("Disconnecting...");
+				break;
+			  case "closed":
+				console.log("Offline");
+				axios.delete('/streaming-room').then(function(res) {
+					connect_status.innerText = '방송 종료됨~'
+				})
+				break;
+			  case "failed":
+				console.log("Error");
+				connect_status.innerText = '연결 실패~'
+				break;
+			  default:
+				console.log("Unknown");
+				break;
+			}
+		}
 	}
 }
 
