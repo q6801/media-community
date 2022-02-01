@@ -27,6 +27,13 @@ presenter_dom.addEventListener('click', function() {
     presenter()
 })
 
+finish_streaming.addEventListener('click', function() {
+     axios.delete('/streaming-room').then(function(res) {
+        connect_status.innerText = '방송 종료됨~'
+    })
+    stop();
+ })
+
 let webSocket = new WebSocket('wss://' + location.host + '/ws/stream');
 let client = Stomp.over(webSocket);
 
