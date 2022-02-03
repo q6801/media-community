@@ -10,8 +10,10 @@ window.onload = function() {
 	video = document.getElementById('localVideo');
 }
 
-window.onbeforeunload = function() {
-	ws.close();
+window.onbeforeunload = function(e) {
+	e.preventDefault();
+	stop();
+	webSocket.close();
 }
 
 viewer_dom.addEventListener('click', function() {
