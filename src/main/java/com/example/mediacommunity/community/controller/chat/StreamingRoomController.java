@@ -2,7 +2,6 @@ package com.example.mediacommunity.community.controller.chat;
 
 import com.example.mediacommunity.community.domain.chat.MsgInfoDto;
 import com.example.mediacommunity.community.domain.chat.StreamingRoom;
-import com.example.mediacommunity.community.domain.chat.MsgRoomDto;
 import com.example.mediacommunity.community.service.StreamingRoomService;
 import com.example.mediacommunity.config.CallHandler;
 import com.example.mediacommunity.security.userInfo.UserInfo;
