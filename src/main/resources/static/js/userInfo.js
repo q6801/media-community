@@ -83,4 +83,12 @@ axios.get('/memberInfo')
         
         user_dom.appendChild(sign_out_div)
 
+        let streaming_btn = document.createElement('button')
+        streaming_btn.addEventListener("click", function() {
+            window.location.replace('/' + memberInfo.loginId + "/stream-manager")
+        })
+        streaming_btn.innerText = "나의 스트리밍 채널"
+
+        user_dom.appendChild(streaming_btn)
+
     })
