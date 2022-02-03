@@ -3,6 +3,9 @@ package com.example.mediacommunity.config;
 //import com.example.mediacommunity.common.handler.ChatHandler;
 
 import lombok.RequiredArgsConstructor;
+import org.kurento.client.KurentoClient;
+import org.kurento.client.MediaPipeline;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -45,5 +48,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 return ChannelInterceptor.super.preSend(message, channel);
             }
         });
+    }
+
+    @Bean
+    public MediaPipeline mediaPipeline() {
+        return kurentoClient().createMediaPipeline();
+    }
+
+    @Bean
+    public KurentoClient kurentoClient() {
+        return KurentoClient.create();
     }
 }
