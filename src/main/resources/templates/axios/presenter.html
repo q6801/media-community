@@ -38,6 +38,15 @@
 <div th:replace="~{axios/header :: header}"></div>
 
 <main>
+  <article class="container blog-post mb-5 mt-5">
+    <form action="" id="streaming-form">
+      <div class="form-floating mt-3">
+        <label for="room-name">방 제목</label>
+        <input class="form-control" placeholder="방 제목" id="room-name" style="height: 100px">
+      </div>
+    </form>
+  </article>
+
   <div class="container">
     <video id="localVideo" autoplay width="480px"></video>
     <p id="waiting"></p>
