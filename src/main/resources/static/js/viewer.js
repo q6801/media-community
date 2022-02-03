@@ -75,12 +75,42 @@ function viewer() {
 			onicecandidate : onIceCandidate
 		}
 		webRtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
-				function(error) {
-					if (error) {
-						return console.error(error);
-					}
-					this.generateOffer(onOfferViewer);
-				});
+			function(error) {
+				if (error) {
+					return console.error(error);
+				}
+				this.generateOffer(onOfferViewer);
+		});
+		console.log("peerConnection 생성~");
+		webRtcPeer.peerConnection.onconnectionstatechange = function(ev) {
+			switch(webRtcPeer.peerConnection.connectionState) {
+			  case "new":
+			  case "connecting":
+				console.log("Connecting...");
+				connect_status.innerText = '연결 시도중~'
+				break;
+			  case "connected":
+				console.log("Online");
+				connect_status.innerText = ''
+				break;
+			  case "disconnected":
+				console.log("Disconnecting...");
+				break;
+			  case "closed":
+				console.log("Offline");
+				connect_status.innerText = '연결이 종료됨(?)'
+				// 이건 presenter가 아닌 viewer의 문제라는 것
+				// 연결이 끊겼을 때 다시 시도도 괜찮을듯
+				break;
+			  case "failed":
+				console.log("Error");
+				connect_status.innerText = '연결 실패~'
+				break;
+			  default:
+				console.log("Unknown");
+				break;
+			}
+		}
 	}
 }
 
