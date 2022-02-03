@@ -126,22 +126,6 @@ function dispose() {
 
 function sendMessage(message) {
 	var jsonMessage = JSON.stringify(message);
-	client.send("/pub/streaming/" + message.id, {}, jsonMessage);
-
-//	ws.send(jsonMessage);
+	client.send("/pub/streaming/" + message.id + "/" + presenter_id, {}, jsonMessage);
 }
-
-function videoWaiting() {
-    let div = document.createElement('div');
-    div.setAttribute('id', 'loading')
-    div.innerText = 'video 로딩중 ~'
-    waiting.appendChild(div)
-}
-
-function hideVideoWaiting() {
-    console.log('hide waiting')
-    let div = document.querySelector('#loading')
-    div.parentNode.removeChild(div)
-}
-
 
