@@ -76,12 +76,12 @@ public class CallHtmlController {
         return "axios/kurento-one2many";
     }
 
-    @GetMapping("/presenter")
+    @GetMapping("/{username}/stream-manager")
     public String presenter() {
         return "axios/presenter";
     }
 
-    @GetMapping("/viewer")
+    @GetMapping("/{username}")
     public String viewer() {
         return "axios/viewer";
     }
