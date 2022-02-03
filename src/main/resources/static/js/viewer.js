@@ -45,6 +45,7 @@ function viewerResponse(message) {
 	if (message.response != 'accepted') {
 		var errorMsg = message.message ? message.message : 'Unknow error';
 		console.info('Call not accepted for the following reason: ' + errorMsg);
+		connect_status.innerText = errorMsg
 		dispose();
 	} else {
 		webRtcPeer.processAnswer(message.sdpAnswer, function(error) {
