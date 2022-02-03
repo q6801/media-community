@@ -1,4 +1,4 @@
-//const ws = new WebSocket('wss://' + location.host + '/helloworld');
+
 var video;
 var webRtcPeer;
 let viewer_dom = document.querySelector('#viewer')
