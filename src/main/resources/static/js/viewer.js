@@ -38,18 +38,6 @@ client.connect({}, function() {
     })
 })
 
-function presenterResponse(message) {
-	if (message.response != 'accepted') {
-		var errorMsg = message.message ? message.message : 'Unknown error';
-		console.info('Call not accepted for the following reason: ' + errorMsg);
-		dispose();
-	} else {
-		webRtcPeer.processAnswer(message.sdpAnswer, function(error) {
-			if (error)
-				return console.error(error);
-		});
-	}
-}
 
 function viewerResponse(message) {
 	if (message.response != 'accepted') {
@@ -67,9 +55,6 @@ function viewerResponse(message) {
 
 function viewer() {
 	if (!webRtcPeer) {
-//		showSpinner(video);
-        videoWaiting(video);
-
 		var options = {
 			remoteVideo : video,
 			onicecandidate : onIceCandidate
