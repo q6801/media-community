@@ -35,29 +35,32 @@
 </head>
 <body>
 
-<div th:replace="~{axios/header :: header}"></div>
+<div th:replace="~{axios/component/header :: header}"></div>
 
 <main>
     <div class="container">
-      <article class="blog-post mb-5 mt-5" id='board'>
-        <div class="form-floating">
-          <input class="form-control" placeholder="title" id="title"></input>
-          <label for="title">title</label>
-        </div>
-        <div class="form-floating mt-3">
-          <textarea class="form-control" placeholder="내용 작성" id="content" style="height: 100px"></textarea>
-          <label for="content">content</label>
-        </div>
-        <button id="submit">전송</button>
-      </article>
+        <article class="blog-post mb-5 mt-5" id='board'>
+            <form action="" id="add-board">
+                <div class="form-floating">
+                    <input class="form-control" placeholder="title" id="title"></input>
+                    <label for="title">title</label>
+                </div>
+                <div class="form-floating mt-3">
+                    <textarea class="form-control" placeholder="내용 작성" id="content" style="height: 100px"></textarea>
+                    <label for="content">content</label>
+                </div>
+                <button type="submit">전송</button>
+            </form>
+        </article>
     </div>
 
-    <div th:replace="~{axios/footer :: footer}"></div>
+    <div th:replace="~{axios/component/footer :: footer}"></div>
 </main>
+
 </body>
 
 <!--  사용자 js -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type='text/javascript' th:src="@{/js/editBoard.js}"></script>
+<script type='text/javascript' th:src="@{/js/addBoard.js}"></script>
 <script type='text/javascript' th:src="@{/js/header.js}"></script>
 </html>

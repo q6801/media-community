@@ -35,39 +35,53 @@
 </head>
 <body>
 
-<div th:replace="~{axios/header :: header}"></div>
+<div th:replace="~{axios/component/header :: header}"></div>
 
 <main>
-  <div class="container form-signin mt-5">
-    <form th:object="${member}" id='sign-in'>
-      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-      <div class="form-floating">
-        <p id="error"></p>
+  <article class="container blog-post mb-5 mt-5">
+    <form action="" id="streaming-form">
+      <div class="form-floating mt-3">
+        <label for="room-name">방 제목</label>
+        <input class="form-control" placeholder="방 제목" id="room-name" style="height: 100px">
       </div>
-
-      <div class="form-floating">
-        <input class="form-control" id="loginId">
-        <label for="loginId">아이디</label>
-      </div>
-      <div class="form-floating">
-        <input type="password" class="form-control" placeholder="Password" id="password">
-        <label for="password">비밀번호</label>
-      </div>
-      <button class="w-100 btn btn-lg btn-primary mt-1" type="submit">Sign in</button>
     </form>
-    <button class="btn btn-lg btn-primary mt-1" th:onclick="|location.href='@{/oauth2/authorization/google}'|">구글 로그인으로 이동</button>
-    <button class="btn btn-lg btn-primary mt-1" th:onclick="|location.href='@{/oauth2/authorization/kakao}'|">카카오 로그인으로 이동</button>
-    <button class="btn btn-lg btn-primary mt-3" th:onClick="|location.href='@{/signup}'|">회원가입</button>
+  </article>
+
+  <div class="container">
+    <video id="localVideo" autoplay width="480px"></video>
+    <p id="connect-status"></p>
+    <button id="presenter">방송 시작</button>
+    <button id="finish-streaming">방송 종료</button>
   </div>
 
-  <div th:replace="~{axios/footer :: footer}"></div>
+  <div class="container">
+    <hr class="mt-5 mb-3">
+    <div class="border-bottom"><h4>채팅</h4></div>
+    <div id='chats' class="rounded"></div>
+  </div>
+
+  <article class="container blog-post mb-5 mt-5">
+    <form action="" id="chat-form">
+      <div class="form-floating mt-3">
+        <input class="form-control" placeholder="댓글 작성" id="chat-content" style="height: 100px"></input>
+        <label for="chat-content">content</label>
+      </div>
+      <button type="submit">전송</button>
+    </form>
+  </article>
+
+
+  <div th:replace="~{axios/component/footer :: footer}"></div>
 </main>
 
 </body>
 
 <!--  사용자 js -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
+<script type='text/javascript' src="/js/kurento-utils.min.js"></script>
+<script type='text/javascript' th:src="@{/js/presenter.js}"></script>
 <script type='text/javascript' th:src="@{/js/header.js}"></script>
-<script type='text/javascript' th:src="@{/js/logIn.js}"></script>
 </html>
