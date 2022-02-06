@@ -13,27 +13,27 @@ public class CallHtmlController {
 
     @GetMapping("/comm")
     public String comm() {
-        return "axios/comm";
+        return "axios/board/comm";
     }
 
     @GetMapping("/addBoard")
     public String boardForm() {
-        return "axios/addBoard";
+        return "axios/board/addBoard";
     }
 
     @GetMapping("/board/{boardIdx}")
     public String board() {
-        return "axios/board";
+        return "axios/board/board";
     }
 
     @GetMapping("/editBoard/{boardIdx}")
     public String boardEditForm() {
-        return "axios/editBoard";
+        return "axios/board/editBoard";
     }
 
-    @GetMapping("/chatRooms")
+    @GetMapping("/streaming")
     public String chatRooms() {
-        return "axios/chatRooms";
+        return "axios/streaming/streamingRooms";
     }
 
     @GetMapping("/chatRoom/{chatIdx}")
@@ -71,18 +71,13 @@ public class CallHtmlController {
         return "axios/editMember";
     }
 
-    @GetMapping("/stream")
-    public String stream() {
-        return "axios/kurento-one2many";
-    }
-
     @GetMapping("/{username}/stream-manager")
     public String presenter() {
-        return "axios/presenter";
+        return "axios/streaming/presenter";
     }
 
     @GetMapping("/{username}")
     public String viewer() {
-        return "axios/viewer";
+        return "axios/streaming/viewer";
     }
 }
