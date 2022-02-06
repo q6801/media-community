@@ -1,4 +1,4 @@
-package com.example.mediacommunity.community.controller.chat;
+package com.example.mediacommunity.community.controller.streaming;
 
 import com.example.mediacommunity.community.domain.chat.MsgInfoDto;
 import com.example.mediacommunity.community.domain.chat.StreamingRoom;

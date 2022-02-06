@@ -1,4 +1,4 @@
-package com.example.mediacommunity.community.repository;
+package com.example.mediacommunity.community.repository.streaming;
 
 import com.example.mediacommunity.community.domain.UserSession;
 import lombok.Data;

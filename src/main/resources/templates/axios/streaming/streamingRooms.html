@@ -35,17 +35,16 @@
 </head>
 <body>
 
-<div th:replace="~{axios/header :: header}"></div>
+<div th:replace="~{axios/component/header :: header}"></div>
 
 <main>
   <div class="container">
     <div id='chatRooms'></div>
-    <button onClick='location.href="/chat/addRoom"' class='mb-5 btn btn-outline-secondary'>방 생성</button>
     </form>
     
   </div>
 
-  <div th:replace="~{axios/footer :: footer}"></div>
+  <div th:replace="~{axios/component/footer :: footer}"></div>
 </main>
 
 </body>

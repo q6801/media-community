@@ -1,4 +1,4 @@
-package com.example.mediacommunity.community.controller.stream;
+package com.example.mediacommunity.community.controller.streaming;
 
 import com.example.mediacommunity.config.CallHandler;
 import com.example.mediacommunity.security.userInfo.StompPrincipal;
