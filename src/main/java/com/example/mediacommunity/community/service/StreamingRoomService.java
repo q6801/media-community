@@ -1,7 +1,7 @@
 package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.chat.StreamingRoom;
-import com.example.mediacommunity.community.repository.StreamingRoomRepository;
+import com.example.mediacommunity.community.repository.streaming.StreamingRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
