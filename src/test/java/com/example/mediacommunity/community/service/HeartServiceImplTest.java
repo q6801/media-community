@@ -1,10 +1,11 @@
-package com.example.mediacommunity.community.service.heart;
+package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
+import com.example.mediacommunity.community.service.heart.HeartServiceImpl;
 import com.example.mediacommunity.community.service.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -36,7 +38,7 @@ class HeartServiceImplTest {
 
     @Test
     void findTheHeart() {
-//given
+        //given
         Member member = getStubMemberList().get(0);
         Board board = getStubBoardList().get(0);
         Heart pushedHeart = getStubHearts().get(0);
