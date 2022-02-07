@@ -13,7 +13,7 @@ public class BoardAddingDto {
     private String content;
 
     public BoardAddingDto() {}
-    public BoardAddingDto(String title, String content, String writerId) {
+    public BoardAddingDto(String title, String content) {
         this.title = title;
         this.content = content;
     }
