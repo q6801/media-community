@@ -47,7 +47,7 @@ public class BoardController {
         return map;
     }
 
-    @GetMapping("boardInfo/{boardIdx}")
+    @GetMapping("/boardInfo/{boardIdx}")
     public BoardInfoDto board(@PathVariable long boardIdx) {
         Board board = boardService.findBoardById(boardIdx);
         boardService.increaseViewCnt(boardIdx, board.getViewCnt());
@@ -86,14 +86,13 @@ public class BoardController {
         return false;
     }
 
-//    @PostMapping("/delete/{boardIdx}")
-//    public String deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
-//        Member authUser = memberService.findMemberById(userInfo.getUsername());
-//        Board board = boardService.findBoardById(boardIdx)
-//                .orElseThrow(() -> new RuntimeException("board finding error"));
-//        if (compareUserAndWriter(authUser, board)) {
-//            boardService.deleteBoard(boardIdx);
-//        }
-//        return "redirect:/boards";
-//    }
+    @DeleteMapping("/board/{boardIdx}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
+        Member authUser = memberService.findMemberById(userInfo.getUsername());
+        Board board = boardService.findBoardById(boardIdx);
+        if (userEqualsToWriter(authUser, board)) {
+            boardService.deleteBoard(boardIdx);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
