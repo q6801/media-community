@@ -39,24 +39,6 @@ class BoardServiceImplTest {
 
     }
 
-//    @Test
-//    void findBoards() {
-//        //given
-//        Board board0 = getStubBoardList().get(0);
-//        Board board1 = getStubBoardList().get(0);
-//        String boardWriter = board0.getWriterId();
-//        List<Board> foundBoards = getStubBoardList().stream().filter(
-//                board -> boardWriter.equals(board.getWriterId()))
-//                .collect(Collectors.toList());
-//        given(boardRepository.findByWriterId(board0.getWriterId())).willReturn(foundBoards);
-//
-//        //when
-//        List<Board> boards = boardService.findBoards(boardWriter);
-//
-//        //then
-//        assertThat(boards).contains(board0, board1);
-//    }
-
     @Test
     void findAllBoards() {
         //given
@@ -75,21 +57,23 @@ class BoardServiceImplTest {
         assertThat(boards).contains(board0, board1);
     }
 
-//    @Test
-//    void modifyBoardUsingDto() {
-//        //given
-//        Board board0 = getStubBoardList().get(0);
-//        Board board0Alpha = getStubBoardList().get(1);
-//        given(boardRepository.findById(board0.getId())).willReturn(board0Alpha);
-//
-//        //when
-//        boardService.modifyBoardUsingDto(board0.getId(), board0Alpha);
-//        Board modifiedBoard = boardRepository.findById(board0.getId());
-//
-//        //then
-//        assertThat(board0).isNotEqualTo(modifiedBoard);
-//        assertThat(board0.getContent()).isNotEqualTo(modifiedBoard.getContent());
-//    }
+    @Test
+    void modifyBoardUsingDto() {
+        //given
+        String updatedContent = "updated content";
+        Board board0 = getStubBoardList().get(0);
+        BoardAddingDto board0Alpha = new BoardAddingDto("title", updatedContent);
+        given(boardRepository.findBoardById(board0.getId()))
+                .willReturn(Optional.of(board0));
+
+        //when
+        boardService.modifyBoardUsingDto(board0.getId(), board0Alpha);
+        Board modifiedBoard = boardRepository.findBoardById(board0.getId()).get();
+
+        //then
+        assertThat(updatedContent).isEqualTo(modifiedBoard.getContent());
+        assertThat(updatedContent).isEqualTo(board0.getContent());
+    }
 
 
     private List<Board> getStubBoardList() {
