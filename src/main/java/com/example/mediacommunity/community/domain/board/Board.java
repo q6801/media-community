@@ -16,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"member", "replies", "hearts"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
     @Id

@@ -3,11 +3,13 @@ package com.example.mediacommunity.community.domain.heart;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@EqualsAndHashCode(exclude={"member", "board"})
 @Entity
 public class Heart {
     @Id

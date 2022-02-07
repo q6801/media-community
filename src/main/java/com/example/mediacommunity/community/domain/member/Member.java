@@ -7,7 +7,6 @@ import com.example.mediacommunity.community.domain.reply.Reply;
 import com.example.mediacommunity.security.userInfo.OAuth2UserInfo;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(exclude = {"boards", "replies", "hearts", "emailTokens"})
 @Table(name="Members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
