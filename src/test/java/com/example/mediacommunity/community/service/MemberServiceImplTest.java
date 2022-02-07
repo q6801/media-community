@@ -1,8 +1,9 @@
-package com.example.mediacommunity.community.service.member;
+package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
+import com.example.mediacommunity.community.service.member.MemberServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceImplTest {

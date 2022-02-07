@@ -1,7 +1,9 @@
-package com.example.mediacommunity.community.service.board;
+package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
+import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
+import com.example.mediacommunity.community.service.board.BoardServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

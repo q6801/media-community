@@ -1,10 +1,11 @@
-package com.example.mediacommunity.community.service.reply;
+package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
 import com.example.mediacommunity.community.repository.reply.ReplyRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
+import com.example.mediacommunity.community.service.reply.ReplyServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
