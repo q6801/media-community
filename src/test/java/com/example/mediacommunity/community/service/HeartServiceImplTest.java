@@ -72,6 +72,60 @@ class HeartServiceImplTest {
         assertThat(pushed).isEqualTo(false);
     }
 
+    @Test
+    public void findLikingBoards() {
+        //given
+        Member member = getStubMemberList().get(0);
+        String memberId = member.getLoginId();
+
+        given(memberService.findMemberById(memberId)).willReturn(member);
+        given(heartRepository.findLikingBoards(member)).willReturn(
+                        getStubHearts().stream()
+                        .filter(heart -> heart.getMember().equals(member))
+                        .collect(Collectors.toList())
+                );
+        //when
+        List<Heart> likingBoards = heartService.findLikingBoards(memberId);
+
+        //then
+        assertThat(likingBoards).contains(getStubHearts().get(0));
+        assertThat(likingBoards.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void findLikingMembers() {
+        //given
+        Board board = getStubBoardList().get(0);
+        given(boardService.findBoardById(board.getId())).willReturn(board);
+        given(heartRepository.findLikingMembers(board)).willReturn(
+                getStubHearts().stream()
+                        .filter(heart -> heart.getBoard().equals(board))
+                        .collect(Collectors.toList())
+        );
+
+        //when
+        List<Heart> likingMembers = heartService.findLikingMembers(board.getId());
+
+        //then
+        assertThat(likingMembers).contains(getStubHearts().get(0));
+        assertThat(likingMembers.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void cntHearts() {
+        //given
+        Board board = getStubBoardList().get(0);
+        given(boardService.findBoardById(board.getId())).willReturn(board);
+        given(heartRepository.cntHearts(board)).willReturn(
+                Long.valueOf(
+                    getStubHearts().stream()
+                    .filter(heart -> heart.getBoard().equals(board))
+                    .collect(Collectors.toList())
+                    .size()
+                )
+        );
+    }
+
 
     private List<Board> getStubBoardList() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
