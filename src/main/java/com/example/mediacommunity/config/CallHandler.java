@@ -18,7 +18,7 @@
 package com.example.mediacommunity.config;
 
 import com.example.mediacommunity.community.domain.UserSession;
-import com.example.mediacommunity.community.repository.StreamingUserRepository;
+import com.example.mediacommunity.community.repository.streaming.StreamingUserRepository;
 import com.example.mediacommunity.security.userInfo.StompPrincipal;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,11 +26,8 @@ import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.kurento.client.*;
 import org.kurento.jsonrpc.JsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
