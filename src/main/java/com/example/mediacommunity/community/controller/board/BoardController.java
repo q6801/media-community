@@ -2,6 +2,8 @@ package com.example.mediacommunity.community.controller.board;
 
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.NotAllowedAccessException;
+import com.example.mediacommunity.community.domain.BoardCategories;
+import com.example.mediacommunity.community.domain.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.board.BoardInfoDto;
@@ -31,12 +33,12 @@ public class BoardController {
     private final Pagination pagination;
     private final MemberService memberService;
 
-    @GetMapping("/boards")
-    public Map<String, Object> boards(@RequestParam(defaultValue = "1") int page) {
+    @GetMapping("/boards/{category}")
+    public Map<String, Object> boards(@RequestParam(defaultValue = "1") int page, @PathVariable String category) {
         int totalBoardsNum = boardService.getTotalBoardsNum();
 
         pagination.pageInfo(page, totalBoardsNum);
-        List<Board> boards = boardService.findBoards(pagination);
+        List<Board> boards = boardService.findBoards(pagination, category);
 
         List<BoardInfoDto> boardInfoDtos = boards.stream()
                 .map(board -> board.convertBoardToBoardInfoDto())
@@ -58,7 +60,9 @@ public class BoardController {
     @PostMapping("/board")
     public ResponseEntity<?> addBoard(@RequestBody BoardAddingDto boardDto, @AuthenticationPrincipal UserInfo userInfo) {
         Member member = memberService.findMemberById(userInfo.getUsername());
-        Board board = Board.convertBoardAddingDtoToBoard(boardDto, member);
+        BoardCategory category = boardService.findCategory(boardDto.getCategory());
+
+        Board board = Board.convertBoardAddingDtoToBoard(boardDto, member, category);
         boardService.save(board);
 
         Map<String, Long> result = new HashMap<>();
@@ -82,5 +86,10 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         throw new NotAllowedAccessException(ExceptionEnum.NOT_ALLOWED_ACCESS);
+    }
+
+    @GetMapping("/board-category")
+    public BoardCategories category() {
+        return boardService.findAllCategories();
     }
 }
