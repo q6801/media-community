@@ -1,5 +1,7 @@
 package com.example.mediacommunity.community.service.board;
 
+import com.example.mediacommunity.community.domain.BoardCategories;
+import com.example.mediacommunity.community.domain.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.member.Member;
@@ -39,8 +41,8 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<Board> findBoards(Pagination pagination) {
-        return boardRepository.findBoards(pagination);
+    public List<Board> findBoards(Pagination pagination, String category) {
+        return boardRepository.findBoards(pagination, category);
     }
 
     @Override
@@ -81,6 +83,18 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public int getTotalBoardsNum() {
         return boardRepository.getTotalBoardsNum();
+    }
+
+    @Override
+    public BoardCategories findAllCategories() {
+        BoardCategories bc = new BoardCategories();
+        bc.setCategories(boardRepository.findAllCategories());
+        return bc;
+    }
+
+    @Override
+    public BoardCategory findCategory(String categoryId) {
+        return boardRepository.findCategory(categoryId);
     }
 
     private boolean compareUserAndWriter(Member member, Board board) {
