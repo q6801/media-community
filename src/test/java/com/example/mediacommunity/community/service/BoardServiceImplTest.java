@@ -2,8 +2,10 @@ package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
+import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.board.BoardServiceImpl;
+import com.example.mediacommunity.community.service.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +25,8 @@ import static org.mockito.BDDMockito.given;
 class BoardServiceImplTest {
     @Mock
     private BoardRepository boardRepository;
+    @Mock
+    private MemberService memberService;
 
     @InjectMocks
     private BoardServiceImpl boardService;
@@ -64,12 +68,14 @@ class BoardServiceImplTest {
         //given
         String updatedContent = "updated content";
         Board board0 = getStubBoardList().get(0);
+        Member writer = board0.getMember();
         BoardAddingDto board0Alpha = new BoardAddingDto("title", updatedContent);
         given(boardRepository.findBoardById(board0.getId()))
                 .willReturn(Optional.of(board0));
+        given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
 
         //when
-        boardService.modifyBoardUsingDto(board0.getId(), board0Alpha);
+        boardService.modifyBoardUsingDto(board0.getId(), board0Alpha, writer.getLoginId());
         Board modifiedBoard = boardRepository.findBoardById(board0.getId()).get();
 
         //then
@@ -78,16 +84,35 @@ class BoardServiceImplTest {
     }
 
 
+
+    private List<Member> getStubMemberList() {
+        return Arrays.asList(
+                Member.builder()
+                        .loginId("test121")
+                        .imageUrl("")
+                        .nickname("test1!")
+                        .password("password0").build(),
+                Member.builder()
+                        .loginId("test1232")
+                        .imageUrl("")
+                        .nickname("test!")
+                        .password("password1").build()
+        );
+    }
+
     private List<Board> getStubBoardList() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
+
+        Board board0 = Board.builder().content("start content")
+                .createdAt(timestamp).updatedAt(timestamp).viewCnt(1).title("title").build();
+        Board board1 = Board.builder().content("start 2")
+                .createdAt(timestamp).updatedAt(timestamp).viewCnt(10).title("title").build();
+
+        board0.setMember(getStubMemberList().get(0));
+        board1.setMember(getStubMemberList().get(1));
+
         return Arrays.asList(
-                Board.builder().content("start content")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(1).title("title").build(),
-                Board.builder().content("start 2")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(10).title("title").build(),
-                Board.builder().build()
+                board0, board1
         );
     }
 
