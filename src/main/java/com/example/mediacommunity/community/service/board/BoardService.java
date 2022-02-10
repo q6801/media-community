@@ -1,6 +1,6 @@
 package com.example.mediacommunity.community.service.board;
 
-import com.example.mediacommunity.community.domain.BoardCategories;
+import com.example.mediacommunity.community.domain.BoardCategoriesDto;
 import com.example.mediacommunity.community.domain.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
@@ -19,6 +19,6 @@ public interface BoardService {
     void increaseViewCnt(Long id, int viewCnt);
     boolean deleteBoard(Long boardIdx, String memberId);
     int getTotalBoardsNum();
-    public BoardCategories findAllCategories();
+    public BoardCategoriesDto findAllCategories();
     BoardCategory findCategory(String categoryId);
 }

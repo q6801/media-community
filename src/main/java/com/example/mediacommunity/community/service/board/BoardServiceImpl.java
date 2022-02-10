@@ -1,6 +1,6 @@
 package com.example.mediacommunity.community.service.board;
 
-import com.example.mediacommunity.community.domain.BoardCategories;
+import com.example.mediacommunity.community.domain.BoardCategoriesDto;
 import com.example.mediacommunity.community.domain.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
@@ -86,8 +86,8 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public BoardCategories findAllCategories() {
-        BoardCategories bc = new BoardCategories();
+    public BoardCategoriesDto findAllCategories() {
+        BoardCategoriesDto bc = new BoardCategoriesDto();
         bc.setCategories(boardRepository.findAllCategories());
         return bc;
     }
