@@ -1,6 +1,7 @@
 package com.example.mediacommunity.community.domain.reply;
 
 import com.example.mediacommunity.community.domain.board.Board;
+import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -66,6 +68,11 @@ public class Reply {
     }
 
     public ReplyInfoDto convertReplyToReplyInfoDto() {
-        return new ReplyInfoDto(this.member.getNickname(), this.content, this.createdAt, this.updatedAt);
+        return new ReplyInfoDto(this.id, this.member.getNickname(), this.content, this.createdAt, this.updatedAt);
+    }
+
+    public void updateReplyWithDto(ReplyInputDto replyInputDto) {
+        this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
+        this.content = replyInputDto.getContent();
     }
 }
