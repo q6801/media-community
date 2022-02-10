@@ -12,9 +12,13 @@ public class BoardAddingDto {
     @NotBlank
     private String content;
 
+    @NotBlank
+    private String category;
+
     public BoardAddingDto() {}
-    public BoardAddingDto(String title, String content) {
+    public BoardAddingDto(String title, String content, String category) {
         this.title = title;
         this.content = content;
+        this.category = category;
     }
 }
