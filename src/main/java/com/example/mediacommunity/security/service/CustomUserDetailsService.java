@@ -1,29 +1,21 @@
 package com.example.mediacommunity.security.service;
 
 import com.example.mediacommunity.community.domain.member.Member;
-import com.example.mediacommunity.community.domain.member.RoleType;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
-import com.example.mediacommunity.community.domain.member.SignUpDto;
-import com.example.mediacommunity.community.service.AmazonS3Service;
-import com.example.mediacommunity.security.userInfo.UserInfo;
 import com.example.mediacommunity.security.BadProviderException;
+import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
-    private final AmazonS3Service amazonS3Service;
 
     @Override
     @Transactional(readOnly = true)
