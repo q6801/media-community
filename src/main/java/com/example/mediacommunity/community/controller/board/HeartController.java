@@ -1,5 +1,8 @@
 package com.example.mediacommunity.community.controller.board;
 
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.NotAllowedAccessException;
+import com.example.mediacommunity.Exception.custom.UserInfoNotFoundException;
 import com.example.mediacommunity.community.domain.heart.HeartInfoDto;
 import com.example.mediacommunity.community.service.heart.HeartService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
@@ -27,6 +30,9 @@ public class HeartController {
 
     @PutMapping("board/{boardIdx}/heart")
     public HeartInfoDto hitTheLikeButton(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long boardIdx) {
+        if (userInfo == null) {
+            throw new UserInfoNotFoundException(ExceptionEnum.USER_INFO_NOT_FOUND);
+        }
         Boolean pushed = heartService.toggleTheHeart(boardIdx, userInfo.getUsername());
         Long cnt = heartService.cntHearts(boardIdx);
         return new HeartInfoDto(cnt, pushed);
