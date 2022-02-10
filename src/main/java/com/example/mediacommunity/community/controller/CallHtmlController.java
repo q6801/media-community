@@ -10,7 +10,7 @@ public class CallHtmlController {
         return "axios/index";
     }
 
-    @GetMapping("/comm")
+    @GetMapping("/articles/{category}")
     public String comm() {
         return "axios/board/comm";
     }
@@ -75,7 +75,7 @@ public class CallHtmlController {
         return "axios/streaming/presenter";
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/{username}/broadcast")
     public String viewer() {
         return "axios/streaming/viewer";
     }
