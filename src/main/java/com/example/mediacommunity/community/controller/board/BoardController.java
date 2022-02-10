@@ -2,7 +2,7 @@ package com.example.mediacommunity.community.controller.board;
 
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.NotAllowedAccessException;
-import com.example.mediacommunity.community.domain.BoardCategories;
+import com.example.mediacommunity.community.domain.BoardCategoriesDto;
 import com.example.mediacommunity.community.domain.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
@@ -89,7 +89,7 @@ public class BoardController {
     }
 
     @GetMapping("/board-category")
-    public BoardCategories category() {
+    public BoardCategoriesDto category() {
         return boardService.findAllCategories();
     }
 }
