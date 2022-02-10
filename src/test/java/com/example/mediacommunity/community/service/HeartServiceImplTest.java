@@ -126,6 +126,10 @@ class HeartServiceImplTest {
                     .size()
                 )
         );
+        //when
+        Long numOfHearts = heartService.cntHearts(board.getId());
+        //then
+        assertThat(numOfHearts).isEqualTo(1);
     }
 
 
