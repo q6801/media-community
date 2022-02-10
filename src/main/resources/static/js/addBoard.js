@@ -1,6 +1,23 @@
 add_board_form = document.querySelector('#add-board')
 add_board_form.addEventListener('submit', post)
 
+let category = document.querySelector('#category')
+axios.get('board-category')
+.then(function(res) {
+    let categories = res.data.categories
+    console.log(res)
+
+    for (c in categories) {
+          let option = document.createElement('option')
+          option.setAttribute('value', categories[c])
+          option.setAttribute('class', 'dropdown-item')
+          option.innerText = categories[c]
+
+          category.appendChild(option)
+    }
+})
+
+
 function post(e) {
     e.preventDefault()
     let title = document.querySelector('#title')
@@ -11,6 +28,7 @@ function post(e) {
 
     axios.post('/board',
             {
+                'category': category.value,
                 'title': title_val,
                 'content': content_val 
             }
