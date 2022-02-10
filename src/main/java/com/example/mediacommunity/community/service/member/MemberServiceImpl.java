@@ -89,14 +89,12 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public Optional<String> updateProfile(String loginId, MemberEditDto memberEditDto) throws IOException {
+        Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
         MultipartFile file = memberEditDto.getFile();
         String newNickname = memberEditDto.getNickname();
-        Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
         String imageUrl;
 
-        if (!updateNickname(member, newNickname)) {
-            return Optional.empty();
-        }
+        updateNickname(member, newNickname);
 
         if(file != null) {
             String ext = extractExt(file.getOriginalFilename());
@@ -111,15 +109,13 @@ public class MemberServiceImpl implements MemberService {
         return Optional.ofNullable(imageUrl);
     }
 
-    public Boolean updateNickname(Member member, String newNickname) {
+    public void updateNickname(Member member, String newNickname) {
         Optional<Member> nameDuplicatedMember = memberRepository.findByNickname(newNickname);
 
         if (nameDuplicatedMember.isPresent() && compareloginId(member.getLoginId(), nameDuplicatedMember)) { // 중복인 id가 있고 자기 자신이 아니라면
-            return false;
-        } else {
-            member.setNickname(newNickname);
+            throw new NicknameAlreadyExistException(ExceptionEnum.NICKNAME_ALREADY_EXIST);
         }
-        return true;
+        member.setNickname(newNickname);
     }
 
     private boolean compareloginId(String loginId, Optional<Member> foundMember) {
