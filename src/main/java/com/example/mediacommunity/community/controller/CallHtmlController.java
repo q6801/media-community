@@ -48,7 +48,7 @@ public class CallHtmlController {
 
     @GetMapping("/user")
     public String userInfo() {
-        return "axios/userInfo";
+        return "axios/user/userInfo";
     }
 
     @GetMapping("/confirm-email")
@@ -58,17 +58,17 @@ public class CallHtmlController {
 
     @GetMapping("/login")
     public String loginForm() {
-        return "axios/loginForm";
+        return "axios/user/loginForm";
     }
 
     @GetMapping("/signup")
     public String signUpForm() {
-        return "axios/signUp";
+        return "axios/user/signUp";
     }
 
     @GetMapping("/editMember")
     public String editMemberForm() {
-        return "axios/editMember";
+        return "axios/user/editMember";
     }
 
     @GetMapping("/{username}/stream-manager")
