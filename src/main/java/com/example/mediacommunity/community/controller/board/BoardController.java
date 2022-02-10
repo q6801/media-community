@@ -1,5 +1,7 @@
 package com.example.mediacommunity.community.controller.board;
 
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.NotAllowedAccessException;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.board.BoardInfoDto;
@@ -43,7 +45,6 @@ public class BoardController {
         Map<String, Object> map = new HashMap<>();
         map.put("boards", boardInfoDtos);
         map.put("pagination", pagination);
-
         return map;
     }
 
@@ -68,31 +69,18 @@ public class BoardController {
     @PutMapping("/board/{boardIdx}")
     public ResponseEntity<?> editBoard(@RequestBody BoardAddingDto boardDto, @PathVariable Long boardIdx,
                                        @AuthenticationPrincipal UserInfo userInfo) {
-        Member member = memberService.findMemberById(userInfo.getUsername());
-        Board board = Board.convertBoardAddingDtoToBoard(boardDto, member);
-
-        if (userEqualsToWriter(member, board)) {
-            boardService.modifyBoardUsingDto(boardIdx, boardDto);
+        if (boardService.modifyBoardUsingDto(boardIdx, boardDto, userInfo.getUsername())) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
-        throw new RuntimeException();
+        throw new NotAllowedAccessException(ExceptionEnum.NOT_ALLOWED_ACCESS);
     }
 
-
-    private boolean userEqualsToWriter(Member member, Board board) {
-        if (member != null  && board.getMember().equals(member)) {
-            return true;
-        }
-        return false;
-    }
 
     @DeleteMapping("/board/{boardIdx}")
     public ResponseEntity<?> deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
-        Member authUser = memberService.findMemberById(userInfo.getUsername());
-        Board board = boardService.findBoardById(boardIdx);
-        if (userEqualsToWriter(authUser, board)) {
-            boardService.deleteBoard(boardIdx);
+        if(boardService.deleteBoard(boardIdx, userInfo.getUsername())) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        throw new NotAllowedAccessException(ExceptionEnum.NOT_ALLOWED_ACCESS);
     }
 }
