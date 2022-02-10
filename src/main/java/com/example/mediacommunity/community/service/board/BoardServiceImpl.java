@@ -49,9 +49,15 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam) {
+    public boolean modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam, String memberId) {
+        Member member = memberService.findMemberById(memberId);
         Board board = boardRepository.findBoardById(boardIdx).orElseThrow();
-        board.updateBoardWithDto(updateParam);
+
+        if (compareUserAndWriter(member, board)) {
+            board.updateBoardWithDto(updateParam);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -61,13 +67,26 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void deleteBoard(Long id) {
-        Board board = boardRepository.findBoardById(id).orElseThrow();
-        boardRepository.delete(board);
+    public boolean deleteBoard(Long boardIdx, String memberId) {
+        Member member = memberService.findMemberById(memberId);
+        Board board = boardRepository.findBoardById(boardIdx).orElseThrow();
+
+        if (compareUserAndWriter(member, board)) {
+            boardRepository.delete(board);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public int getTotalBoardsNum() {
         return boardRepository.getTotalBoardsNum();
+    }
+
+    private boolean compareUserAndWriter(Member member, Board board) {
+        if (member != null  && board.getMember().equals(member)) {
+            return true;
+        }
+        return false;
     }
 }
