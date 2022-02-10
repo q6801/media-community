@@ -13,8 +13,8 @@ public interface BoardService {
     List<Board> findByWriterId(String writerId);
     List<Board> findBoards(Pagination pagination);
     List<Board> findAllBoards();
-    void modifyBoardUsingDto(Long BoardIdx, BoardAddingDto updateParam);
+    boolean modifyBoardUsingDto(Long BoardIdx, BoardAddingDto updateParam, String memberId);
     void increaseViewCnt(Long id, int viewCnt);
-    void deleteBoard(Long id);
+    boolean deleteBoard(Long boardIdx, String memberId);
     int getTotalBoardsNum();
 }
