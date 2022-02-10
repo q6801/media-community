@@ -27,14 +27,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();                // google
-        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, oAuth2User.getAttributes());
+        String providerType = userRequest.getClientRegistration().getRegistrationId();                // google
+        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oAuth2User.getAttributes());
         System.out.println("userInfo = " + userInfo);
 
         Optional<Member> savedMember = memberRepository.findByLoginId(userInfo.getId());
         Member member;
         if (savedMember.isEmpty()) {
-            member = Member.createOAuth2Member(userInfo, registrationId);
+            member = Member.createOAuth2Member(userInfo, providerType);
             memberRepository.save(member);
         } else{
             member = savedMember.get();
