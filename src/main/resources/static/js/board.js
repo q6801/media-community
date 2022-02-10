@@ -49,7 +49,7 @@ axios.get('/boardInfo/' + board_id)
 
     axios.get('/memberInfo')
         .then(function(memberRes) {
-            if (memberRes.data.username == board.username) {
+            if (memberRes.data.nickname == board.writer) {
                 let edit = document.querySelector('#edit')
                 let editBtn = document.createElement('button')
                 edit.appendChild(editBtn)
@@ -93,12 +93,18 @@ axios.get('/boardInfo/' + board_id + '/hearts')
                     }
                     button.innerText = '좋아요 수 : ' + pushedHeart.heartsCnt
                 })
+                .catch(function(err) {
+                    console.log('err : ' +  err.response.data.errorCode)
+                    console.log('err : ' +  err.response.data.errorMessage)
+
+                    alert(err.response.data.errorMessage)
+                })
         })
 
     })
 
 // REPLY들
-axios.get('/boardInfo/' + board_id + '/replies')
+axios.get('/board/' + board_id + '/replies')
 .then(function(res) {
     console.log(res.data)
 
@@ -106,30 +112,72 @@ axios.get('/boardInfo/' + board_id + '/replies')
     let replyInfo = document.querySelector('#replies')
     let total_div = document.createElement('div')
     replyInfo.appendChild(total_div)
-    
-    for(idx in replies) {
-        let reply = replies[idx]
-        let container_div = document.createElement('div')
-        let h4 = document.createElement('h5')
-        h4.innerText = reply.writer
 
-        let div1 = document.createElement('div')
-        div1.innerText = reply.updatedAt
+    axios.get('/memberInfo')
+        .then(function(memberRes) {
+            for(idx in replies) {
+                let reply = replies[idx]
+                let container_div = document.createElement('div')
+                let h4 = document.createElement('h5')
+                h4.innerText = reply.writer
 
-        container_div.appendChild(h4)
-        container_div.appendChild(div1)
-        container_div.setAttribute('class', 'mb-4')
+                let div1 = document.createElement('div')
+                div1.innerText = reply.updatedAt
 
-        let content = document.createElement('div')
-        content.innerText = reply.content
+                container_div.appendChild(h4)
+                container_div.appendChild(div1)
+                container_div.setAttribute('class', 'mb-4')
 
-        hr = document.createElement('hr')
-        hr.setAttribute('class', 'mt-3 mb-3')
+                let content = document.createElement('div')
+                content.innerText = reply.content
 
-        total_div.appendChild(container_div)
-        total_div.appendChild(content)
-        total_div.appendChild(hr)
-    }
+                hr = document.createElement('hr')
+                hr.setAttribute('class', 'mt-3 mb-3')
+
+                console.log('username', memberRes.data.nickname)
+                console.log('writer', reply.writer)
+
+                total_div.appendChild(container_div)
+                if (memberRes.data.nickname == reply.writer) {
+                    let button_deletion = document.createElement('button')
+                    button_deletion.innerText = '삭제'
+                    button_deletion.setAttribute('style', 'float:right;')
+                    button_deletion.addEventListener('click', function() {
+                        axios.delete("/reply/" + reply.id)
+                        .then(function(res) {
+                            window.location.reload()
+                        })
+                    })
+                    total_div.appendChild(button_deletion)
+                }
+                total_div.appendChild(content)
+                total_div.appendChild(hr)
+            }
+        }).catch(function(err) {
+            for(idx in replies) {
+                let reply = replies[idx]
+                let container_div = document.createElement('div')
+                let h4 = document.createElement('h5')
+                h4.innerText = reply.writer
+
+                let div1 = document.createElement('div')
+                div1.innerText = reply.updatedAt
+
+                container_div.appendChild(h4)
+                container_div.appendChild(div1)
+                container_div.setAttribute('class', 'mb-4')
+
+                let content = document.createElement('div')
+                content.innerText = reply.content
+
+                hr = document.createElement('hr')
+                hr.setAttribute('class', 'mt-3 mb-3')
+
+                total_div.appendChild(container_div)
+                total_div.appendChild(content)
+                total_div.appendChild(hr)
+            }
+        })
 })
 
 // reply form
@@ -140,7 +188,9 @@ let submit_reply = function(e) {
     let reply_content_dom = document.querySelector('#reply-content')
     let reply_content = reply_content_dom.value
 
-    axios.post('/reply/'+ board_id, {
+    let url = board_id + '/reply'
+
+    axios.post(url, {
         content: reply_content
     }).then(function(res) {
         reply_content_dom.value = ''
@@ -168,11 +218,28 @@ let submit_reply = function(e) {
         hr = document.createElement('hr')
         hr.setAttribute('class', 'mt-3 mb-3')
 
+        let button_deletion = document.createElement('button')
+        button_deletion.innerText = '삭제'
+        button_deletion.setAttribute('style', 'float:right;')
+        button_deletion.addEventListener('click', function() {
+            axios.delete("/reply/" + reply.id)
+            .then(function(res) {
+                window.location.reload()
+            })
+        })
+
         total_div.appendChild(container_div)
+        total_div.appendChild(button_deletion)
         total_div.appendChild(content)
         total_div.appendChild(hr)
+    })
+    .catch(function(err) {
+        console.log('err : ' +  err.response.data.errorCode)
+        console.log('err : ' +  err.response.data.errorMessage)
 
+        alert(err.response.data.errorMessage)
     })
 }
 add_reply_form.addEventListener('submit', submit_reply)
+
 
