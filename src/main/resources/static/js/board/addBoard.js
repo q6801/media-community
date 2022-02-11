@@ -1,6 +1,11 @@
 add_board_form = document.querySelector('#add-board')
 add_board_form.addEventListener('submit', post)
 
+let quill = new Quill('#editor', {
+    theme: 'snow'
+  });
+
+
 let category = document.querySelector('#category')
 axios.get('board-category')
 .then(function(res) {
@@ -30,7 +35,7 @@ function post(e) {
             {
                 'category': category.value,
                 'title': title_val,
-                'content': content_val 
+                'content': quill.root.innerHTML
             }
     ).then(function(res) {
         console.log(res.data)
@@ -40,3 +45,5 @@ function post(e) {
         console.log(err);
     })
 }
+
+
