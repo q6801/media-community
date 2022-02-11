@@ -1,8 +1,9 @@
 package com.example.mediacommunity.community.controller.streaming;
 
 import com.example.mediacommunity.community.domain.chat.MsgInfoDto;
-import com.example.mediacommunity.community.domain.chat.StreamingRoom;
-import com.example.mediacommunity.community.service.StreamingRoomService;
+import com.example.mediacommunity.community.domain.chat.Room;
+import com.example.mediacommunity.community.domain.chat.RoomType;
+import com.example.mediacommunity.community.service.RoomServiceImpl;
 import com.example.mediacommunity.config.CallHandler;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -20,33 +21,33 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class StreamingRoomController {
 
-    private final StreamingRoomService streamingRoomService;
+    private final RoomServiceImpl roomServiceImpl;
     private final CallHandler callHandler;
 
     @GetMapping("/streaming-rooms")
-    public List<StreamingRoom> rooms(Model model) {
-        List<StreamingRoom> allRoom = streamingRoomService.findAllRoom();
+    public List<Room> rooms(Model model) {
+        List<Room> allRoom = roomServiceImpl.findRoomsByType(RoomType.STREAMING);
         return allRoom;
     }
 
     @GetMapping("/streaming-rooms/{roomId}")
-    public MsgInfoDto roomEnter(@PathVariable UUID roomId, @AuthenticationPrincipal UserInfo userInfo) {
-        StreamingRoom streamingRoom = streamingRoomService.findById(roomId);
-        return new MsgInfoDto(streamingRoom.getId(), streamingRoom.getRoomName());
+    public MsgInfoDto roomEnter(@PathVariable UUID roomId) {
+        Room room = roomServiceImpl.findById(roomId);
+        return new MsgInfoDto(room.getId(), room.getRoomName());
     }
 
     @PostMapping("streaming-room")
     public ResponseEntity<?> addStreamingRoom(@RequestBody Map<String, String> roomMap,
                                      @AuthenticationPrincipal UserInfo userInfo) {
-        streamingRoomService.findByPresenter(userInfo.getName())
-                .ifPresent(room -> streamingRoomService.deleteRoom(userInfo.getName()));
-        streamingRoomService.createRoom(roomMap.get("roomName"), userInfo.getName());
+        roomServiceImpl.findByPresenter(userInfo.getName())
+                .ifPresent(room -> roomServiceImpl.deleteRoom(userInfo.getName()));
+        roomServiceImpl.createRoom(roomMap.get("roomName"), userInfo.getName(), RoomType.STREAMING);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/streaming-room")
     public ResponseEntity<?> deleteRoom( @AuthenticationPrincipal UserInfo userInfo) {
-        streamingRoomService.deleteRoom(userInfo.getName());
+        roomServiceImpl.deleteRoom(userInfo.getName());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
