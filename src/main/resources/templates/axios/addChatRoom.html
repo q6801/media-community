@@ -36,13 +36,13 @@
 </head>
 <body>
 
-<div th:replace="~{axios/header :: header}"></div>
+<div th:replace="~{axios/component/header :: header}"></div>
 
 <main>
   <div class="container">
       <form action="" id="room-form">
         <div class="col-12 mt-5">
-            <label for="loginId" class="form-label">roomName</label>
+            <label for="roomName" class="form-label">roomName</label>
             <input type="text" class="form-control" id="roomName" placeholder="room name">
         </div>
         <div class="col-12">
@@ -50,7 +50,7 @@
         </div>
       </form>
     </div>
-  <div th:replace="~{axios/footer :: footer}"></div>
+  <div th:replace="~{axios/component/footer :: footer}"></div>
 </main>
 
 </body>
