@@ -4,9 +4,9 @@ room_form.addEventListener('submit', function(e) {
     e.preventDefault()
     let roomName = document.querySelector('#roomName')
 
-    axios.post('/chat/room', {
+    axios.post('/chat-room', {
         roomName: roomName.value
     }).then(function(res) {
-        window.location.replace('/chatRooms')
+        window.location.replace('/chat')
     })
 })
