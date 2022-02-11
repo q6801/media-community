@@ -2,7 +2,7 @@ package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.chat.Room;
 import com.example.mediacommunity.community.domain.chat.RoomType;
-import com.example.mediacommunity.community.repository.streaming.StreamingRoomRepository;
+import com.example.mediacommunity.community.repository.streaming.RoomRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class RoomServiceTest {
     @Mock
-    private StreamingRoomRepository streamingRoomRepository;
+    private RoomRepository roomRepository;
 
     @InjectMocks
     private RoomServiceImpl roomServiceImpl;
@@ -48,7 +48,7 @@ public class RoomServiceTest {
     public void findById() {
         //given
         Room room = getStubRoomList().get(0);
-        given(streamingRoomRepository.findByRoomId(room.getId())).willReturn(room);
+        given(roomRepository.findByRoomId(room.getId())).willReturn(room);
 
         //when
         Room foundRoom = roomServiceImpl.findById(room.getId());
@@ -61,7 +61,7 @@ public class RoomServiceTest {
     public void findByPresenter() {
         //given
         Room room = getStubRoomList().get(0);
-        given(streamingRoomRepository.findByPresenter(room.getPresenter()))
+        given(roomRepository.findByPresenter(room.getPresenter()))
                 .willReturn(Optional.of(room));
 
         //when
@@ -74,7 +74,7 @@ public class RoomServiceTest {
     @Test
     public void findAllRoom() {
         //given
-        given(streamingRoomRepository.findRoomsByType(RoomType.STREAMING)).willReturn(getStubRoomList());
+        given(roomRepository.findRoomsByType(RoomType.STREAMING)).willReturn(getStubRoomList());
 
         //when
         List<Room> allRoom = roomServiceImpl.findRoomsByType(RoomType.STREAMING);

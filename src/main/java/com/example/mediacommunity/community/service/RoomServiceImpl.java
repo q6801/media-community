@@ -2,7 +2,7 @@ package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.chat.Room;
 import com.example.mediacommunity.community.domain.chat.RoomType;
-import com.example.mediacommunity.community.repository.streaming.StreamingRoomRepository;
+import com.example.mediacommunity.community.repository.streaming.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional
 public class RoomServiceImpl {
-    private final StreamingRoomRepository streamingRoomRepository;
+    private final RoomRepository roomRepository;
 
     public Room createRoom(String roomName, String memberId, RoomType roomType) {
         Room room = Room.builder()
@@ -25,24 +25,24 @@ public class RoomServiceImpl {
                 .presenter(memberId)
                 .roomType(roomType)
                 .build();
-        streamingRoomRepository.saveRoom(room);
+        roomRepository.saveRoom(room);
         return room;
     }
 
     public Room findById(UUID roomId) {
-        return streamingRoomRepository.findByRoomId(roomId);
+        return roomRepository.findByRoomId(roomId);
     }
 
     public Optional<Room> findByPresenter(String username) {
-        return streamingRoomRepository.findByPresenter(username);
+        return roomRepository.findByPresenter(username);
     }
 
     public List<Room> findRoomsByType(RoomType roomType) {
-        return streamingRoomRepository.findRoomsByType(roomType);
+        return roomRepository.findRoomsByType(roomType);
     }
 
     public void deleteRoom(String username) {
         findByPresenter(username)
-                .ifPresent((room) -> streamingRoomRepository.deleteRoom(room));
+                .ifPresent((room) -> roomRepository.deleteRoom(room));
     }
 }

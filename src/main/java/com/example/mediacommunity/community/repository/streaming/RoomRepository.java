@@ -6,10 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public class StreamingRoomRepository {
+public class RoomRepository {
 
     @PersistenceContext
     private EntityManager em;
@@ -24,13 +26,13 @@ public class StreamingRoomRepository {
 
     public Optional<Room> findByPresenter(String username) {
         return em.createQuery(
-                "select s from StreamingRoom s where s.presenter=:username", Room.class)
+                "select s from Room s where s.presenter=:username", Room.class)
                 .setParameter("username", username)
                 .getResultList().stream().findFirst();
     }
 
     public List<Room> findRoomsByType(RoomType roomType) {
-        return em.createQuery("select s from StreamingRoom s where s.roomType=:roomType", Room.class)
+        return em.createQuery("select s from Room s where s.roomType=:roomType", Room.class)
                 .setParameter("roomType", roomType)
                 .getResultList();
     }
