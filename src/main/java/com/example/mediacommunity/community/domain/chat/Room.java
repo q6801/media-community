@@ -14,7 +14,7 @@ import java.util.UUID;
 @Entity
 @EqualsAndHashCode
 @ToString
-public class StreamingRoom {
+public class Room {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -27,4 +27,7 @@ public class StreamingRoom {
 
     @Column(nullable = false)
     private String presenter;
+
+    @Enumerated
+    private RoomType roomType = RoomType.CHAT;
 }
