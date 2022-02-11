@@ -28,16 +28,16 @@ axios.get('/streaming-rooms')
 
         // 테이블 바디 제작
         for(idx in msgRooms) {
-            let streamingRoom = msgRooms[idx]
+            let room = msgRooms[idx]
             let tr = document.createElement('tr')
-            tr.setAttribute('onClick', `location.href="/${streamingRoom.presenter}"`)
+            tr.setAttribute('onClick', `location.href="/${room.presenter}"`)
             let td = new Array(2);
             for(let i=0; i<td.length; i++) {
                 td[i] = document.createElement('td')
                 tr.appendChild(td[i])
             }
-            td[0].innerText = streamingRoom.roomName
-            td[1].innerText = streamingRoom.presenter
+            td[0].innerText = room.roomName
+            td[1].innerText = room.presenter
             tbody.appendChild(tr)
         }
                   
