@@ -1,6 +1,5 @@
 package com.example.mediacommunity.community.domain.board;
 
-import com.example.mediacommunity.community.domain.BoardCategory;
 import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
