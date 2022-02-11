@@ -5,16 +5,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class CallHtmlController {
+    // index
     @GetMapping("/")
     public String home() {
         return "axios/index";
     }
 
+    //board
     @GetMapping("/articles/{category}")
     public String comm() {
         return "axios/board/comm";
     }
-
     @GetMapping("/addBoard")
     public String boardForm() {
         return "axios/board/addBoard";
@@ -30,9 +31,15 @@ public class CallHtmlController {
         return "axios/board/editBoard";
     }
 
+    // room
     @GetMapping("/streaming")
-    public String chatRooms() {
+    public String streamRooms() {
         return "axios/streaming/streamingRooms";
+    }
+
+    @GetMapping("/chat")
+    public String chatRooms() {
+        return "axios/chat/chatRooms";
     }
 
     @GetMapping("/chatRoom/{chatIdx}")
@@ -40,11 +47,22 @@ public class CallHtmlController {
         return "axios/chatRoom";
     }
 
+    @GetMapping("/{username}/stream-manager")
+    public String presenter() {
+        return "axios/streaming/presenter";
+    }
+
+    @GetMapping("/{username}/broadcast")
+    public String viewer() {
+        return "axios/streaming/viewer";
+    }
+
     @GetMapping("/chat/addRoom")
     public String room() {
         return "axios/addChatRoom";
     }
 
+    // user
     @GetMapping("/user")
     public String userInfo() {
         return "axios/user/userInfo";
@@ -68,15 +86,5 @@ public class CallHtmlController {
     @GetMapping("/editMember")
     public String editMemberForm() {
         return "axios/user/editMember";
-    }
-
-    @GetMapping("/{username}/stream-manager")
-    public String presenter() {
-        return "axios/streaming/presenter";
-    }
-
-    @GetMapping("/{username}/broadcast")
-    public String viewer() {
-        return "axios/streaming/viewer";
     }
 }
