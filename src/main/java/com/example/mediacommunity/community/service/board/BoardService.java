@@ -1,7 +1,7 @@
 package com.example.mediacommunity.community.service.board;
 
-import com.example.mediacommunity.community.domain.BoardCategoriesDto;
-import com.example.mediacommunity.community.domain.BoardCategory;
+import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.service.Pagination;
@@ -19,6 +19,6 @@ public interface BoardService {
     void increaseViewCnt(Long id, int viewCnt);
     boolean deleteBoard(Long boardIdx, String memberId);
     int getTotalBoardsNum();
-    public BoardCategoriesDto findAllCategories();
+    BoardCategoriesDto findAllCategories();
     BoardCategory findCategory(String categoryId);
 }

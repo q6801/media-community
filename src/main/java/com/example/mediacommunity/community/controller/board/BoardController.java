@@ -2,8 +2,8 @@ package com.example.mediacommunity.community.controller.board;
 
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.NotAllowedAccessException;
-import com.example.mediacommunity.community.domain.BoardCategoriesDto;
-import com.example.mediacommunity.community.domain.BoardCategory;
+import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.board.BoardInfoDto;
@@ -41,7 +41,7 @@ public class BoardController {
         List<Board> boards = boardService.findBoards(pagination, category);
 
         List<BoardInfoDto> boardInfoDtos = boards.stream()
-                .map(board -> board.convertBoardToBoardInfoDto())
+                .map(Board::convertBoardToBoardInfoDto)
                 .collect(Collectors.toList());
 
         Map<String, Object> map = new HashMap<>();

@@ -1,7 +1,7 @@
 package com.example.mediacommunity.community.service.board;
 
-import com.example.mediacommunity.community.domain.BoardCategoriesDto;
-import com.example.mediacommunity.community.domain.BoardCategory;
+import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.member.Member;
@@ -98,9 +98,6 @@ public class BoardServiceImpl implements BoardService{
     }
 
     private boolean compareUserAndWriter(Member member, Board board) {
-        if (member != null  && board.getMember().equals(member)) {
-            return true;
-        }
-        return false;
+        return member != null && member.equals(board.getMember());
     }
 }

@@ -1,6 +1,6 @@
 package com.example.mediacommunity.community.repository.board;
 
-import com.example.mediacommunity.community.domain.BoardCategory;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.service.Pagination;

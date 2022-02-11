@@ -1,6 +1,6 @@
 package com.example.mediacommunity.community.repository.board;
 
-import com.example.mediacommunity.community.domain.BoardCategory;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
@@ -104,7 +104,7 @@ public class JpaBoardRepository implements BoardRepository {
     @Override
     public List<String> findAllCategories() {
         return em.createQuery("select c from BoardCategory c", BoardCategory.class)
-                .getResultList().stream().map(c -> c.getId()).collect(Collectors.toList());
+                .getResultList().stream().map(BoardCategory::getId).collect(Collectors.toList());
     }
 
     @Override
