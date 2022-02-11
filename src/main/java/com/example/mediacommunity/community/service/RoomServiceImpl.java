@@ -1,6 +1,7 @@
 package com.example.mediacommunity.community.service;
 
-import com.example.mediacommunity.community.domain.chat.StreamingRoom;
+import com.example.mediacommunity.community.domain.chat.Room;
+import com.example.mediacommunity.community.domain.chat.RoomType;
 import com.example.mediacommunity.community.repository.streaming.StreamingRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,28 +16,29 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class StreamingRoomService {
+public class RoomServiceImpl {
     private final StreamingRoomRepository streamingRoomRepository;
 
-    public StreamingRoom createRoom(String roomName, String memberId) {
-        StreamingRoom streamingRoom = StreamingRoom.builder()
+    public Room createRoom(String roomName, String memberId, RoomType roomType) {
+        Room room = Room.builder()
                 .roomName(roomName)
                 .presenter(memberId)
+                .roomType(roomType)
                 .build();
-        streamingRoomRepository.saveRoom(streamingRoom);
-        return streamingRoom;
+        streamingRoomRepository.saveRoom(room);
+        return room;
     }
 
-    public StreamingRoom findById(UUID roomId) {
+    public Room findById(UUID roomId) {
         return streamingRoomRepository.findByRoomId(roomId);
     }
 
-    public Optional<StreamingRoom> findByPresenter(String username) {
+    public Optional<Room> findByPresenter(String username) {
         return streamingRoomRepository.findByPresenter(username);
     }
 
-    public List<StreamingRoom> findAllRoom() {
-        return streamingRoomRepository.findAllRoom();
+    public List<Room> findRoomsByType(RoomType roomType) {
+        return streamingRoomRepository.findRoomsByType(roomType);
     }
 
     public void deleteRoom(String username) {

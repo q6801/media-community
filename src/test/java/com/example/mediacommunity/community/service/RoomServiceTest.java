@@ -1,6 +1,7 @@
 package com.example.mediacommunity.community.service;
 
-import com.example.mediacommunity.community.domain.chat.StreamingRoom;
+import com.example.mediacommunity.community.domain.chat.Room;
+import com.example.mediacommunity.community.domain.chat.RoomType;
 import com.example.mediacommunity.community.repository.streaming.StreamingRoomRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,12 +20,12 @@ import static org.mockito.BDDMockito.given;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
-public class StreamingRoomServiceTest {
+public class RoomServiceTest {
     @Mock
     private StreamingRoomRepository streamingRoomRepository;
 
     @InjectMocks
-    private StreamingRoomService streamingRoomService;
+    private RoomServiceImpl roomServiceImpl;
 
 
     private UUID id0 = UUID.randomUUID();
@@ -33,11 +34,11 @@ public class StreamingRoomServiceTest {
     @Test
     public void createRoom() {
         // given
-        StreamingRoom room = getStubRoomList().get(1);
+        Room room = getStubRoomList().get(1);
 
         //when
-        StreamingRoom createdRoom = streamingRoomService
-                .createRoom(room.getRoomName(), room.getPresenter());
+        Room createdRoom = roomServiceImpl
+                .createRoom(room.getRoomName(), room.getPresenter(), RoomType.STREAMING);
 
         //then
         assertThat(room).isEqualTo(createdRoom);
@@ -46,11 +47,11 @@ public class StreamingRoomServiceTest {
     @Test
     public void findById() {
         //given
-        StreamingRoom room = getStubRoomList().get(0);
+        Room room = getStubRoomList().get(0);
         given(streamingRoomRepository.findByRoomId(room.getId())).willReturn(room);
 
         //when
-        StreamingRoom foundRoom = streamingRoomService.findById(room.getId());
+        Room foundRoom = roomServiceImpl.findById(room.getId());
 
         //then
         assertThat(foundRoom).isEqualTo(room);
@@ -59,12 +60,12 @@ public class StreamingRoomServiceTest {
     @Test
     public void findByPresenter() {
         //given
-        StreamingRoom room = getStubRoomList().get(0);
+        Room room = getStubRoomList().get(0);
         given(streamingRoomRepository.findByPresenter(room.getPresenter()))
                 .willReturn(Optional.of(room));
 
         //when
-        Optional<StreamingRoom> foundRoom = streamingRoomService.findByPresenter(room.getPresenter());
+        Optional<Room> foundRoom = roomServiceImpl.findByPresenter(room.getPresenter());
 
         //then
         assertThat(foundRoom.get()).isEqualTo(room);
@@ -73,10 +74,10 @@ public class StreamingRoomServiceTest {
     @Test
     public void findAllRoom() {
         //given
-        given(streamingRoomRepository.findAllRoom()).willReturn(getStubRoomList());
+        given(streamingRoomRepository.findRoomsByType(RoomType.STREAMING)).willReturn(getStubRoomList());
 
         //when
-        List<StreamingRoom> allRoom = streamingRoomService.findAllRoom();
+        List<Room> allRoom = roomServiceImpl.findRoomsByType(RoomType.STREAMING);
 
         //then
         System.out.println(getStubRoomList().get(0));
@@ -87,14 +88,14 @@ public class StreamingRoomServiceTest {
 
 
 
-    private List<StreamingRoom> getStubRoomList() {
+    private List<Room> getStubRoomList() {
 
         return Arrays.asList(
-                StreamingRoom.builder()
+                Room.builder()
                         .roomName("room0")
                         .id(id0)
                         .presenter("tester0").build(),
-                StreamingRoom.builder()
+                Room.builder()
                         .roomName("room1")
                         .presenter("tester1").build()
         );
