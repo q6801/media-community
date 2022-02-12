@@ -1,5 +1,7 @@
 package com.example.mediacommunity.community.repository.streaming;
 
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.NotFoundPageException;
 import com.example.mediacommunity.community.domain.chat.Room;
 import com.example.mediacommunity.community.domain.chat.RoomType;
 import org.springframework.stereotype.Repository;
@@ -40,6 +42,12 @@ public class RoomRepository {
         return em.createQuery("select s from Room s where s.roomType=:roomType", Room.class)
                 .setParameter("roomType", roomType)
                 .getResultList();
+    }
+
+    public int getTotalRoomsNum(RoomType roomType) {
+        return em.createQuery("select count(r) from Room r where r.roomType=:roomType", Long.class)
+                .setParameter("roomType", roomType)
+                .getSingleResult().intValue();
     }
 
 
