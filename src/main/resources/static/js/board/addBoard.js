@@ -26,10 +26,8 @@ axios.get('board-category')
 function post(e) {
     e.preventDefault()
     let title = document.querySelector('#title')
-    let content = document.querySelector('#content')
 
     let title_val = title.value
-    let content_val = content.value
 
     axios.post('/board',
             {
