@@ -39,15 +39,15 @@ public class StreamingRoomController {
     @PostMapping("streaming-room")
     public ResponseEntity<?> addStreamingRoom(@RequestBody Map<String, String> roomMap,
                                      @AuthenticationPrincipal UserInfo userInfo) {
-        roomServiceImpl.findByPresenter(userInfo.getName())
-                .ifPresent(room -> roomServiceImpl.deleteRoom(userInfo.getName()));
+        roomServiceImpl.findByPresenter(userInfo.getName(), RoomType.STREAMING)
+                .ifPresent(room -> roomServiceImpl.deleteRoom(userInfo.getName(), RoomType.STREAMING));
         roomServiceImpl.createRoom(roomMap.get("roomName"), userInfo.getName(), RoomType.STREAMING);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/streaming-room")
     public ResponseEntity<?> deleteRoom( @AuthenticationPrincipal UserInfo userInfo) {
-        roomServiceImpl.deleteRoom(userInfo.getName());
+        roomServiceImpl.deleteRoom(userInfo.getName(), RoomType.STREAMING);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
