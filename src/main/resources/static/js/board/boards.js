@@ -101,6 +101,10 @@ axios.get('/board-category')
         a.setAttribute('href', '/articles/' + categories[c])
         a.innerText = categories[c]
 
+        if (categories[c] === category) {
+            a.setAttribute('class', 'nav-link active')
+        }
+
         categoryDom.appendChild(li)
     }
 })
