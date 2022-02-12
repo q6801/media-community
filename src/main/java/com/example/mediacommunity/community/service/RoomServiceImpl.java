@@ -41,8 +41,12 @@ public class RoomServiceImpl {
         return roomRepository.findRoomsByType(roomType);
     }
 
-    public void deleteRoom(String username) {
-        findByPresenter(username)
+    public int getTotalRoomsNum(RoomType roomType) {
+        return roomRepository.getTotalRoomsNum(roomType);
+    }
+
+    public void deleteRoom(String username, RoomType roomType) {
+        findByPresenter(username, roomType)
                 .ifPresent((room) -> roomRepository.deleteRoom(room));
     }
 }
