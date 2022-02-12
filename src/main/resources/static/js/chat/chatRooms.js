@@ -1,9 +1,16 @@
-axios.get('/chat-rooms')
+const params = new URLSearchParams(window.location.search)
+let page = params.get('page')
+if (page == null) {
+    page = 1
+}
+
+axios.get('/chat-rooms?page=' + page)
     .then(function(res) {
         console.log(res.data)
+        let msgRooms = res.data.rooms
+        let pagination = res.data.pagination
 
-        // boards
-        let msgRooms = res.data
+        // rooms
         let chatRooms_dom = document.querySelector('#chatRooms')
 
         let table = document.createElement('table');
@@ -41,4 +48,32 @@ axios.get('/chat-rooms')
             tbody.appendChild(tr)
         }
 
+        // pagination
+            let div = document.createElement('div')
+            if (pagination.prev) {
+                let prev = document.createElement('button')
+                prev.setAttribute('onClick', `location.href='/chat?page=${pagination.startPage-1}'`)
+                prev.setAttribute('class', "btn btn-outline-secondary")
+                prev.innerText = '이전'
+                div.appendChild(prev)
+            }
+            for(let i=pagination.startPage; i<pagination.endPage+1; i++) {
+                let btn = document.createElement('button')
+                btn.innerText = i
+                btn.setAttribute('onClick', `location.href='/chat?page=${i}'`)
+                if (pagination.page == i) {
+                    btn.setAttribute('class', 'btn btn-primary')
+                } else {
+                    btn.setAttribute('class', 'btn btn-secondary')
+                }
+                div.appendChild(btn)
+            }
+            if (pagination.next) {
+                let next = document.createElement('button')
+                next.setAttribute('onClick', `location.href='/chat?page=${pagination.endPage+1}'`)
+                next.setAttribute('class', "btn btn-outline-secondary")
+                next.innerText = '다음'
+                div.appendChild(next)
+            }
+            chatRooms_dom.appendChild(div)
     })
