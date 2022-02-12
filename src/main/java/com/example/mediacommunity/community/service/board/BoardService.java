@@ -18,7 +18,7 @@ public interface BoardService {
     boolean modifyBoardUsingDto(Long BoardIdx, BoardAddingDto updateParam, String memberId);
     void increaseViewCnt(Long id, int viewCnt);
     boolean deleteBoard(Long boardIdx, String memberId);
-    int getTotalBoardsNum();
+    int getTotalBoardsNum(String category);
     BoardCategoriesDto findAllCategories();
     BoardCategory findCategory(String categoryId);
 }

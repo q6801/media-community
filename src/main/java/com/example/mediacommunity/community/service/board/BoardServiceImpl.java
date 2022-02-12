@@ -81,8 +81,8 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public int getTotalBoardsNum() {
-        return boardRepository.getTotalBoardsNum();
+    public int getTotalBoardsNum(String category) {
+        return boardRepository.getTotalBoardsNum(category);
     }
 
     @Override

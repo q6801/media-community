@@ -92,8 +92,9 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public int getTotalBoardsNum() {
-        return em.createQuery("select count(b) from Board b", Long.class)
+    public int getTotalBoardsNum(String category) {
+        return em.createQuery("select count(b) from Board b where b.boardCategory.id=:category", Long.class)
+                .setParameter("category", category)
                 .getSingleResult().intValue();
     }
 

@@ -17,7 +17,7 @@ public interface BoardRepository {
     void update(Long BoardIdx, Board updateParam);
     void increaseViewCnt(Long id, int viewCnt);
     void delete(Board board);
-    int getTotalBoardsNum();
+    int getTotalBoardsNum(String category);
     List<String> findAllCategories();
     BoardCategory findCategory(String categoryId);
 }

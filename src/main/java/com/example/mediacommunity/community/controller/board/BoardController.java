@@ -35,7 +35,7 @@ public class BoardController {
 
     @GetMapping("/boards/{category}")
     public Map<String, Object> boards(@RequestParam(defaultValue = "1") int page, @PathVariable String category) {
-        int totalBoardsNum = boardService.getTotalBoardsNum();
+        int totalBoardsNum = boardService.getTotalBoardsNum(category);
 
         pagination.pageInfo(page, totalBoardsNum);
         List<Board> boards = boardService.findBoards(pagination, category);
