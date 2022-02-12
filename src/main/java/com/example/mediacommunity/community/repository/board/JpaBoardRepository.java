@@ -1,5 +1,7 @@
 package com.example.mediacommunity.community.repository.board;
 
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.NotFoundPageException;
 import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
@@ -13,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -31,13 +32,12 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public Optional<Board> findBoardById(Long id) {
-        try {
-            Board board = em.find(Board.class, id);
-            return Optional.of(board);
-        } catch(DataAccessException e) {
-            return Optional.empty();
+    public Board findBoardById(Long id) {
+        Board board = em.find(Board.class, id);
+        if (board == null) {
+            throw new NotFoundPageException(ExceptionEnum.NOT_FOUND_PAGE);
         }
+        return board;
     }
 
     @Override

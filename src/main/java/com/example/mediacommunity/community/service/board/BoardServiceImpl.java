@@ -30,7 +30,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public Board findBoardById(Long id) {
-        return boardRepository.findBoardById(id).orElseThrow();
+        return boardRepository.findBoardById(id);
     }
 
 
@@ -53,7 +53,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public boolean modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam, String memberId) {
         Member member = memberService.findMemberById(memberId);
-        Board board = boardRepository.findBoardById(boardIdx).orElseThrow();
+        Board board = boardRepository.findBoardById(boardIdx);
 
         if (compareUserAndWriter(member, board)) {
             board.updateBoardWithDto(updateParam);
@@ -64,14 +64,13 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void increaseViewCnt(Long id, int viewCnt) {
-        boardRepository.findBoardById(id)
-            .orElseThrow().increaseViewCnt();
+        boardRepository.findBoardById(id).increaseViewCnt();
     }
 
     @Override
     public boolean deleteBoard(Long boardIdx, String memberId) {
         Member member = memberService.findMemberById(memberId);
-        Board board = boardRepository.findBoardById(boardIdx).orElseThrow();
+        Board board = boardRepository.findBoardById(boardIdx);
 
         if (compareUserAndWriter(member, board)) {
             boardRepository.delete(board);

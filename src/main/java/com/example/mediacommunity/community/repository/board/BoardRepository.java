@@ -6,11 +6,10 @@ import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.service.Pagination;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BoardRepository {
     Board save(Board board);
-    Optional<Board> findBoardById(Long id);
+    Board findBoardById(Long id);
     List<Board> findByWriterId(Member member);
     List<Board> findBoards(Pagination pagination, String category);
     List<Board> findAll();
