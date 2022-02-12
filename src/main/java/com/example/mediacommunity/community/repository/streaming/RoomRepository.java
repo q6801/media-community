@@ -21,7 +21,11 @@ public class RoomRepository {
     }
 
     public Room findByRoomId(UUID roomId) {
-        return em.find(Room.class, roomId);
+        Room room = em.find(Room.class, roomId);
+        if (room == null) {
+            throw new NotFoundPageException(ExceptionEnum.NOT_FOUND_PAGE);
+        }
+        return room;
     }
 
     public Optional<Room> findByPresenter(String username, RoomType roomType) {
