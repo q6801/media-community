@@ -61,7 +61,7 @@ axios.get('/boards/' + category + '?page=' + page)
     let div = document.createElement('div')
     if (pagination.prev) {
         let prev = document.createElement('button')
-        prev.setAttribute('onClick', `location.href='/comm?page=${pagination.startPage-1}'`)
+        prev.setAttribute('onClick', `location.href='/articles/community?page=${pagination.startPage-1}'`)
         prev.setAttribute('class', "btn btn-outline-secondary")
         prev.innerText = '이전'
         div.appendChild(prev)
@@ -69,7 +69,7 @@ axios.get('/boards/' + category + '?page=' + page)
     for(let i=pagination.startPage; i<pagination.endPage+1; i++) {
         let btn = document.createElement('button')
         btn.innerText = i
-        btn.setAttribute('onClick', `location.href='/comm?page=${i}'`)
+        btn.setAttribute('onClick', `location.href='/articles/community?page=${i}'`)
         if (pagination.page == i) {
             btn.setAttribute('class', 'btn btn-primary')
         } else {
@@ -79,7 +79,7 @@ axios.get('/boards/' + category + '?page=' + page)
     }
     if (pagination.next) {
         let next = document.createElement('button')
-        next.setAttribute('onClick', `location.href='/comm?page=${pagination.endPage+1}'`)
+        next.setAttribute('onClick', `location.href='/articles/community?page=${pagination.endPage+1}'`)
         next.setAttribute('class', "btn btn-outline-secondary")
         next.innerText = '다음'
         div.appendChild(next)
@@ -93,13 +93,12 @@ axios.get('/board-category')
     console.log(res)
 
     for (c in categories) {
-        console.log(c)
         let li = document.createElement('li')
         let a = document.createElement('a')
         li.appendChild(a)
         li.setAttribute('class', 'nav-item')
         a.setAttribute('class', 'nav-link')
-        a.setAttribute('href', '#')
+        a.setAttribute('href', '/articles/' + categories[c])
         a.innerText = categories[c]
 
         categoryDom.appendChild(li)
