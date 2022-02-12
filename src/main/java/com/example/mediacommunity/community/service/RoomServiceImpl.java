@@ -33,8 +33,8 @@ public class RoomServiceImpl {
         return roomRepository.findByRoomId(roomId);
     }
 
-    public Optional<Room> findByPresenter(String username) {
-        return roomRepository.findByPresenter(username);
+    public Optional<Room> findByPresenter(String username, RoomType roomType) {
+        return roomRepository.findByPresenter(username, roomType);
     }
 
     public List<Room> findRoomsByType(RoomType roomType) {
