@@ -1,6 +1,4 @@
-let pathArr = window.location.pathname.split('/');
-let board_id = pathArr[2]
-console.log('pathArr : ' + pathArr)
+let board_id = window.location.pathname.split('/')[2]
 
 // BOARD
 axios.get('/boardInfo/' + board_id)
@@ -59,7 +57,15 @@ axios.get('/boardInfo/' + board_id)
                 editBtn.innerText = '글 수정'
             }
         })
-
+        .catch(function(err) {
+            console.log('err : ' +  err.response.data.errorCode)
+            console.log('err : ' +  err.response.data.errorMessage)
+        })
+})
+.catch(function(err) {
+    console.log('err : ' +  err.response.data.errorCode)
+    console.log('err : ' +  err.response.data.errorMessage)
+    window.location.replace('/articles/community')
 })
 
 // HEART
