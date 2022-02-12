@@ -10,11 +10,11 @@ public enum ExceptionEnum {
     USER_ALREADY_EXIST("auth-004", "이미 존재하는 id이다."),
     BAD_PROVIDER("auth-005", "잘못된 provider이다."),
     NICKNAME_ALREADY_EXIST("auth-006", "이미 존재하는 nickname이다."),
-    NOT_ALLOWED_ACCESS("auth-007", "잘못된 접근이다."),
+    NOT_ALLOWED_ACCESS("auth-007", "잘못된 접근이다. (권한 없음)"),
 
     BLANK_EXIST("common-001", "값을 다 넣어주세요"),
     BAD_VALUE("common-002", "잘못된 값입니다."),
-
+    NOT_FOUND_PAGE("common-003", "잘못된 페이지입니다.")
     ;
 
     private String code;
