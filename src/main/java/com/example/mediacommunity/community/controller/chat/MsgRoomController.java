@@ -3,6 +3,7 @@ package com.example.mediacommunity.community.controller.chat;
 import com.example.mediacommunity.community.domain.chat.MsgInfoDto;
 import com.example.mediacommunity.community.domain.chat.Room;
 import com.example.mediacommunity.community.domain.chat.RoomType;
+import com.example.mediacommunity.community.service.Pagination;
 import com.example.mediacommunity.community.service.RoomServiceImpl;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -19,11 +21,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MsgRoomController {
     private final RoomServiceImpl roomService;
+    private final Pagination pagination;
 
     @GetMapping("/chat-rooms")
-    public List<Room> getRoom() {
+    public Map<String, Object> getRooms(@RequestParam(defaultValue = "1") int page) {
+        int totalRoomsNum = roomService.getTotalRoomsNum(RoomType.CHAT);
+        pagination.pageInfo(page, totalRoomsNum);
         List<Room> rooms = roomService.findRoomsByType(RoomType.CHAT);
-        return rooms;
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("rooms", rooms);
+        map.put("pagination", pagination);
+        return map;
     }
 
     @GetMapping("/chat-room/{roomId}")
@@ -41,7 +50,7 @@ public class MsgRoomController {
 
     @DeleteMapping("/chat-room")
     public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal UserInfo userInfo) {
-        roomService.deleteRoom(userInfo.getName());
+        roomService.deleteRoom(userInfo.getName(), RoomType.STREAMING);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
