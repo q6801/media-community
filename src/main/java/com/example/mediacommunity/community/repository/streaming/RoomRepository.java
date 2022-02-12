@@ -24,10 +24,11 @@ public class RoomRepository {
         return em.find(Room.class, roomId);
     }
 
-    public Optional<Room> findByPresenter(String username) {
+    public Optional<Room> findByPresenter(String username, RoomType roomType) {
         return em.createQuery(
-                "select s from Room s where s.presenter=:username", Room.class)
+                "select s from Room s where s.roomType=:roomType and s.presenter=:username", Room.class)
                 .setParameter("username", username)
+                .setParameter("roomType", roomType)
                 .getResultList().stream().findFirst();
     }
 
