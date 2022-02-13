@@ -30,7 +30,7 @@ axios.get('/streaming-rooms')
         for(idx in msgRooms) {
             let room = msgRooms[idx]
             let tr = document.createElement('tr')
-            tr.setAttribute('onClick', `location.href="/${room.presenter}"`)
+            tr.setAttribute('onClick', `location.href="/broadcast/${room.presenter}"`)
             let td = new Array(2);
             for(let i=0; i<td.length; i++) {
                 td[i] = document.createElement('td')

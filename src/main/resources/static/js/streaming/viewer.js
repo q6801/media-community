@@ -4,7 +4,7 @@ var webRtcPeer;
 let viewer_dom = document.querySelector('#viewer')
 let connect_status = document.querySelector('#connect-status')
 let pathArr = window.location.pathname.split('/');
-let presenter_id = pathArr[1]
+let presenter_id = pathArr[2]
 
 window.onload = function() {
 	video = document.getElementById('localVideo');

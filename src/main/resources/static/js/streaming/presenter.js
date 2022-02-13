@@ -6,7 +6,7 @@ let presenter_dom = document.querySelector('#presenter')
 let finish_streaming = document.querySelector('#finish-streaming')
 let connect_status = document.querySelector('#connect-status')
 let pathArr = window.location.pathname.split('/');
-let presenter_id = pathArr[1]
+let presenter_id = pathArr[2]
 console.log('pathArr : ' + pathArr)
 
 window.onload = function() {

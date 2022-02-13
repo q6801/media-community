@@ -85,7 +85,7 @@ axios.get('/memberInfo')
 
         let streaming_btn = document.createElement('button')
         streaming_btn.addEventListener("click", function() {
-            window.location.replace('/' + memberInfo.loginId + "/stream-manager")
+            window.location.replace('/stream-manager/' + memberInfo.loginId)
         })
         streaming_btn.innerText = "나의 스트리밍 채널"
 
