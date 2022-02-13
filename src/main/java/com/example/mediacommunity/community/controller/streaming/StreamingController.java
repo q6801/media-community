@@ -17,8 +17,7 @@ public class StreamingController {
     private final CallHandler callHandler;
 
     @MessageMapping("/streaming/presenter/{presenter}")
-    public void message(String message, SimpMessageHeaderAccessor accessor,
-                        @DestinationVariable("presenter") String presenter) throws Exception {
+    public void message(String message, SimpMessageHeaderAccessor accessor) throws Exception {
         Principal user = accessor.getUser();
         try {
             callHandler.presenter(message, accessor);
