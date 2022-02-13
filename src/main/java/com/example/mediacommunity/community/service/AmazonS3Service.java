@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 @Service
@@ -44,7 +42,9 @@ public class AmazonS3Service {
         return "uploadS3 success";
     }
 
-    public void deleteFile(String bucket, String deleteFile) {
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, deleteFile));
+    public void deleteFile(String path, String imageUrl) {
+        int pos = imageUrl.lastIndexOf("/");
+        String fileName = imageUrl.substring(pos+1);
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, path + fileName));
     }
 }
