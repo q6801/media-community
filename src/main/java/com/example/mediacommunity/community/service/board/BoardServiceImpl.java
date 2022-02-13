@@ -8,6 +8,7 @@ import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.Pagination;
 import com.example.mediacommunity.community.service.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,10 @@ import java.util.List;
 @Service
 @Slf4j
 @Transactional
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
-    @Autowired
-    BoardRepository boardRepository;
-    MemberService memberService;
+    private final BoardRepository boardRepository;
+    private final MemberService memberService;
 
     @Override
     public Board save(Board board) {
