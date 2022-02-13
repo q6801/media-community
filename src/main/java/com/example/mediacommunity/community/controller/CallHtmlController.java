@@ -47,12 +47,12 @@ public class CallHtmlController {
         return "axios/chatRoom";
     }
 
-    @GetMapping("/{username}/stream-manager")
+    @GetMapping("/stream-manager/{username}")
     public String presenter() {
         return "axios/streaming/presenter";
     }
 
-    @GetMapping("/{username}/broadcast")
+    @GetMapping("/broadcast/{username}")
     public String viewer() {
         return "axios/streaming/viewer";
     }
