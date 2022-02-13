@@ -1,7 +1,19 @@
 add_board_form = document.querySelector('#add-board')
 add_board_form.addEventListener('submit', post)
 
+hljs.configure({   // optionally configure hljs
+  languages: ['javascript', 'java', 'python', 'c++']
+});
+
 let quill = new Quill('#editor', {
+    modules: {
+        syntax: true,
+        toolbar: [
+              [{ header: [1, 2, false] }],
+              ['bold', 'italic', 'underline'],
+              ['code-block']
+            ]
+    },
     theme: 'snow'
   });
 
