@@ -9,4 +9,8 @@ room_form.addEventListener('submit', function(e) {
     }).then(function(res) {
         window.location.replace('/chat')
     })
+    .catch(function(err) {
+        console.log(err)
+        alert(err.response.data.errorMessage)
+    })
 })
