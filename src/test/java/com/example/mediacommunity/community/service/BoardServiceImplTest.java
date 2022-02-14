@@ -2,8 +2,10 @@ package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
+import com.example.mediacommunity.community.service.board.BoardCategoryService;
 import com.example.mediacommunity.community.service.board.BoardServiceImpl;
 import com.example.mediacommunity.community.service.member.MemberService;
 import org.junit.jupiter.api.Test;
@@ -16,9 +18,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +28,8 @@ class BoardServiceImplTest {
     private BoardRepository boardRepository;
     @Mock
     private MemberService memberService;
+    @Mock
+    private BoardCategoryService boardCategoryService;
 
     @InjectMocks
     private BoardServiceImpl boardService;
@@ -73,6 +76,7 @@ class BoardServiceImplTest {
         given(boardRepository.findBoardById(board0.getId()))
                 .willReturn(board0);
         given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
+        given(boardCategoryService.findById("community")).willReturn(board0.getBoardCategory());
 
         //when
         boardService.modifyBoardUsingDto(board0.getId(), board0Alpha, writer.getLoginId());
@@ -103,6 +107,8 @@ class BoardServiceImplTest {
     private List<Board> getStubBoardList() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
 
+        BoardCategory bc = new BoardCategory("community");
+
         Board board0 = Board.builder().content("start content")
                 .createdAt(timestamp).updatedAt(timestamp).viewCnt(1).title("title").build();
         Board board1 = Board.builder().content("start 2")
@@ -110,6 +116,8 @@ class BoardServiceImplTest {
 
         board0.setMember(getStubMemberList().get(0));
         board1.setMember(getStubMemberList().get(1));
+        board0.setCategory(bc);
+        board1.setCategory(bc);
 
         return Arrays.asList(
                 board0, board1

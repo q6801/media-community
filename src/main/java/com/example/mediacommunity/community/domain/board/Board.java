@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@EqualsAndHashCode(exclude = {"member", "replies", "hearts"})
+@EqualsAndHashCode(exclude = {"member", "replies", "hearts", "boardCategory"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
     @Id
@@ -54,6 +54,10 @@ public class Board {
         }
         this.member = member;
         member.getBoards().add(this);   // 주인이 아니라서 저장 시 사용 안됨
+    }
+
+    public void setCategory(BoardCategory bc) {
+        this.boardCategory = bc;
     }
 
     public static Board convertBoardAddingDtoToBoard(BoardAddingDto boardDto, Member member, BoardCategory category) {

@@ -1,5 +1,7 @@
 package com.example.mediacommunity.community.service;
 
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.BlankExistException;
 import com.example.mediacommunity.community.domain.chat.Room;
 import com.example.mediacommunity.community.domain.chat.RoomType;
 import com.example.mediacommunity.community.repository.streaming.RoomRepository;
@@ -20,6 +22,9 @@ public class RoomServiceImpl {
     private final RoomRepository roomRepository;
 
     public Room createRoom(String roomName, String memberId, RoomType roomType) {
+        if (roomName.isBlank()) {
+            throw new BlankExistException(ExceptionEnum.BLANK_EXIST);
+        }
         Room room = Room.builder()
                 .roomName(roomName)
                 .presenter(memberId)
