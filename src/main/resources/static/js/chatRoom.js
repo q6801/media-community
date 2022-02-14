@@ -31,7 +31,8 @@ const connect = function(response) {
         username = response.data.nickname
         pathArr = window.location.pathname.split('/');
         roomId = pathArr[pathArr.length - 1]
-        webSocket = new WebSocket("wss://localhost:8000/ws/chat");
+
+        webSocket = new WebSocket('wss://' + location.host + '/ws/chat');
         client = Stomp.over(webSocket);
 
         console.log('username : ' + username);
