@@ -1,9 +1,11 @@
 package com.example.mediacommunity.community.controller;
 
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.heart.HeartInfoDto;
 import com.example.mediacommunity.community.domain.member.SignUpDto;
 import com.example.mediacommunity.community.domain.reply.ReplyInputDto;
+import com.example.mediacommunity.community.service.board.BoardCategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -31,16 +33,25 @@ public class IntegrationAPITest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private BoardCategoryService boardCategoryService;
 
     @Test
     public void boards() throws Exception {
-        mockMvc.perform(get("/boards").accept(MediaType.APPLICATION_JSON))
+        BoardCategory bc = new BoardCategory("testCategory");
+        boardCategoryService.save(bc);
+
+        mockMvc.perform(get("/boards/testCategory").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
+    @WithUserDetails("test1")
     public void board() throws Exception {
-        mockMvc.perform(get("/boardInfo/1").accept(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = createBoardWithTest();
+        int boardIdx = getBoardIdx(mvcResult);
+
+        mockMvc.perform(get("/boardInfo/" + boardIdx).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -49,7 +60,7 @@ public class IntegrationAPITest {
     public void addAndEditAndDeleteBoard() throws Exception {
         MvcResult mvcResult = createBoardWithTest();
         int boardIdx = getBoardIdx(mvcResult);
-        BoardAddingDto boardEditingDto = new BoardAddingDto("newTitle", "newContent");
+        BoardAddingDto boardEditingDto = new BoardAddingDto("newTitle", "newContent", "testCategory");
 
         mockMvc.perform(
                 put("/board/" + boardIdx)
@@ -64,7 +75,7 @@ public class IntegrationAPITest {
     }
 
     private MvcResult createBoardWithTest() throws Exception {
-        BoardAddingDto boardAddingDto = new BoardAddingDto("title", "content");
+        BoardAddingDto boardAddingDto = new BoardAddingDto("title", "content", "testCategory");
         return mockMvc.perform(
                 post("/board")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -115,12 +126,12 @@ public class IntegrationAPITest {
         ReplyInputDto replyInputDto = new ReplyInputDto("content");
 
         //  post reply
-        mockMvc.perform(get("/boardInfo/" + boardIdx + "/replies")
+        mockMvc.perform(get("/board/" + boardIdx + "/replies")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
 
         // get reply
-        mockMvc.perform(post("/reply/" + boardIdx)
+        mockMvc.perform(post("/board/" + boardIdx + "/reply")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(replyInputDto))
         ).andExpect(status().isOk());
