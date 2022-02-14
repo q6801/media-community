@@ -19,7 +19,7 @@ let quill = new Quill('#editor', {
 
 
 let category = document.querySelector('#category')
-axios.get('board-category')
+axios.get('/board-category')
 .then(function(res) {
     let categories = res.data.categories
     console.log(res)
