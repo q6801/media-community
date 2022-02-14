@@ -1,5 +1,6 @@
 package com.example.mediacommunity.community.domain;
 
+import com.example.mediacommunity.security.userInfo.UserInfo;
 import com.google.gson.JsonObject;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.WebRtcEndpoint;
@@ -14,24 +15,10 @@ import java.io.IOException;
  * Kurento Java Tutorial - Per-user session state.
  */
 public class UserSession {
-
     private static final Logger log = LoggerFactory.getLogger(UserSession.class);
 
-    private final WebSocketSession session;
     private WebRtcEndpoint webRtcEndpoint;
 
-    public UserSession(WebSocketSession session) {
-        this.session = session;
-    }
-
-    public WebSocketSession getSession() {
-        return session;
-    }
-
-    public void sendMessage(JsonObject message) throws IOException {
-        log.debug("Sending message from user with session Id '{}': {}", session.getId(), message);
-        session.sendMessage(new TextMessage(message.toString()));
-    }
 
     public WebRtcEndpoint getWebRtcEndpoint() {
         return webRtcEndpoint;

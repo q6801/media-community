@@ -2,38 +2,44 @@ package com.example.mediacommunity.community.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class CallHtmlController {
+    // index
     @GetMapping("/")
     public String home() {
         return "axios/index";
     }
 
-    @GetMapping("/comm")
+    //board
+    @GetMapping("/articles/{category}")
     public String comm() {
-        return "axios/comm";
+        return "axios/board/comm";
     }
-
     @GetMapping("/addBoard")
     public String boardForm() {
-        return "axios/addBoard";
+        return "axios/board/addBoard";
     }
 
     @GetMapping("/board/{boardIdx}")
     public String board() {
-        return "axios/board";
+        return "axios/board/board";
     }
 
     @GetMapping("/editBoard/{boardIdx}")
     public String boardEditForm() {
-        return "axios/editBoard";
+        return "axios/board/editBoard";
     }
 
-    @GetMapping("/chatRooms")
+    // room
+    @GetMapping("/streaming")
+    public String streamRooms() {
+        return "axios/streaming/streamingRooms";
+    }
+
+    @GetMapping("/chat")
     public String chatRooms() {
-        return "axios/chatRooms";
+        return "axios/chat/chatRooms";
     }
 
     @GetMapping("/chatRoom/{chatIdx}")
@@ -41,14 +47,25 @@ public class CallHtmlController {
         return "axios/chatRoom";
     }
 
+    @GetMapping("/stream-manager/{username}")
+    public String presenter() {
+        return "axios/streaming/presenter";
+    }
+
+    @GetMapping("/broadcast/{username}")
+    public String viewer() {
+        return "axios/streaming/viewer";
+    }
+
     @GetMapping("/chat/addRoom")
     public String room() {
         return "axios/addChatRoom";
     }
 
+    // user
     @GetMapping("/user")
     public String userInfo() {
-        return "axios/userInfo";
+        return "axios/user/userInfo";
     }
 
     @GetMapping("/confirm-email")
@@ -58,21 +75,16 @@ public class CallHtmlController {
 
     @GetMapping("/login")
     public String loginForm() {
-        return "axios/loginForm";
+        return "axios/user/loginForm";
     }
 
     @GetMapping("/signup")
     public String signUpForm() {
-        return "axios/signUp";
+        return "axios/user/signUp";
     }
 
     @GetMapping("/editMember")
     public String editMemberForm() {
-        return "axios/editMember";
-    }
-
-    @GetMapping("/stream")
-    public String stream() {
-        return "axios/kurento-one2many";
+        return "axios/user/editMember";
     }
 }

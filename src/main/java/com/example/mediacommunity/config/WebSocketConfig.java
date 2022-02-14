@@ -3,6 +3,9 @@ package com.example.mediacommunity.config;
 //import com.example.mediacommunity.common.handler.ChatHandler;
 
 import lombok.RequiredArgsConstructor;
+import org.kurento.client.KurentoClient;
+import org.kurento.client.MediaPipeline;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -23,8 +26,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
-                .addEndpoint("/ws/chat")
-                .setAllowedOrigins("http://localhost:8080")
+                .addEndpoint("/ws/chat", "/ws/stream")
+                .setAllowedOrigins("*")
+                .setHandshakeHandler(new CustomHandshakeHandler())
 //                .withSockJS()
         ;
     }
@@ -41,11 +45,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                String user = accessor.getFirstNativeHeader("user");
-                System.out.println("user = " + user);
-                System.out.println("accessor = " + accessor.getUser());
                 return ChannelInterceptor.super.preSend(message, channel);
             }
         });
+    }
+
+    @Bean
+    public MediaPipeline mediaPipeline() {
+        return kurentoClient().createMediaPipeline();
+    }
+
+    @Bean
+    public KurentoClient kurentoClient() {
+        return KurentoClient.create();
     }
 }

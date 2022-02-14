@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 @Getter
 @AllArgsConstructor
 public class ReplyInfoDto {
+    private Long id;
     private String writer;
     private String content;
     private Timestamp createdAt;

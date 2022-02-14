@@ -1,11 +1,14 @@
 package com.example.mediacommunity.community.service.board;
 
+import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.Pagination;
 import com.example.mediacommunity.community.service.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +19,10 @@ import java.util.List;
 @Service
 @Slf4j
 @Transactional
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
-    @Autowired
-    BoardRepository boardRepository;
-    MemberService memberService;
+    private final BoardRepository boardRepository;
+    private final MemberService memberService;
 
     @Override
     public Board save(Board board) {
@@ -28,7 +31,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public Board findBoardById(Long id) {
-        return boardRepository.findBoardById(id).orElseThrow();
+        return boardRepository.findBoardById(id);
     }
 
 
@@ -39,8 +42,8 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<Board> findBoards(Pagination pagination) {
-        return boardRepository.findBoards(pagination);
+    public List<Board> findBoards(Pagination pagination, String category) {
+        return boardRepository.findBoards(pagination, category);
     }
 
     @Override
@@ -49,25 +52,52 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam) {
-        Board board = boardRepository.findBoardById(boardIdx).orElseThrow();
-        board.updateBoardWithDto(updateParam);
+    public boolean modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam, String memberId) {
+        Member member = memberService.findMemberById(memberId);
+        Board board = boardRepository.findBoardById(boardIdx);
+
+        if (compareUserAndWriter(member, board)) {
+            board.updateBoardWithDto(updateParam);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void increaseViewCnt(Long id, int viewCnt) {
-        boardRepository.findBoardById(id)
-            .orElseThrow().increaseViewCnt();
+        boardRepository.findBoardById(id).increaseViewCnt();
     }
 
     @Override
-    public void deleteBoard(Long id) {
-        Board board = boardRepository.findBoardById(id).orElseThrow();
-        boardRepository.delete(board);
+    public boolean deleteBoard(Long boardIdx, String memberId) {
+        Member member = memberService.findMemberById(memberId);
+        Board board = boardRepository.findBoardById(boardIdx);
+
+        if (compareUserAndWriter(member, board)) {
+            boardRepository.delete(board);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public int getTotalBoardsNum() {
-        return boardRepository.getTotalBoardsNum();
+    public int getTotalBoardsNum(String category) {
+        return boardRepository.getTotalBoardsNum(category);
+    }
+
+    @Override
+    public BoardCategoriesDto findAllCategories() {
+        BoardCategoriesDto bc = new BoardCategoriesDto();
+        bc.setCategories(boardRepository.findAllCategories());
+        return bc;
+    }
+
+    @Override
+    public BoardCategory findCategory(String categoryId) {
+        return boardRepository.findCategory(categoryId);
+    }
+
+    private boolean compareUserAndWriter(Member member, Board board) {
+        return member != null && member.equals(board.getMember());
     }
 }

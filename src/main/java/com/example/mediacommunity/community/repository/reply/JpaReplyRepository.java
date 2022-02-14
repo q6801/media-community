@@ -29,4 +29,15 @@ public class JpaReplyRepository implements ReplyRepository {
     public List<Reply> findAllReplies(Board board) {
         return board.getReplies();
     }
+
+    @Override
+    public Reply findReplyById(Long replyId) {
+        Reply reply = em.find(Reply.class, replyId);
+        return reply;
+    }
+
+    @Override
+    public void deleteReply(Reply reply) {
+        em.remove(reply);
+    }
 }

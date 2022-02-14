@@ -1,5 +1,9 @@
 package com.example.mediacommunity.community.controller.board;
 
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.NotAllowedAccessException;
+import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.board.BoardInfoDto;
@@ -29,25 +33,24 @@ public class BoardController {
     private final Pagination pagination;
     private final MemberService memberService;
 
-    @GetMapping("/boards")
-    public Map<String, Object> boards(@RequestParam(defaultValue = "1") int page) {
-        int totalBoardsNum = boardService.getTotalBoardsNum();
+    @GetMapping("/boards/{category}")
+    public Map<String, Object> boards(@RequestParam(defaultValue = "1") int page, @PathVariable String category) {
+        int totalBoardsNum = boardService.getTotalBoardsNum(category);
 
         pagination.pageInfo(page, totalBoardsNum);
-        List<Board> boards = boardService.findBoards(pagination);
+        List<Board> boards = boardService.findBoards(pagination, category);
 
         List<BoardInfoDto> boardInfoDtos = boards.stream()
-                .map(board -> board.convertBoardToBoardInfoDto())
+                .map(Board::convertBoardToBoardInfoDto)
                 .collect(Collectors.toList());
 
         Map<String, Object> map = new HashMap<>();
         map.put("boards", boardInfoDtos);
         map.put("pagination", pagination);
-
         return map;
     }
 
-    @GetMapping("boardInfo/{boardIdx}")
+    @GetMapping("/boardInfo/{boardIdx}")
     public BoardInfoDto board(@PathVariable long boardIdx) {
         Board board = boardService.findBoardById(boardIdx);
         boardService.increaseViewCnt(boardIdx, board.getViewCnt());
@@ -57,7 +60,9 @@ public class BoardController {
     @PostMapping("/board")
     public ResponseEntity<?> addBoard(@RequestBody BoardAddingDto boardDto, @AuthenticationPrincipal UserInfo userInfo) {
         Member member = memberService.findMemberById(userInfo.getUsername());
-        Board board = Board.convertBoardAddingDtoToBoard(boardDto, member);
+        BoardCategory category = boardService.findCategory(boardDto.getCategory());
+
+        Board board = Board.convertBoardAddingDtoToBoard(boardDto, member, category);
         boardService.save(board);
 
         Map<String, Long> result = new HashMap<>();
@@ -68,32 +73,23 @@ public class BoardController {
     @PutMapping("/board/{boardIdx}")
     public ResponseEntity<?> editBoard(@RequestBody BoardAddingDto boardDto, @PathVariable Long boardIdx,
                                        @AuthenticationPrincipal UserInfo userInfo) {
-        Member member = memberService.findMemberById(userInfo.getUsername());
-        Board board = Board.convertBoardAddingDtoToBoard(boardDto, member);
-
-        if (userEqualsToWriter(member, board)) {
-            boardService.modifyBoardUsingDto(boardIdx, boardDto);
+        if (boardService.modifyBoardUsingDto(boardIdx, boardDto, userInfo.getUsername())) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
-        throw new RuntimeException();
+        throw new NotAllowedAccessException(ExceptionEnum.NOT_ALLOWED_ACCESS);
     }
 
 
-    private boolean userEqualsToWriter(Member member, Board board) {
-        if (member != null  && board.getMember().equals(member)) {
-            return true;
+    @DeleteMapping("/board/{boardIdx}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
+        if(boardService.deleteBoard(boardIdx, userInfo.getUsername())) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return false;
+        throw new NotAllowedAccessException(ExceptionEnum.NOT_ALLOWED_ACCESS);
     }
 
-//    @PostMapping("/delete/{boardIdx}")
-//    public String deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
-//        Member authUser = memberService.findMemberById(userInfo.getUsername());
-//        Board board = boardService.findBoardById(boardIdx)
-//                .orElseThrow(() -> new RuntimeException("board finding error"));
-//        if (compareUserAndWriter(authUser, board)) {
-//            boardService.deleteBoard(boardIdx);
-//        }
-//        return "redirect:/boards";
-//    }
+    @GetMapping("/board-category")
+    public BoardCategoriesDto category() {
+        return boardService.findAllCategories();
+    }
 }

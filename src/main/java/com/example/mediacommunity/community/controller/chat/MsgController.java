@@ -22,4 +22,10 @@ public class MsgController {
         message.setMessage(message.getWriter() + "이 입장했습니다.");
         sendingOperations.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
+
+    @MessageMapping("/exit")
+    public void exit(Message message) {
+        message.setMessage(message.getWriter() + "이 퇴장했습니다.");
+        sendingOperations.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+    }
 }

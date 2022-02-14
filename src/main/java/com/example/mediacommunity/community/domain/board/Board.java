@@ -4,9 +4,6 @@ import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -16,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"member", "replies", "hearts"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
     @Id
@@ -39,6 +36,9 @@ public class Board {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Heart> hearts = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private BoardCategory boardCategory;
+
     @Builder
     private Board(String content, int viewCnt, String title, Timestamp createdAt, Timestamp updatedAt) {
         this.content = content;
@@ -56,15 +56,17 @@ public class Board {
         member.getBoards().add(this);   // 주인이 아니라서 저장 시 사용 안됨
     }
 
-    public static Board convertBoardAddingDtoToBoard(BoardAddingDto boardDto, Member member) {
+    public static Board convertBoardAddingDtoToBoard(BoardAddingDto boardDto, Member member, BoardCategory category) {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         Board board = Board.builder()
                 .content(boardDto.getContent())
                 .title(boardDto.getTitle())
                 .createdAt(timestamp)
                 .updatedAt(timestamp)
-                .viewCnt(0).build();
+                .viewCnt(0)
+                .build();
         board.setMember(member);
+        board.boardCategory = category;
         return board;
     }
 

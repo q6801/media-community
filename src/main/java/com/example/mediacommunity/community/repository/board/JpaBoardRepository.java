@@ -1,20 +1,21 @@
 package com.example.mediacommunity.community.repository.board;
 
+import com.example.mediacommunity.Exception.ExceptionEnum;
+import com.example.mediacommunity.Exception.custom.NotFoundPageException;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
-import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.community.service.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,13 +32,12 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public Optional<Board> findBoardById(Long id) {
-        try {
-            Board board = em.find(Board.class, id);
-            return Optional.of(board);
-        } catch(DataAccessException e) {
-            return Optional.empty();
+    public Board findBoardById(Long id) {
+        Board board = em.find(Board.class, id);
+        if (board == null) {
+            throw new NotFoundPageException(ExceptionEnum.NOT_FOUND_PAGE);
         }
+        return board;
     }
 
     @Override
@@ -46,9 +46,10 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public List<Board> findBoards(Pagination pagination) {
+    public List<Board> findBoards(Pagination pagination, String category) {
         try {
-            return em.createQuery("select b from Board b order by b.updatedAt desc", Board.class)
+            return em.createQuery("select b from Board b  where b.boardCategory.id=:category order by b.updatedAt desc", Board.class)
+                    .setParameter("category", category)
                     .setFirstResult(pagination.getStartingBoardNumInPage())
                     .setMaxResults(pagination.getOnePageBoardsNum())
                     .getResultList();
@@ -91,8 +92,24 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public int getTotalBoardsNum() {
-        return em.createQuery("select count(b) from Board b", Long.class)
+    public int getTotalBoardsNum(String category) {
+        return em.createQuery("select count(b) from Board b where b.boardCategory.id=:category", Long.class)
+                .setParameter("category", category)
                 .getSingleResult().intValue();
+    }
+
+    public void saveCategory(BoardCategory bc) {
+        em.persist(bc);
+    }
+
+    @Override
+    public List<String> findAllCategories() {
+        return em.createQuery("select c from BoardCategory c", BoardCategory.class)
+                .getResultList().stream().map(BoardCategory::getId).collect(Collectors.toList());
+    }
+
+    @Override
+    public BoardCategory findCategory(String categoryId) {
+        return em.find(BoardCategory.class, categoryId);
     }
 }

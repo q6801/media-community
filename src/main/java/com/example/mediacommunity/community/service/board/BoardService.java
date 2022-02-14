@@ -1,5 +1,7 @@
 package com.example.mediacommunity.community.service.board;
 
+import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.service.Pagination;
@@ -11,10 +13,12 @@ public interface BoardService {
     Board findBoardById(Long id);
 //    Board createBoard(Long boardId);
     List<Board> findByWriterId(String writerId);
-    List<Board> findBoards(Pagination pagination);
+    List<Board> findBoards(Pagination pagination, String category);
     List<Board> findAllBoards();
-    void modifyBoardUsingDto(Long BoardIdx, BoardAddingDto updateParam);
+    boolean modifyBoardUsingDto(Long BoardIdx, BoardAddingDto updateParam, String memberId);
     void increaseViewCnt(Long id, int viewCnt);
-    void deleteBoard(Long id);
-    int getTotalBoardsNum();
+    boolean deleteBoard(Long boardIdx, String memberId);
+    int getTotalBoardsNum(String category);
+    BoardCategoriesDto findAllCategories();
+    BoardCategory findCategory(String categoryId);
 }

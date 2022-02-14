@@ -15,7 +15,6 @@ import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,9 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -39,7 +38,7 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Value("${path.img}")
-    private String path;
+    private String thumbnailPath;
 
 
     @Override
@@ -80,30 +79,21 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findAll();
     }
 
-    /***
-     * 닉네임 변경에 실패해면 null, 아니면 imageUrl
-     * @param loginId
-     * @param memberEditDto
-     * @return imageUrl
-     * @throws IOException
-     */
     @Override
     public Optional<String> updateProfile(String loginId, MemberEditDto memberEditDto) throws IOException {
+        Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
         MultipartFile file = memberEditDto.getFile();
         String newNickname = memberEditDto.getNickname();
-        Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
         String imageUrl;
 
-        if (!updateNickname(member, newNickname)) {
-            return Optional.empty();
-        }
-
+        updateNickname(member, newNickname);
         if(file != null) {
             String ext = extractExt(file.getOriginalFilename());
-            String storeFileName = loginId + "Profile" + "." + ext;
-            amazonS3Service.uploadImg(path + storeFileName, memberEditDto.getFile());
-            amazonS3Service.searchImage(path, storeFileName);
-            imageUrl = amazonS3Service.searchImage(path, storeFileName);
+            String storeFileName = UUID.randomUUID() + "." + ext;
+
+            amazonS3Service.deleteFile(thumbnailPath, member.getImageUrl());
+            amazonS3Service.uploadImg(thumbnailPath + storeFileName, memberEditDto.getFile());
+            imageUrl = amazonS3Service.searchImage(thumbnailPath, storeFileName);
             member.setImageUrl(imageUrl);
         } else {
             imageUrl = member.getImageUrl();
@@ -111,15 +101,13 @@ public class MemberServiceImpl implements MemberService {
         return Optional.ofNullable(imageUrl);
     }
 
-    public Boolean updateNickname(Member member, String newNickname) {
+    public void updateNickname(Member member, String newNickname) {
         Optional<Member> nameDuplicatedMember = memberRepository.findByNickname(newNickname);
 
         if (nameDuplicatedMember.isPresent() && compareloginId(member.getLoginId(), nameDuplicatedMember)) { // 중복인 id가 있고 자기 자신이 아니라면
-            return false;
-        } else {
-            member.setNickname(newNickname);
+            throw new NicknameAlreadyExistException(ExceptionEnum.NICKNAME_ALREADY_EXIST);
         }
-        return true;
+        member.setNickname(newNickname);
     }
 
     private boolean compareloginId(String loginId, Optional<Member> foundMember) {
