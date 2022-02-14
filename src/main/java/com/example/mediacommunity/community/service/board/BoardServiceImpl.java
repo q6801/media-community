@@ -23,6 +23,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService{
     private final BoardRepository boardRepository;
     private final MemberService memberService;
+    private final BoardCategoryService boardCategoryService;
 
     @Override
     public Board save(Board board) {
@@ -55,9 +56,10 @@ public class BoardServiceImpl implements BoardService{
     public boolean modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam, String memberId) {
         Member member = memberService.findMemberById(memberId);
         Board board = boardRepository.findBoardById(boardIdx);
+        BoardCategory category = boardCategoryService.findById(updateParam.getCategory());
 
         if (compareUserAndWriter(member, board)) {
-            board.updateBoardWithDto(updateParam);
+            board.updateBoardWithDto(updateParam, category);
             return true;
         }
         return false;

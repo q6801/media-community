@@ -17,6 +17,24 @@ let quill = new Quill('#editor', {
     },
     theme: 'snow'
   });
+
+let category = document.querySelector('#category')
+axios.get('/board-category')
+.then(function(res) {
+  let categories = res.data.categories
+  console.log(res)
+
+  for (c in categories) {
+        let option = document.createElement('option')
+        option.setAttribute('value', categories[c])
+        option.setAttribute('class', 'dropdown-item')
+        option.innerText = categories[c]
+
+        category.appendChild(option)
+  }
+})
+
+
 let editBtn = document.querySelector('#submit')
 editBtn.addEventListener('click', post)
 
@@ -35,6 +53,8 @@ axios.get('/boardInfo/' + board_id)
 
 })
 
+
+
 function post() {
     let title = document.querySelector('#title')
 
@@ -42,6 +62,7 @@ function post() {
 
     axios.put('/board/' + board_id,
             {
+                'category': category.value,
                 'title': title_val,
                 'content': quill.root.innerHTML
             }
@@ -52,3 +73,4 @@ function post() {
         console.log(err);
     })
 }
+

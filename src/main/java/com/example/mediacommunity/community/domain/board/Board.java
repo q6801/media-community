@@ -70,10 +70,11 @@ public class Board {
         return board;
     }
 
-    public void updateBoardWithDto(BoardAddingDto updateParam) {
+    public void updateBoardWithDto(BoardAddingDto updateParam, BoardCategory category) {
         this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         this.content = updateParam.getContent();
         this.title = updateParam.getTitle();
+        this.boardCategory = category;
     }
 
     public BoardInfoDto convertBoardToBoardInfoDto() {
