@@ -35,7 +35,7 @@ class BoardServiceImplTest {
     void findBoard() {
         //given
         Board board0 = getStubBoardList().get(0);
-        given(boardRepository.findBoardById(board0.getId())).willReturn(Optional.of(board0));
+        given(boardRepository.findBoardById(board0.getId())).willReturn(board0);
 
         //when
         Board foundBoard = boardService.findBoardById(board0.getId());
@@ -69,14 +69,14 @@ class BoardServiceImplTest {
         String updatedContent = "updated content";
         Board board0 = getStubBoardList().get(0);
         Member writer = board0.getMember();
-        BoardAddingDto board0Alpha = new BoardAddingDto("title", updatedContent);
+        BoardAddingDto board0Alpha = new BoardAddingDto("title", updatedContent, "community");
         given(boardRepository.findBoardById(board0.getId()))
-                .willReturn(Optional.of(board0));
+                .willReturn(board0);
         given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
 
         //when
         boardService.modifyBoardUsingDto(board0.getId(), board0Alpha, writer.getLoginId());
-        Board modifiedBoard = boardRepository.findBoardById(board0.getId()).get();
+        Board modifiedBoard = boardRepository.findBoardById(board0.getId());
 
         //then
         assertThat(updatedContent).isEqualTo(modifiedBoard.getContent());
