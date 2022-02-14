@@ -61,11 +61,11 @@ public class RoomServiceTest {
     public void findByPresenter() {
         //given
         Room room = getStubRoomList().get(0);
-        given(roomRepository.findByPresenter(room.getPresenter()))
+        given(roomRepository.findByPresenter(room.getPresenter(), RoomType.STREAMING))
                 .willReturn(Optional.of(room));
 
         //when
-        Optional<Room> foundRoom = roomServiceImpl.findByPresenter(room.getPresenter());
+        Optional<Room> foundRoom = roomServiceImpl.findByPresenter(room.getPresenter(), RoomType.STREAMING);
 
         //then
         assertThat(foundRoom.get()).isEqualTo(room);
@@ -94,10 +94,14 @@ public class RoomServiceTest {
                 Room.builder()
                         .roomName("room0")
                         .id(id0)
-                        .presenter("tester0").build(),
+                        .presenter("tester0")
+                        .roomType(RoomType.STREAMING)
+                        .build(),
                 Room.builder()
                         .roomName("room1")
-                        .presenter("tester1").build()
+                        .presenter("tester1")
+                        .roomType(RoomType.STREAMING)
+                        .build()
         );
     }
 
