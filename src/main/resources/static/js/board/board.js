@@ -120,7 +120,8 @@ axios.get('/board/' + board_id + '/replies')
                 h4.innerText = reply.writer
 
                 let div1 = document.createElement('div')
-                div1.innerText = reply.updatedAt
+                let tt = new Date(reply.updatedAt)
+                div1.innerText = tt.toLocaleString();
 
                 container_div.appendChild(h4)
                 container_div.appendChild(div1)
@@ -159,7 +160,8 @@ axios.get('/board/' + board_id + '/replies')
                 h4.innerText = reply.writer
 
                 let div1 = document.createElement('div')
-                div1.innerText = reply.updatedAt
+                let tt = new Date(reply.updatedAt)
+                div1.innerText = tt.toLocaleString();
 
                 container_div.appendChild(h4)
                 container_div.appendChild(div1)
