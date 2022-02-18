@@ -8,33 +8,25 @@ axios.get('/boardInfo/' + board_id)
 
     let boardInfo = document.querySelector('#board')
 
-    let table = document.createElement('table');
-    let tbody = document.createElement('tbody');
-    table.setAttribute('class', "mt-5")
-    table.appendChild(tbody)
+    let title = document.createElement('h2')
+    let colWriter = document.createElement('div')
+    let colViews = document.createElement('div')
+    let colCreated = document.createElement('div')
 
-    let tr0 = document.createElement('tr')
-    let td_title = document.createElement('td')
-    let td_title1 = document.createElement('h2')
-    td_title.appendChild(td_title1)
-    td_title1.innerText = board.title
-    tr0.appendChild(td_title)
+    colWriter.setAttribute('class', 'col')
+    colViews.setAttribute('class', 'col')
+    colCreated.setAttribute('class', 'col')
 
-    let tr1 = document.createElement('tr')
-    let td_writer = document.createElement('td')
-    let td_views = document.createElement('td')
-    let td_created = document.createElement('td')
-    td_writer.innerText = board.writer
-    td_views.innerText = '조회수 : ' + board.viewCnt
-    td_created.innerText = board.createdAt
+    title.innerText = board.title
+    colWriter.innerText = '작성자 : ' + board.writer
+    colViews.innerText = '조회수 : ' + board.viewCnt
+    let tt = new Date(board.createdAt)
+    colCreated.innerText = '작성일 : ' + tt.toLocaleString();
 
-    tr1.appendChild(td_writer)
-    tr1.appendChild(td_views)
-    tr1.appendChild(td_created)
-
-    tbody.appendChild(tr0)
-    tbody.appendChild(tr1)
-    boardInfo.appendChild(table)
+    boardInfo.appendChild(title)
+    boardInfo.appendChild(colWriter)
+    boardInfo.appendChild(colViews)
+    boardInfo.appendChild(colCreated)
 
     let hr = document.createElement('hr')
     hr.setAttribute('class', 'mt-3 mb-5')
