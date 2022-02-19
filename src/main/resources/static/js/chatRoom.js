@@ -47,8 +47,12 @@ const connect = function(response) {
                   let input = document.querySelector('#chats');
 
                   let span = document.createElement('span');
-                  span.innerHTML = writer + ' : ' + content.message + ' </br>';
+                  span.innerText = writer + ' : ' + content.message;
+
+                  let br = document.createElement('br')
                   input.appendChild(span);
+                  input.appendChild(br);
+
             });
             client.send("/pub/enter", {}, JSON.stringify({'roomId': roomId, 'writer': username}));
         });
