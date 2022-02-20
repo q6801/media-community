@@ -47,6 +47,21 @@ axios.get('/boardInfo/' + board_id)
                 editBtn.setAttribute('onClick', `location.href="/editBoard/${board_id}"`)
                 editBtn.setAttribute('class', 'btn btn-outline-secondary')
                 editBtn.innerText = '글 수정'
+
+                let deleteBtn = document.createElement('button')
+                edit.appendChild(deleteBtn)
+
+                deleteBtn.setAttribute('class', 'btn btn-outline-secondary')
+                deleteBtn.innerText = '글 삭제'
+                deleteBtn.addEventListener('click', function() {
+                    axios.delete('/board/' + board_id)
+                        .then(function() {
+                            window.location.replace('/articles/community')
+                        }).catch(function(err) {
+                            console.log('err : ' +  err.response.data.errorCode)
+                            console.log('err : ' +  err.response.data.errorMessage)
+                        })
+                })
             }
         })
         .catch(function(err) {
