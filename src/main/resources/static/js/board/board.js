@@ -17,7 +17,8 @@ axios.get('/boardInfo/' + board_id)
     colViews.setAttribute('class', 'col')
     colCreated.setAttribute('class', 'col')
 
-    title.innerText = board.title
+//    title.innerText = board.title
+    title.innerHTML = board.title
     colWriter.innerText = '작성자 : ' + board.writer
     colViews.innerText = '조회수 : ' + board.viewCnt
     let tt = new Date(board.createdAt)
