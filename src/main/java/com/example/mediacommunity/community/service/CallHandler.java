@@ -15,7 +15,7 @@
  *
  */
 
-package com.example.mediacommunity.config;
+package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.UserSession;
 import com.example.mediacommunity.community.repository.streaming.StreamingUserRepository;

@@ -39,17 +39,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/pub");
     }
 
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                return ChannelInterceptor.super.preSend(message, channel);
-            }
-        });
-    }
-
     @Bean
     public MediaPipeline mediaPipeline() {
         return kurentoClient().createMediaPipeline();

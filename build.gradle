@@ -47,6 +47,7 @@ dependencies {
 	implementation 'com.amazonaws:aws-java-sdk-s3'
 
 	implementation group: 'org.jsoup', name: 'jsoup', version: '1.14.3'
+	implementation 'com.navercorp.lucy:lucy-xss-servlet:2.0.1'
 
 }
 

@@ -1,6 +1,6 @@
 package com.example.mediacommunity.community.controller.streaming;
 
-import com.example.mediacommunity.config.CallHandler;
+import com.example.mediacommunity.community.service.CallHandler;
 import com.example.mediacommunity.security.userInfo.StompPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;

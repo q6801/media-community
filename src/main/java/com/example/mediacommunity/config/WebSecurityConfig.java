@@ -1,8 +1,8 @@
 package com.example.mediacommunity.config;
 
+import com.example.mediacommunity.security.handler.FormLoginFailureHandler;
 import com.example.mediacommunity.security.service.CustomOAuth2UserService;
 import com.example.mediacommunity.security.service.CustomUserDetailsService;
-import com.example.mediacommunity.security.handler.FormLoginFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.formLogin().disable().logout().disable();
         http
             .authorizeRequests()
                 .antMatchers("/login", "/signup", "/", "/boards").permitAll()
@@ -58,7 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/")
-            .and().csrf().disable()
+            .and().csrf().disable();
+//        http.headers().contentSecurityPolicy();
         ;
     }
 
