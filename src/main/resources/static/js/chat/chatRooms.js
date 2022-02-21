@@ -43,7 +43,7 @@ axios.get('/chat-rooms?page=' + page)
                 td[i] = document.createElement('td')
                 tr.appendChild(td[i])
             }
-            td[0].innerHtml = room.roomName
+            td[0].innerHTML = room.roomName
             td[1].innerText = room.presenter
             tbody.appendChild(tr)
         }
