@@ -9,16 +9,25 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.ReadListener;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.Part;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 
 @Slf4j
 public class RequestWrapper extends HttpServletRequestWrapper {
+    @Override
+    public Collection<Part> getParts() throws IOException, ServletException {
+        return super.getParts();
+    }
+
     private byte[] newData;
 
     public RequestWrapper(HttpServletRequest request) throws IOException {
@@ -32,7 +41,12 @@ public class RequestWrapper extends HttpServletRequestWrapper {
             String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
 
             ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, String> map = objectMapper.readValue(messageBody, Map.class);
+            Map<String, String> map;
+            if (messageBody.isBlank()) {
+                map = new HashMap<>();
+            } else {
+                map = objectMapper.readValue(messageBody, Map.class);
+            }
             map.forEach((key, value) -> System.out.println(key +" : " + value));
 
             for(String key : map.keySet()) {
@@ -47,15 +61,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
                     map.put(key, htmlEscapedValue);
                 }
             }
-            System.out.println(map);
-            System.out.println(messageBody);
 
             newData = objectMapper.writeValueAsBytes(map);
-//            String cleanBody = Jsoup.clean(messageBody, "", safelist, new Document.OutputSettings().prettyPrint(false));
-//            String quotReplacedBody = cleanBody.replaceAll("\"\\\\&quot;", "\'");
-//            quotReplacedBody = quotReplacedBody.replaceAll("\\\\&quot;\"", "\'");
-
-//            newData = quotReplacedBody.getBytes(StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw e;
         }
