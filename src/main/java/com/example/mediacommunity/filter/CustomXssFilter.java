@@ -1,4 +1,4 @@
-package com.example.mediacommunity.config;
+package com.example.mediacommunity.filter;
 
 import org.springframework.http.MediaType;
 

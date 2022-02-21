@@ -1,5 +1,6 @@
 package com.example.mediacommunity.config;
 
+import com.example.mediacommunity.filter.CustomXssFilter;
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

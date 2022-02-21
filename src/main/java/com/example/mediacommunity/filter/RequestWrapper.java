@@ -1,4 +1,4 @@
-package com.example.mediacommunity.config;
+package com.example.mediacommunity.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

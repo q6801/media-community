@@ -4,7 +4,7 @@ import com.example.mediacommunity.community.domain.chat.MsgInfoDto;
 import com.example.mediacommunity.community.domain.chat.Room;
 import com.example.mediacommunity.community.domain.chat.RoomType;
 import com.example.mediacommunity.community.service.RoomServiceImpl;
-import com.example.mediacommunity.config.CallHandler;
+import com.example.mediacommunity.community.service.CallHandler;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
