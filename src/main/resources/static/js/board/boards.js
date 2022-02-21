@@ -50,7 +50,7 @@ axios.get('/boards/' + category + '?page=' + page)
             td[i] = document.createElement('td')
             tr.appendChild(td[i])
         }
-        td[0].innerText = board.title
+        td[0].innerHTML = board.title
         td[1].innerText = board.writer
         td[2].innerText = board.viewCnt
 //        td[3].innerText = board.createdAt
