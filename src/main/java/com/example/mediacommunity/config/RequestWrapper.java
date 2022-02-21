@@ -9,25 +9,17 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.ReadListener;
-import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.Part;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 
 @Slf4j
 public class RequestWrapper extends HttpServletRequestWrapper {
-    @Override
-    public Collection<Part> getParts() throws IOException, ServletException {
-        return super.getParts();
-    }
-
     private byte[] newData;
 
     public RequestWrapper(HttpServletRequest request) throws IOException {
