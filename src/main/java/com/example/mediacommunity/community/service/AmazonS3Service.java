@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +47,19 @@ public class AmazonS3Service {
         int pos = imageUrl.lastIndexOf("/");
         String fileName = imageUrl.substring(pos+1);
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, path + fileName));
+    }
+
+    public String updateFile(String filePath, String fileUrlToDelete, MultipartFile multipartFile) throws IOException {
+        String ext = extractExt(multipartFile.getOriginalFilename());
+        String storeFileName = UUID.randomUUID() + "." + ext;
+
+        deleteFile(filePath, fileUrlToDelete);
+        uploadImg(filePath + storeFileName, multipartFile);
+        return searchImage(filePath, storeFileName);
+
+    }
+    private String extractExt(String originalFilename) {
+        int pos = originalFilename.lastIndexOf(".");
+        return originalFilename.substring(pos + 1);
     }
 }
