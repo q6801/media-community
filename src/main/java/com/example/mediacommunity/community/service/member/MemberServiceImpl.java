@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -36,7 +35,8 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final AmazonS3Service amazonS3Service;
     private final PasswordEncoder passwordEncoder;
-
+    
+    // 프로필 이미지 저장 위치
     @Value("${path.img}")
     private String thumbnailPath;
 
@@ -84,21 +84,16 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
         MultipartFile file = memberEditDto.getFile();
         String newNickname = memberEditDto.getNickname();
-        String imageUrl;
+        String newImageUrl;
 
         updateNickname(member, newNickname);
         if(file != null) {
-            String ext = extractExt(file.getOriginalFilename());
-            String storeFileName = UUID.randomUUID() + "." + ext;
-
-            amazonS3Service.deleteFile(thumbnailPath, member.getImageUrl());
-            amazonS3Service.uploadImg(thumbnailPath + storeFileName, memberEditDto.getFile());
-            imageUrl = amazonS3Service.searchImage(thumbnailPath, storeFileName);
-            member.setImageUrl(imageUrl);
+            newImageUrl = amazonS3Service.updateFile(thumbnailPath, member.getImageUrl(), file);
+            member.setImageUrl(newImageUrl);
         } else {
-            imageUrl = member.getImageUrl();
+            newImageUrl = member.getImageUrl();
         }
-        return Optional.ofNullable(imageUrl);
+        return Optional.ofNullable(newImageUrl);
     }
 
     public void updateNickname(Member member, String newNickname) {
@@ -114,10 +109,7 @@ public class MemberServiceImpl implements MemberService {
         return !foundMember.get().getLoginId().equals(loginId);
     }
 
-    private String extractExt(String originalFilename) {
-        int pos = originalFilename.lastIndexOf(".");
-        return originalFilename.substring(pos + 1);
-    }
+
 
     @Override
     public void signOut(String memberId) {
