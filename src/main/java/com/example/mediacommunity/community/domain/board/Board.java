@@ -84,7 +84,7 @@ public class Board {
 
     public BoardInfoDto convertBoardToBoardInfoDto() {
         return new BoardInfoDto(this.id, this.content, this.createdAt,
-                this.updatedAt, this.viewCnt, this.title, this.member.getNickname());
+                this.updatedAt, this.viewCnt, this.title, this.member.getNickname(), this.replies.size());
     }
 
     public void increaseViewCnt() {

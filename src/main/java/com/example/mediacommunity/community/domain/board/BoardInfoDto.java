@@ -15,4 +15,5 @@ public class BoardInfoDto {
     private int viewCnt;
     private String title;
     private String writer;
+    private int repliesCnt;
 }
