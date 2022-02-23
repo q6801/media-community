@@ -31,8 +31,8 @@ axios.get('/boards/' + category + '?page=' + page)
     // 테이블 헤드 제작
     let tr = document.createElement('tr')
     let td = new Array(4);
-    let table_head_innertext = ['title', 'writer', 'views', 'createdAt']
-    for(let i=0; i<4; i++) {
+    let table_head_innertext = ['title', 'writer', '댓글 수', '조회수', 'createdAt']
+    for(let i=0; i<table_head_innertext.length; i++) {
         td[i] = document.createElement('td')
         td[i].innerText = table_head_innertext[i]
         tr.appendChild(td[i])
@@ -45,16 +45,16 @@ axios.get('/boards/' + category + '?page=' + page)
         let tr = document.createElement('tr')
         let board_url = '/board/' + board.id
         tr.setAttribute('onClick', `location.href="${board_url}?page=${pagination.page}"`)
-        let td = new Array(4);
-        for(let i=0; i<4; i++) {
+        let td = new Array(5);
+        for(let i=0; i<5; i++) {
             td[i] = document.createElement('td')
             tr.appendChild(td[i])
         }
         td[0].innerHTML = board.title
         td[1].innerText = board.writer
-        td[2].innerText = board.viewCnt
-//        td[3].innerText = board.createdAt
-        td[3].innerText = timeForToday(new Date(board.createdAt))
+        td[2].innerText = board.repliesCnt
+        td[3].innerText = board.viewCnt
+        td[4].innerText = timeForToday(new Date(board.createdAt))
         tbody.appendChild(tr)
     }
 
