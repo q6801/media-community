@@ -17,4 +17,5 @@ public class BoardInfoDto {
     private String writer;
     private int repliesCnt;
     private boolean anonymous;
+    private String category;
 }

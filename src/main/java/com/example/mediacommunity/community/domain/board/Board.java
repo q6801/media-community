@@ -82,13 +82,15 @@ public class Board {
         this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         this.content = updateParam.getContent();
         this.title = updateParam.getTitle();
+        this.anonymous = updateParam.getAnonymous();
         this.boardCategory = category;
     }
 
     public BoardInfoDto convertBoardToBoardInfoDto() {
         String writer = checkAnomymousStatus();
         return new BoardInfoDto(this.id, this.content, this.createdAt,
-                this.updatedAt, this.viewCnt, this.title, writer, this.replies.size(), this.anonymous);
+                this.updatedAt, this.viewCnt, this.title, writer, this.replies.size(),
+                this.anonymous, this.boardCategory.getId());
     }
 
     private String checkAnomymousStatus() {

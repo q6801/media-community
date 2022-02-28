@@ -44,8 +44,16 @@ axios.get('/boardInfo/' + board_id)
     let board = res.data
 
     let title = document.querySelector('#title')
-//    let content = document.querySelector('#content')
 
+    let category = document.querySelector('#category')
+    let optionValues = category.options
+    for(let j=0; j<optionValues.length; j++) {
+        if (board.category==optionValues[j].value) {
+            optionValues[j].selected=true;
+        }
+    }
+    let anonymous = document.querySelector('#anonymous')
+    anonymous.checked = board.anonymous
     title.value = board.title
 
     const delta = quill.clipboard.convert(board.content)
