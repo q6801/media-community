@@ -57,14 +57,15 @@ axios.get('/boardInfo/' + board_id)
 
 function post() {
     let title = document.querySelector('#title')
-
     let title_val = title.value
+    let anonymous = document.querySelector('#anonymous')
 
     axios.put('/board/' + board_id,
             {
                 'category': category.value,
                 'title': title_val,
-                'content': quill.root.innerHTML
+                'content': quill.root.innerHTML,
+                'anonymous': anonymous.checked
             }
     ).then(function(res) {
         console.log(res.data)

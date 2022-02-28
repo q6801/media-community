@@ -15,10 +15,13 @@ public class BoardAddingDto {
     @NotBlank
     private String category;
 
+    private Boolean anonymous;
+
     public BoardAddingDto() {}
-    public BoardAddingDto(String title, String content, String category) {
+    public BoardAddingDto(String title, String content, String category, Boolean anonymous) {
         this.title = title;
         this.content = content;
         this.category = category;
+        this.anonymous = anonymous;
     }
 }

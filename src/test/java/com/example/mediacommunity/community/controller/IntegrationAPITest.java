@@ -60,7 +60,7 @@ public class IntegrationAPITest {
     public void addAndEditAndDeleteBoard() throws Exception {
         MvcResult mvcResult = createBoardWithTest();
         int boardIdx = getBoardIdx(mvcResult);
-        BoardAddingDto boardEditingDto = new BoardAddingDto("newTitle", "newContent", "testCategory");
+        BoardAddingDto boardEditingDto = new BoardAddingDto("newTitle", "newContent", "testCategory", false);
 
         mockMvc.perform(
                 put("/board/" + boardIdx)
@@ -75,7 +75,7 @@ public class IntegrationAPITest {
     }
 
     private MvcResult createBoardWithTest() throws Exception {
-        BoardAddingDto boardAddingDto = new BoardAddingDto("title", "content", "testCategory");
+        BoardAddingDto boardAddingDto = new BoardAddingDto("title", "content", "testCategory", false);
         return mockMvc.perform(
                 post("/board")
                         .contentType(MediaType.APPLICATION_JSON)
