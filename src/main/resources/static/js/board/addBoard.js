@@ -38,14 +38,15 @@ axios.get('/board-category')
 function post(e) {
     e.preventDefault()
     let title = document.querySelector('#title')
-
     let title_val = title.value
+    let anonymous = document.querySelector('#anonymous')
 
     axios.post('/board',
             {
                 'category': category.value,
                 'title': title_val,
-                'content': quill.root.innerHTML
+                'content': quill.root.innerHTML,
+                'anonymous': anonymous.checked
             }
     ).then(function(res) {
         console.log(res.data)
