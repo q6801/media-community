@@ -26,6 +26,7 @@ public class Board {
     private Timestamp updatedAt;
     private int viewCnt;
     private String title;
+    private Boolean anonymous=false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writerId")
@@ -41,12 +42,13 @@ public class Board {
     private BoardCategory boardCategory;
 
     @Builder
-    private Board(String content, int viewCnt, String title, Timestamp createdAt, Timestamp updatedAt) {
+    private Board(String content, int viewCnt, String title, Timestamp createdAt, Timestamp updatedAt, Boolean anonymous) {
         this.content = content;
         this.viewCnt = viewCnt;
         this.title = title;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.anonymous = anonymous;
     }
 
     public void setMember(Member member) {
@@ -69,6 +71,7 @@ public class Board {
                 .createdAt(timestamp)
                 .updatedAt(timestamp)
                 .viewCnt(0)
+                .anonymous(boardDto.getAnonymous())
                 .build();
         board.setMember(member);
         board.boardCategory = category;
@@ -83,8 +86,19 @@ public class Board {
     }
 
     public BoardInfoDto convertBoardToBoardInfoDto() {
+        String writer = checkAnomymousStatus();
         return new BoardInfoDto(this.id, this.content, this.createdAt,
-                this.updatedAt, this.viewCnt, this.title, this.member.getNickname(), this.replies.size());
+                this.updatedAt, this.viewCnt, this.title, writer, this.replies.size(), this.anonymous);
+    }
+
+    private String checkAnomymousStatus() {
+        String writer;
+        if (this.anonymous==true) {
+            writer = "익명의 누군가";
+        } else {
+            writer=this.member.getNickname();
+        }
+        return writer;
     }
 
     public void increaseViewCnt() {
