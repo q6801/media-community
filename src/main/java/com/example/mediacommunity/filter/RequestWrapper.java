@@ -53,15 +53,17 @@ public class RequestWrapper extends HttpServletRequestWrapper {
         safelist.addAttributes(":all", "class");
 
         for(String key : map.keySet()) {
-            String value = map.get(key);
-            if (key.equals("content")) {
-                String cleanBody = Jsoup.clean(value, "", safelist, new Document.OutputSettings().prettyPrint(false));
-                String quotReplacedBody = cleanBody.replaceAll("\"\\\\&quot;", "\'");
-                quotReplacedBody = quotReplacedBody.replaceAll("\\\\&quot;\"", "\'");
-                map.put(key, quotReplacedBody);
-            } else {
-                String htmlEscapedValue = HtmlUtils.htmlEscape(value);
-                map.put(key, htmlEscapedValue);
+            if (map.get(key) instanceof String) {
+                String value = map.get(key);
+                if (key.equals("content")) {
+                    String cleanBody = Jsoup.clean(value, "", safelist, new Document.OutputSettings().prettyPrint(false));
+                    String quotReplacedBody = cleanBody.replaceAll("\"\\\\&quot;", "\'");
+                    quotReplacedBody = quotReplacedBody.replaceAll("\\\\&quot;\"", "\'");
+                    map.put(key, quotReplacedBody);
+                } else {
+                    String htmlEscapedValue = HtmlUtils.htmlEscape(value);
+                    map.put(key, htmlEscapedValue);
+                }
             }
         }
     }
