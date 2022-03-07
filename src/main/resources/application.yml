@@ -33,7 +33,7 @@ logging.level:
 
 jasypt:
   encryptor:
-    password: appdkaghghk
+    password:
     bean: jasyptStringEncryptor
 
 kms:
