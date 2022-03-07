@@ -50,7 +50,7 @@ public class MsgRoomController {
 
     @DeleteMapping("/chat-room")
     public ResponseEntity<?> deleteRoom(@AuthenticationPrincipal UserInfo userInfo) {
-        roomService.deleteRoom(userInfo.getName(), RoomType.STREAMING);
+        roomService.deleteRoom(userInfo.getName(), RoomType.CHAT);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
