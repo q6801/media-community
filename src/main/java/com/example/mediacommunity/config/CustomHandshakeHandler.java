@@ -21,7 +21,6 @@ public class CustomHandshakeHandler extends DefaultHandshakeHandler {
         } else {
             stompPrincipal = new StompPrincipal(userUUID);
         }
-//        return super.determineUser(request, wsHandler, attributes);
         return stompPrincipal;
     }
 }
