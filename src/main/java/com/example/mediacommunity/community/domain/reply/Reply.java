@@ -1,7 +1,6 @@
 package com.example.mediacommunity.community.domain.reply;
 
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardAddingDto;
 import com.example.mediacommunity.community.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -3,14 +3,9 @@ package com.example.mediacommunity.community.repository.heart;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
-import com.example.mediacommunity.community.repository.board.BoardRepository;
-import com.example.mediacommunity.community.repository.member.MemberRepository;
-import com.example.mediacommunity.community.service.board.BoardService;
-import com.example.mediacommunity.community.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

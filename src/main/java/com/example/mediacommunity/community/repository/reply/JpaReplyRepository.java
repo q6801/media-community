@@ -5,7 +5,6 @@ import com.example.mediacommunity.community.domain.reply.Reply;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

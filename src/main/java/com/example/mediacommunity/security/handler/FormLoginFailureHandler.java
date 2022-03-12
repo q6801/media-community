@@ -2,7 +2,6 @@ package com.example.mediacommunity.security.handler;
 
 import com.example.mediacommunity.Exception.ApiErrorResponse;
 import com.example.mediacommunity.Exception.ExceptionEnum;
-import com.example.mediacommunity.Exception.custom.UserNotExistException;
 import com.example.mediacommunity.security.BadProviderException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.BadCredentialsException;

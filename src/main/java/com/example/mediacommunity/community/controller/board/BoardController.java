@@ -2,11 +2,7 @@ package com.example.mediacommunity.community.controller.board;
 
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.NotAllowedAccessException;
-import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
-import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardAddingDto;
-import com.example.mediacommunity.community.domain.board.BoardInfoDto;
+import com.example.mediacommunity.community.domain.board.*;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.service.Pagination;
 import com.example.mediacommunity.community.service.board.BoardService;

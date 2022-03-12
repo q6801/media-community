@@ -1,9 +1,9 @@
 package com.example.mediacommunity.community.service.board;
 
-import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.board.BoardAddingDto;
+import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.service.Pagination;
 
 import java.util.List;

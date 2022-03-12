@@ -2,8 +2,8 @@ package com.example.mediacommunity.community.repository.board;
 
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.NotFoundPageException;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.board.Board;
+import com.example.mediacommunity.community.domain.board.BoardCategory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.community.service.Pagination;

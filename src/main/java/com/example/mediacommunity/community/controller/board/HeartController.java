@@ -1,7 +1,6 @@
 package com.example.mediacommunity.community.controller.board;
 
 import com.example.mediacommunity.Exception.ExceptionEnum;
-import com.example.mediacommunity.Exception.custom.NotAllowedAccessException;
 import com.example.mediacommunity.Exception.custom.UserInfoNotFoundException;
 import com.example.mediacommunity.community.domain.heart.HeartInfoDto;
 import com.example.mediacommunity.community.service.heart.HeartService;

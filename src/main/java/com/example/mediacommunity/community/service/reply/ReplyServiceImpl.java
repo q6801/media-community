@@ -3,7 +3,6 @@ package com.example.mediacommunity.community.service.reply;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
-import com.example.mediacommunity.community.domain.reply.ReplyInfoDto;
 import com.example.mediacommunity.community.domain.reply.ReplyInputDto;
 import com.example.mediacommunity.community.repository.reply.ReplyRepository;
 import com.example.mediacommunity.community.service.board.BoardService;

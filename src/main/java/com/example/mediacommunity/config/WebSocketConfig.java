@@ -1,7 +1,5 @@
 package com.example.mediacommunity.config;
 
-//import com.example.mediacommunity.common.handler.ChatHandler;
-
 import lombok.RequiredArgsConstructor;
 import org.kurento.client.KurentoClient;
 import org.kurento.client.MediaPipeline;
