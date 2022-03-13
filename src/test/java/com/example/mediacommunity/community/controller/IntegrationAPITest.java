@@ -38,9 +38,6 @@ public class IntegrationAPITest {
 
     @Test
     public void boards() throws Exception {
-        BoardCategory bc = new BoardCategory("testCategory");
-        boardCategoryService.save(bc);
-
         mockMvc.perform(get("/boards/testCategory").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -75,6 +72,9 @@ public class IntegrationAPITest {
     }
 
     private MvcResult createBoardWithTest() throws Exception {
+        BoardCategory bc = new BoardCategory("testCategory");
+        boardCategoryService.save(bc);
+
         BoardAddingDto boardAddingDto = new BoardAddingDto("title", "content", "testCategory", false);
         return mockMvc.perform(
                 post("/board")
