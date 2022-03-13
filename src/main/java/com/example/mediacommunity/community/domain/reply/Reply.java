@@ -1,5 +1,6 @@
 package com.example.mediacommunity.community.domain.reply;
 
+import com.example.mediacommunity.community.domain.BaseTimeEntity;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import lombok.AccessLevel;
@@ -16,19 +17,13 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Reply {
+public class Reply extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(columnDefinition = "TEXT")
     private String content;
-
-    @UpdateTimestamp
-    private Timestamp createdAt;
-
-    @CreationTimestamp
-    private Timestamp updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "replyer")

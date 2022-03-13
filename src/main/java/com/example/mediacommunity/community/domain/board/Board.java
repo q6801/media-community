@@ -1,5 +1,6 @@
 package com.example.mediacommunity.community.domain.board;
 
+import com.example.mediacommunity.community.domain.BaseTimeEntity;
 import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
@@ -15,15 +16,13 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode(exclude = {"member", "replies", "hearts", "boardCategory"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board {
+public class Board extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
     private int viewCnt;
     private String title;
     private Boolean anonymous=false;
