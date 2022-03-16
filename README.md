@@ -41,3 +41,15 @@
 ```Bug Fixes```
 - 1.0.1에서 추가한 xss filter때문에 글 제목, 채팅 방 제목에 ‘<’같은 기호를 사용 못하던 문제 수정
 - form과 multipart form을 사용한 Xss 공격을 Lucy Servlet Xss Filter로 막음
+
+---
+
+***version_1.2.0***
+
+```Changes```
+- 커뮤니티 목록에서 댓글 수 보이게 수정
+- 게시글 작성할 때 익명 가능
+  
+```Bug Fixes```
+- 게시물에서 ql-editor 태그 부제로 에디터의 css 적용 안되던 것 수정
+- 회원탈퇴 안되던 것 수정 (delete cascade가 안 되어 있었음)
