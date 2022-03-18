@@ -2,7 +2,7 @@ package com.example.mediacommunity.community.controller.email;
 
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.BadValueException;
-import com.example.mediacommunity.community.service.EmailConfirmationTokenService;
+import com.example.mediacommunity.community.service.email.EmailConfirmationTokenService;
 import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;

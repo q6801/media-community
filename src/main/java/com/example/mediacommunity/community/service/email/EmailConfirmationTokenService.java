@@ -1,4 +1,4 @@
-package com.example.mediacommunity.community.service;
+package com.example.mediacommunity.community.service.email;
 
 import com.example.mediacommunity.community.domain.email.EmailConfirmationToken;
 import com.example.mediacommunity.community.domain.member.Member;

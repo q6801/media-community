@@ -1,4 +1,4 @@
-package com.example.mediacommunity.community.service;
+package com.example.mediacommunity.community.service.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
