@@ -7,17 +7,15 @@ import com.example.mediacommunity.community.service.heart.HeartService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class HeartController {
     private final HeartService heartService;
 
-    @GetMapping("boardInfo/{boardIdx}/hearts")
+    @GetMapping("board/{boardIdx}/hearts")
     public HeartInfoDto hearts(@PathVariable long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
         Long cnt = heartService.cntHearts(boardIdx);
         Boolean pushed = false;

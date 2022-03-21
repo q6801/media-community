@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class BoardController {
 
     private final BoardService boardService;
@@ -46,7 +47,7 @@ public class BoardController {
         return map;
     }
 
-    @GetMapping("/boardInfo/{boardIdx}")
+    @GetMapping("/board/{boardIdx}")
     public BoardInfoDto board(@PathVariable long boardIdx) {
         Board board = boardService.findBoardById(boardIdx);
         boardService.increaseViewCnt(boardIdx, board.getViewCnt());

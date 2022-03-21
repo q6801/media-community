@@ -22,10 +22,11 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class MemberController {
     private final MemberService memberService;
 
-    @GetMapping("/memberInfo")
+    @GetMapping("/member")
     public MemberInfoDto member(@AuthenticationPrincipal UserInfo userInfo) {
         if (userInfo == null) {
             throw new UserInfoNotFoundException(ExceptionEnum.USER_INFO_NOT_FOUND);
