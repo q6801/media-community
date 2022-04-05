@@ -51,23 +51,12 @@ public class JpaBoardRepository implements BoardRepository {
         try {
             String sequence = "desc";
             String sql = "select b from Board b where b.boardCategory.id=:category " +
-                    "order by b." + orderCriterion.getCode() + " " + sequence;
-            if (orderCriterion == BoardOrderCriterion.HEARTS) {
-                sql = "select b.id, b.member, b.boardCategory, b.content, b.viewCnt, b.title, b.anonymous, b.createdAt, b.updatedAt from Board b, Heart h where b.boardCategory.id=:category group by h.board order by count(*)";
-
-//                sql = "(select h.board from Heart h group by h.board order by count(*))";
-            }
-            List resultList = em.createNativeQuery("select b.id, b.writer_id, b.board_category_id, b.content, b.view_cnt, b.title, b.anonymous, b.created_at, b.updated_at from board b join heart h\n" +
-                    "on b.id=h.board_id\n" +
-//                    "where b.board_category_id='community'\n" +
-                    "group by h.board_id\n" +
-                    "order by count(*) desc;", Board.class)
-//                    .setParameter(1, category)
-//                    .setFirstResult(pagination.getStartingBoardNumInPage())
-//                    .setMaxResults(pagination.getOnePageBoardsNum())
+                    "order by b." + orderCriterion.getCode() + " b.createdAt" + sequence;
+            return em.createQuery(sql)
+                    .setParameter("category", category)
+                    .setFirstResult(pagination.getStartingBoardNumInPage())
+                    .setMaxResults(pagination.getOnePageBoardsNum())
                     .getResultList();
-            System.out.println(resultList);
-            return null;
         } catch(DataAccessException e) {
             return new ArrayList<>();
         }
