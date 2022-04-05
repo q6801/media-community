@@ -1,9 +1,6 @@
 package com.example.mediacommunity.community.service.board;
 
-import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardAddingDto;
-import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
+import com.example.mediacommunity.community.domain.board.*;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.Pagination;
@@ -13,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,8 +40,12 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public List<Board> findBoards(Pagination pagination, String category) {
-        return boardRepository.findBoards(pagination, category);
+    public List<Board> findBoards(Pagination pagination, String category, BoardOrderCriterion orderCriterion) {
+        List<Board> boards = boardRepository.findBoards(pagination, category, orderCriterion);
+        if (boards==null) {
+            return new ArrayList<>();
+        }
+        return boards;
     }
 
     @Override
