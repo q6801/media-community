@@ -19,7 +19,7 @@ let quill = new Quill('#editor', {
   });
 
 let category = document.querySelector('#category')
-axios.get('/board-category')
+axios.get('/api/board-category')
 .then(function(res) {
   let categories = res.data.categories
   console.log(res)
@@ -38,7 +38,7 @@ axios.get('/board-category')
 let editBtn = document.querySelector('#submit')
 editBtn.addEventListener('click', post)
 
-axios.get('/boardInfo/' + board_id)
+axios.get('/api/board/' + board_id)
 .then(function(res) {
     console.log('board : ' + res.data)
     let board = res.data
@@ -68,7 +68,7 @@ function post() {
     let title_val = title.value
     let anonymous = document.querySelector('#anonymous')
 
-    axios.put('/board/' + board_id,
+    axios.put('/api/board/' + board_id,
             {
                 'category': category.value,
                 'title': title_val,

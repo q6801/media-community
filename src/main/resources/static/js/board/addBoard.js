@@ -19,7 +19,7 @@ let quill = new Quill('#editor', {
 
 
 let category = document.querySelector('#category')
-axios.get('/board-category')
+axios.get('/api/board-category')
 .then(function(res) {
     let categories = res.data.categories
     console.log(res)
@@ -41,7 +41,7 @@ function post(e) {
     let title_val = title.value
     let anonymous = document.querySelector('#anonymous')
 
-    axios.post('/board',
+    axios.post('/api/board',
             {
                 'category': category.value,
                 'title': title_val,

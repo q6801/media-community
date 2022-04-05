@@ -15,7 +15,7 @@ window.onload = function() {
 
 window.onbeforeunload = function(e) {
 	e.preventDefault();
-	axios.delete('/streaming-room').then(function(res) {
+	axios.delete('/api/streaming-room').then(function(res) {
 		connect_status.innerText = '방송 종료됨~'
 	})
 	stop();
@@ -28,7 +28,7 @@ presenter_dom.addEventListener('click', function() {
 })
 
 finish_streaming.addEventListener('click', function() {
-     axios.delete('/streaming-room').then(function(res) {
+     axios.delete('/api/streaming-room').then(function(res) {
         connect_status.innerText = '방송 종료됨~'
     })
     stop();

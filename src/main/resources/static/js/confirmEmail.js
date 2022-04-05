@@ -11,7 +11,7 @@ email_confirm_form.addEventListener('submit', function(e) {
     let verifying_num_input = document.querySelector('#verifying-num')
     let verifying_num = verifying_num_input.value
 
-    axios.post('/confirm-email', {
+    axios.post('/api/confirm-email', {
         verifyingNum: verifying_num
     }).then(function(res) {
         window.location.replace('/user')

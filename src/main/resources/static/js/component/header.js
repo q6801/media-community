@@ -1,4 +1,4 @@
-axios.get('/memberInfo')
+axios.get('/api/member')
     .then(function(response) {
         console.log('res : ' +  response)
         let user = document.querySelector('#user');

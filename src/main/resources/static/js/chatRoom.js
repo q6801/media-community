@@ -15,8 +15,8 @@ window.onbeforeunload = function(e) {
 }
 const callChatRoom = async() => {
     try {
-        const res = await axios.get('/chat-room/' + roomId)
-        const res1 = await axios.get('/memberInfo')
+        const res = await axios.get('/api/chat-room/' + roomId)
+        const res1 = await axios.get('/api/member')
         connect(res1)
     } catch(err) {
         console.log('err : ' +  err.response.data.errorCode)
