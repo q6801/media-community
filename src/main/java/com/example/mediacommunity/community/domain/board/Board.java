@@ -5,6 +5,7 @@ import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
 import lombok.*;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -95,9 +96,12 @@ public class Board extends BaseTimeEntity {
 
     public BoardInfoDto convertBoardToBoardInfoDto() {
         String writer = checkAnomymousStatus();
-        return new BoardInfoDto(this.id, this.content, this.createdAt,
-                this.updatedAt, this.viewCnt, this.title, writer, this.replies.size(),
-                this.anonymous, this.boardCategory.getId());
+        BoardInfoDto boardInfoDto = new BoardInfoDto();
+        BeanUtils.copyProperties(this, boardInfoDto);
+        boardInfoDto.setWriter(writer);
+        System.out.println(boardInfoDto);
+
+        return boardInfoDto;
     }
 
     private String checkAnomymousStatus() {
