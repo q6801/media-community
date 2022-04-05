@@ -35,7 +35,26 @@ public class BoardController {
         int totalBoardsNum = boardService.getTotalBoardsNum(category);
 
         pagination.pageInfo(page, totalBoardsNum);
-        List<Board> boards = boardService.findBoards(pagination, category);
+        List<Board> boards = boardService.findBoards(pagination, category, BoardOrderCriterion.CREATED);
+        System.out.println(boards);
+        List<BoardInfoDto> boardInfoDtos = boards.stream()
+                .map(Board::convertBoardToBoardInfoDto)
+                .collect(Collectors.toList());
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("boards", boardInfoDtos);
+        map.put("pagination", pagination);
+        return map;
+    }
+
+    @PostMapping("/boards/{category}")
+    public Map<String, Object> changeBoardsOrder(@RequestParam(defaultValue = "1") int page, @PathVariable String category,
+                                      @RequestBody Map<String, String> input) {
+        int totalBoardsNum = boardService.getTotalBoardsNum(category);
+        BoardOrderCriterion boardOrderCriterion = BoardOrderCriterion.valueOf(input.get("type"));
+
+        pagination.pageInfo(page, totalBoardsNum);
+        List<Board> boards = boardService.findBoards(pagination, category, boardOrderCriterion);
 
         List<BoardInfoDto> boardInfoDtos = boards.stream()
                 .map(Board::convertBoardToBoardInfoDto)
