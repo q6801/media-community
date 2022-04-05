@@ -23,11 +23,6 @@ public class ReplyServiceImpl implements ReplyService {
     private final MemberService memberService;
 
     @Override
-    public Reply saveReply(Reply reply) {
-        return replyRepository.saveReply(reply);
-    }
-
-    @Override
     public List<Reply> findAllReplies(Long boardId) {
         Board board = boardService.findBoardById(boardId);
         return replyRepository.findAllReplies(board);
@@ -38,6 +33,7 @@ public class ReplyServiceImpl implements ReplyService {
         Board board = boardService.findBoardById(boardId);
         Member member = memberService.findMemberById(memberId);
         Reply reply = Reply.createReply(member, board, content);
+        board.increaseReplyCnt();
 
         replyRepository.saveReply(reply);
         return reply;
@@ -46,6 +42,7 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void deleteReply(Long replyId) {
         Reply reply = replyRepository.findReplyById(replyId);
+        reply.getBoard().decreaseReplyCnt();
         replyRepository.deleteReply(reply);
     }
 
