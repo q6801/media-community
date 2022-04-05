@@ -15,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @EqualsAndHashCode(exclude = {"member", "replies", "hearts", "boardCategory"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(exclude = {"member", "replies", "hearts", "boardCategory"})
@@ -26,10 +27,13 @@ public class Board extends BaseTimeEntity {
     @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
 
+    @Setter(AccessLevel.NONE)
     private int viewCnt;
 
+    @Setter(AccessLevel.NONE)
     private int replyCnt;
 
+    @Setter(AccessLevel.NONE)
     private int heartCnt;
 
     private String title;
@@ -50,11 +54,9 @@ public class Board extends BaseTimeEntity {
     private BoardCategory boardCategory;
 
     @Builder
-    private Board(String content, int viewCnt, String title, Timestamp createdAt, Timestamp updatedAt, Boolean anonymous) {
+    private Board(String content, String title, Timestamp updatedAt, Boolean anonymous) {
         this.content = content;
-        this.viewCnt = viewCnt;
         this.title = title;
-        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.anonymous = anonymous;
     }
@@ -67,30 +69,21 @@ public class Board extends BaseTimeEntity {
         member.getBoards().add(this);   // 주인이 아니라서 저장 시 사용 안됨
     }
 
-    public void setCategory(BoardCategory bc) {
+    public void setBoardCategory(BoardCategory bc) {
         this.boardCategory = bc;
     }
 
     public static Board convertBoardAddingDtoToBoard(BoardAddingDto boardDto, Member member, BoardCategory category) {
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = Board.builder()
-                .content(boardDto.getContent())
-                .title(boardDto.getTitle())
-                .createdAt(timestamp)
-                .updatedAt(timestamp)
-                .viewCnt(0)
-                .anonymous(boardDto.getAnonymous())
-                .build();
+        Board board = new Board();
+        BeanUtils.copyProperties(boardDto, board);
         board.setMember(member);
         board.boardCategory = category;
         return board;
     }
 
     public void updateBoardWithDto(BoardAddingDto updateParam, BoardCategory category) {
+        BeanUtils.copyProperties(updateParam, this);
         this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        this.content = updateParam.getContent();
-        this.title = updateParam.getTitle();
-        this.anonymous = updateParam.getAnonymous();
         this.boardCategory = category;
     }
 
