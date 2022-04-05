@@ -51,7 +51,7 @@ public class JpaBoardRepository implements BoardRepository {
         try {
             String sequence = "desc";
             String sql = "select b from Board b where b.boardCategory.id=:category " +
-                    "order by b." + orderCriterion.getCode() + " b.createdAt" + sequence;
+                    "order by b." + orderCriterion.getCode() + " " + sequence + ", b.createdAt desc";
             return em.createQuery(sql)
                     .setParameter("category", category)
                     .setFirstResult(pagination.getStartingBoardNumInPage())
