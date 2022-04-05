@@ -2,6 +2,7 @@ package com.example.mediacommunity.community.service.heart;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.domain.heart.HeartInfoDto;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
@@ -37,22 +38,27 @@ public class HeartServiceImpl implements HeartService{
      * @return heart pushed여부 (true면 이제 누른것)
      */
     @Override
-    public Boolean toggleTheHeart(Long boardId, String memberId) {
+    public HeartInfoDto toggleTheHeart(Long boardId, String memberId) {
         Board board = boardService.findBoardById(boardId);
         Member member = memberService.findMemberById(memberId);
         Optional<Heart> theLikeStatus = heartRepository.findTheHeart(board, member);
+        boolean pushed;
 
         if (theLikeStatus.isEmpty()) {
             Heart heart = Heart.builder().build();
             heart.setBoard(board);
             heart.setMember(member);
             heartRepository.addHeart(heart);
-            return true;
+            board.increaseHeartCnt();
+            pushed= true;
         } else {
             board.getHearts().remove(theLikeStatus.get());
             heartRepository.deleteHeart(theLikeStatus.get());
-            return false;
+            board.decreaseHeartCnt();
+            pushed= false;
         }
+
+        return new HeartInfoDto(board.getHeartCnt(), pushed);
     }
 
     @Override
@@ -65,11 +71,5 @@ public class HeartServiceImpl implements HeartService{
     public List<Heart> findLikingMembers(Long boardId) {
         Board board = boardService.findBoardById(boardId);
         return heartRepository.findLikingMembers(board);
-    }
-
-    @Override
-    public Long cntHearts(Long boardId) {
-        Board board = boardService.findBoardById(boardId);
-        return heartRepository.cntHearts(board);
     }
 }
