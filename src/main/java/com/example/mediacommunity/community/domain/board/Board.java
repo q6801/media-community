@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode(exclude = {"member", "replies", "hearts", "boardCategory"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(exclude = {"member", "replies", "hearts", "boardCategory"})
 public class Board extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -23,8 +24,15 @@ public class Board extends BaseTimeEntity {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
+
     private int viewCnt;
+
+    private int replyCnt;
+
+    private int heartCnt;
+
     private String title;
+
     private Boolean anonymous=false;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -102,7 +110,21 @@ public class Board extends BaseTimeEntity {
         return writer;
     }
 
-    public void increaseViewCnt() {
-        this.viewCnt += 1;
+    public void increaseViewCnt() { this.viewCnt += 1; }
+    public void increaseHeartCnt() {
+        this.heartCnt += 1;
+    }
+    public void decreaseHeartCnt() {
+        if(this.heartCnt > 0) {
+            this.heartCnt -= 1;
+        }
+    }
+    public void decreaseReplyCnt() {
+        if (this.replyCnt > 0) {
+            this.replyCnt -= 1;
+        }
+    }
+    public void increaseReplyCnt() {
+        this.replyCnt += 1;
     }
 }
