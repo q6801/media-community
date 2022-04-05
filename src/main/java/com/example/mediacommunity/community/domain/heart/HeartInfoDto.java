@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HeartInfoDto {
-    private Long heartsCnt;
+    private int heartCnt;
     private Boolean pushed;
 }
