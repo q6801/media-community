@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum BoardOrderCriterion {
-    CREATED("createdAt"), HEARTS("updatedAt"), VIEWS("viewCnt");
+    CREATED("createdAt"), HEARTS("heartCnt"), VIEWS("viewCnt"), REPLIES("replyCnt");
 
     private String code;
 
