@@ -1,10 +1,10 @@
 package com.example.mediacommunity.community.domain.board;
 
-import lombok.Data;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
 public class BoardAddingDto {
     @NotBlank
     private String title;
