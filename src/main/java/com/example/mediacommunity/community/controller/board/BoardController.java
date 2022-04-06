@@ -68,8 +68,7 @@ public class BoardController {
 
     @GetMapping("/board/{boardIdx}")
     public BoardInfoDto board(@PathVariable long boardIdx) {
-        Board board = boardService.findBoardById(boardIdx);
-        boardService.increaseViewCnt(boardIdx, board.getViewCnt());
+        Board board = boardService.increaseViewCnt(boardIdx);
         return board.convertBoardToBoardInfoDto();
     }
 

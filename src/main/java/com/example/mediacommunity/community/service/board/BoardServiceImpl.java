@@ -28,18 +28,21 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Board findBoardById(Long id) {
         return boardRepository.findBoardById(id);
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<Board> findByWriterId(String writerId) {
         Member member = memberService.findMemberById(writerId);
         return boardRepository.findByWriterId(member);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Board> findBoards(Pagination pagination, String category, BoardOrderCriterion orderCriterion) {
         List<Board> boards = boardRepository.findBoards(pagination, category, orderCriterion);
         if (boards==null) {
@@ -49,6 +52,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Board> findAllBoards() {
         return boardRepository.findAll();
     }
@@ -67,8 +71,10 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void increaseViewCnt(Long id, int viewCnt) {
-        boardRepository.findBoardById(id).increaseViewCnt();
+    public Board increaseViewCnt(long boardId) {
+        Board board = boardRepository.findBoardById(boardId);
+        board.increaseViewCnt();
+        return board;
     }
 
     @Override
@@ -84,11 +90,13 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int getTotalBoardsNum(String category) {
         return boardRepository.getTotalBoardsNum(category);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BoardCategoriesDto findAllCategories() {
         BoardCategoriesDto bc = new BoardCategoriesDto();
         bc.setCategories(boardRepository.findAllCategories());
@@ -96,6 +104,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BoardCategory findCategory(String categoryId) {
         return boardRepository.findCategory(categoryId);
     }
