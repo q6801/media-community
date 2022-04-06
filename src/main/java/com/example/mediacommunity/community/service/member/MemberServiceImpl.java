@@ -63,18 +63,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Member findMemberById(String loginId) {
         return memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new UserNotExistException(ExceptionEnum.USER_NOT_EXIST));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Member findMemberByName(String nickName) {
         return memberRepository.findByNickname(nickName)
                 .orElseThrow(() -> new UserNotExistException(ExceptionEnum.USER_NOT_EXIST));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Member> findAllMembers() {
         return memberRepository.findAll();
     }

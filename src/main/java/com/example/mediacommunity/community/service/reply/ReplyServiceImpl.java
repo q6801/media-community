@@ -23,6 +23,7 @@ public class ReplyServiceImpl implements ReplyService {
     private final MemberService memberService;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Reply> findAllReplies(Long boardId) {
         Board board = boardService.findBoardById(boardId);
         return replyRepository.findAllReplies(board);

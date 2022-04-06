@@ -25,6 +25,7 @@ public class HeartServiceImpl implements HeartService{
     private final MemberService memberService;
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Heart> findTheHeart(Long boardId, String memberId) {
         Board board = boardService.findBoardById(boardId);
         Member member = memberService.findMemberById(memberId);
@@ -35,7 +36,7 @@ public class HeartServiceImpl implements HeartService{
      *
      * @param boardId
      * @param memberId
-     * @return heart pushed여부 (true면 이제 누른것)
+     * @return HeartInfoDto
      */
     @Override
     public HeartInfoDto toggleTheHeart(Long boardId, String memberId) {
@@ -50,7 +51,7 @@ public class HeartServiceImpl implements HeartService{
             heart.setMember(member);
             heartRepository.addHeart(heart);
             board.increaseHeartCnt();
-            pushed= true;
+            pushed=true;
         } else {
             board.getHearts().remove(theLikeStatus.get());
             heartRepository.deleteHeart(theLikeStatus.get());
@@ -62,12 +63,14 @@ public class HeartServiceImpl implements HeartService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Heart> findLikingBoards(String memberId) {
         Member member = memberService.findMemberById(memberId);
         return heartRepository.findLikingBoards(member);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Heart> findLikingMembers(Long boardId) {
         Board board = boardService.findBoardById(boardId);
         return heartRepository.findLikingMembers(board);
