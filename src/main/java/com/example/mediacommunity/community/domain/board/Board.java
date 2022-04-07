@@ -1,6 +1,7 @@
 package com.example.mediacommunity.community.domain.board;
 
 import com.example.mediacommunity.community.domain.BaseTimeEntity;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
 import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
@@ -73,7 +74,7 @@ public class Board extends BaseTimeEntity {
         this.boardCategory = bc;
     }
 
-    public static Board convertBoardAddingDtoToBoard(BoardAddingDto boardDto, Member member, BoardCategory category) {
+    public static Board convertBoardRequestDtoToBoard(BoardRequestDto boardDto, Member member, BoardCategory category) {
         Board board = new Board();
         BeanUtils.copyProperties(boardDto, board);
         board.setMember(member);
@@ -81,20 +82,18 @@ public class Board extends BaseTimeEntity {
         return board;
     }
 
-    public void updateBoardWithDto(BoardAddingDto updateParam, BoardCategory category) {
-        BeanUtils.copyProperties(updateParam, this);
+    public void updateBoardWithDto(BoardRequestDto updateParams, BoardCategory category) {
+        BeanUtils.copyProperties(updateParams, this);
         this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         this.boardCategory = category;
     }
 
-    public BoardInfoDto convertBoardToBoardInfoDto() {
+    public BoardDto convertBoardToBoardDto() {
         String writer = checkAnomymousStatus();
-        BoardInfoDto boardInfoDto = new BoardInfoDto();
-        BeanUtils.copyProperties(this, boardInfoDto);
-        boardInfoDto.setWriter(writer);
-        System.out.println(boardInfoDto);
-
-        return boardInfoDto;
+        BoardDto boardDto = new BoardDto();
+        BeanUtils.copyProperties(this, boardDto);
+        boardDto.setWriter(writer);
+        return boardDto;
     }
 
     private String checkAnomymousStatus() {

@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BoardInfoDto {
+public class BoardDto {
     private Long id;
     private String content;
     private Timestamp createdAt;

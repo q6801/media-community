@@ -1,4 +1,4 @@
-package com.example.mediacommunity.community.domain.board;
+package com.example.mediacommunity.community.domain.category;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -2,7 +2,7 @@ package com.example.mediacommunity.community.service.heart;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
-import com.example.mediacommunity.community.domain.heart.HeartInfoDto;
+import com.example.mediacommunity.community.domain.heart.HeartDto;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
@@ -39,7 +39,7 @@ public class HeartServiceImpl implements HeartService{
      * @return HeartInfoDto
      */
     @Override
-    public HeartInfoDto toggleTheHeart(Long boardId, String memberId) {
+    public HeartDto toggleTheHeart(Long boardId, String memberId) {
         Board board = boardService.findBoardById(boardId);
         Member member = memberService.findMemberById(memberId);
         Optional<Heart> theLikeStatus = heartRepository.findTheHeart(board, member);
@@ -59,7 +59,7 @@ public class HeartServiceImpl implements HeartService{
             pushed= false;
         }
 
-        return new HeartInfoDto(board.getHeartCnt(), pushed);
+        return new HeartDto(board.getHeartCnt(), pushed);
     }
 
     @Override

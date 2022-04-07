@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HeartInfoDto {
+public class HeartDto {
     private int heartCnt;
     private Boolean pushed;
 }

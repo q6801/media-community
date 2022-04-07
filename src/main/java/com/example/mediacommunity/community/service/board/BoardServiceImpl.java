@@ -1,6 +1,8 @@
 package com.example.mediacommunity.community.service.board;
 
 import com.example.mediacommunity.community.domain.board.*;
+import com.example.mediacommunity.community.domain.category.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.Pagination;
@@ -58,7 +60,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public boolean modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam, String memberId) {
+    public boolean modifyBoardUsingDto(Long boardIdx, BoardRequestDto updateParam, String memberId) {
         Member member = memberService.findMemberById(memberId);
         Board board = boardRepository.findBoardById(boardIdx);
         BoardCategory category = boardCategoryService.findById(updateParam.getCategory());

@@ -3,6 +3,8 @@ package com.example.mediacommunity.community.controller.board;
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.NotAllowedAccessException;
 import com.example.mediacommunity.community.domain.board.*;
+import com.example.mediacommunity.community.domain.category.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.service.Pagination;
 import com.example.mediacommunity.community.service.board.BoardService;
@@ -37,8 +39,8 @@ public class BoardController {
         pagination.pageInfo(page, totalBoardsNum);
         List<Board> boards = boardService.findBoards(pagination, category, BoardOrderCriterion.CREATED);
         System.out.println(boards);
-        List<BoardInfoDto> boardInfoDtos = boards.stream()
-                .map(Board::convertBoardToBoardInfoDto)
+        List<BoardDto> boardInfoDtos = boards.stream()
+                .map(Board::convertBoardToBoardDto)
                 .collect(Collectors.toList());
 
         Map<String, Object> map = new HashMap<>();
@@ -56,8 +58,8 @@ public class BoardController {
         pagination.pageInfo(page, totalBoardsNum);
         List<Board> boards = boardService.findBoards(pagination, category, boardOrderCriterion);
 
-        List<BoardInfoDto> boardInfoDtos = boards.stream()
-                .map(Board::convertBoardToBoardInfoDto)
+        List<BoardDto> boardInfoDtos = boards.stream()
+                .map(Board::convertBoardToBoardDto)
                 .collect(Collectors.toList());
 
         Map<String, Object> map = new HashMap<>();
@@ -67,17 +69,17 @@ public class BoardController {
     }
 
     @GetMapping("/board/{boardIdx}")
-    public BoardInfoDto board(@PathVariable long boardIdx) {
+    public BoardDto board(@PathVariable long boardIdx) {
         Board board = boardService.increaseViewCnt(boardIdx);
-        return board.convertBoardToBoardInfoDto();
+        return board.convertBoardToBoardDto();
     }
 
     @PostMapping("/board")
-    public ResponseEntity<?> addBoard(@RequestBody BoardAddingDto boardDto, @AuthenticationPrincipal UserInfo userInfo) {
+    public ResponseEntity<?> addBoard(@RequestBody BoardRequestDto boardDto, @AuthenticationPrincipal UserInfo userInfo) {
         Member member = memberService.findMemberById(userInfo.getUsername());
         BoardCategory category = boardService.findCategory(boardDto.getCategory());
 
-        Board board = Board.convertBoardAddingDtoToBoard(boardDto, member, category);
+        Board board = Board.convertBoardRequestDtoToBoard(boardDto, member, category);
         boardService.save(board);
 
         Map<String, Long> result = new HashMap<>();
@@ -86,7 +88,7 @@ public class BoardController {
     }
 
     @PutMapping("/board/{boardIdx}")
-    public ResponseEntity<?> editBoard(@RequestBody BoardAddingDto boardDto, @PathVariable Long boardIdx,
+    public ResponseEntity<?> editBoard(@RequestBody BoardRequestDto boardDto, @PathVariable Long boardIdx,
                                        @AuthenticationPrincipal UserInfo userInfo) {
         if (boardService.modifyBoardUsingDto(boardIdx, boardDto, userInfo.getUsername())) {
             return ResponseEntity.status(HttpStatus.CREATED).build();

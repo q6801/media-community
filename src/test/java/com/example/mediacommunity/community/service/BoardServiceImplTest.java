@@ -1,8 +1,8 @@
 package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardAddingDto;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
+import com.example.mediacommunity.community.domain.board.BoardRequestDto;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.board.BoardCategoryService;
@@ -72,7 +72,7 @@ class BoardServiceImplTest {
         String updatedContent = "updated content";
         Board board0 = getStubBoardList().get(0);
         Member writer = board0.getMember();
-        BoardAddingDto board0Alpha = new BoardAddingDto("title", updatedContent, "community", false);
+        BoardRequestDto board0Alpha = new BoardRequestDto("title", updatedContent, "community", false);
         given(boardRepository.findBoardById(board0.getId()))
                 .willReturn(board0);
         given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);

@@ -4,7 +4,7 @@ import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.UserInfoNotFoundException;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
-import com.example.mediacommunity.community.domain.member.MemberInfoDto;
+import com.example.mediacommunity.community.domain.member.MemberDto;
 import com.example.mediacommunity.community.domain.member.SignUpDto;
 import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
@@ -27,12 +27,12 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/member")
-    public MemberInfoDto member(@AuthenticationPrincipal UserInfo userInfo) {
+    public MemberDto member(@AuthenticationPrincipal UserInfo userInfo) {
         if (userInfo == null) {
             throw new UserInfoNotFoundException(ExceptionEnum.USER_INFO_NOT_FOUND);
         }
         Member member = memberService.findMemberById(userInfo.getUsername());
-        return new MemberInfoDto(member.getLoginId(), member.getEmail(),
+        return new MemberDto(member.getLoginId(), member.getEmail(),
                 member.getNickname(), member.getImageUrl());
     }
 

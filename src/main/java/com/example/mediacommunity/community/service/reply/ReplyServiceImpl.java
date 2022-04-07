@@ -3,7 +3,7 @@ package com.example.mediacommunity.community.service.reply;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
-import com.example.mediacommunity.community.domain.reply.ReplyInputDto;
+import com.example.mediacommunity.community.domain.reply.ReplyRequestDto;
 import com.example.mediacommunity.community.repository.reply.ReplyRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.member.MemberService;
@@ -48,7 +48,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public Reply modifyReply(Long replyId, ReplyInputDto replyDto, String memberId) {
+    public Reply modifyReply(Long replyId, ReplyRequestDto replyDto, String memberId) {
         Member member = memberService.findMemberById(memberId);
         Reply reply = replyRepository.findReplyById(replyId);
 

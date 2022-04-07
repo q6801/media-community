@@ -1,10 +1,10 @@
 package com.example.mediacommunity.community.controller;
 
-import com.example.mediacommunity.community.domain.board.BoardAddingDto;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
-import com.example.mediacommunity.community.domain.heart.HeartInfoDto;
+import com.example.mediacommunity.community.domain.board.BoardRequestDto;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
+import com.example.mediacommunity.community.domain.heart.HeartDto;
 import com.example.mediacommunity.community.domain.member.SignUpDto;
-import com.example.mediacommunity.community.domain.reply.ReplyInputDto;
+import com.example.mediacommunity.community.domain.reply.ReplyRequestDto;
 import com.example.mediacommunity.community.service.board.BoardCategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,7 +57,7 @@ public class IntegrationAPITest {
     public void addAndEditAndDeleteBoard() throws Exception {
         MvcResult mvcResult = createBoardWithTest();
         int boardIdx = getBoardIdx(mvcResult);
-        BoardAddingDto boardEditingDto = new BoardAddingDto("newTitle", "newContent", "testCategory", false);
+        BoardRequestDto boardEditingDto = new BoardRequestDto("newTitle", "newContent", "testCategory", false);
 
         mockMvc.perform(
                 put("/board/" + boardIdx)
@@ -75,7 +75,7 @@ public class IntegrationAPITest {
         BoardCategory bc = new BoardCategory("testCategory");
         boardCategoryService.save(bc);
 
-        BoardAddingDto boardAddingDto = new BoardAddingDto("title", "content", "testCategory", false);
+        BoardRequestDto boardAddingDto = new BoardRequestDto("title", "content", "testCategory", false);
         return mockMvc.perform(
                 post("/board")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -101,8 +101,8 @@ public class IntegrationAPITest {
         MvcResult hearts = mockMvc.perform(get("/boardInfo/" + boardIdx + "/hearts")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();
-        HeartInfoDto heartInfoDto0 = objectMapper.readValue(
-                hearts.getResponse().getContentAsString(), HeartInfoDto.class);
+        HeartDto heartInfoDto0 = objectMapper.readValue(
+                hearts.getResponse().getContentAsString(), HeartDto.class);
 
         assertThat(heartInfoDto0.getHeartsCnt()).isEqualTo(0);
         assertThat(heartInfoDto0.getPushed()).isEqualTo(false);
@@ -111,8 +111,8 @@ public class IntegrationAPITest {
         MvcResult hitTheLikeButton = mockMvc.perform(put("/board/" + boardIdx + "/heart")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk()).andReturn();
-        HeartInfoDto heartInfoDto1 = objectMapper.readValue(
-                hitTheLikeButton.getResponse().getContentAsString(), HeartInfoDto.class);
+        HeartDto heartInfoDto1 = objectMapper.readValue(
+                hitTheLikeButton.getResponse().getContentAsString(), HeartDto.class);
 
         assertThat(heartInfoDto1.getHeartsCnt()).isEqualTo(1);
         assertThat(heartInfoDto1.getPushed()).isEqualTo(true);
@@ -123,7 +123,7 @@ public class IntegrationAPITest {
     public void replyController() throws Exception {
         MvcResult board = createBoardWithTest();
         int boardIdx = getBoardIdx(board);
-        ReplyInputDto replyInputDto = new ReplyInputDto("content");
+        ReplyRequestDto replyInputDto = new ReplyRequestDto("content");
 
         //  post reply
         mockMvc.perform(get("/board/" + boardIdx + "/replies")
