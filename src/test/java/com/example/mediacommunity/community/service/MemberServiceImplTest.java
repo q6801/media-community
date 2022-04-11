@@ -75,11 +75,11 @@ class MemberServiceImplTest {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         return Arrays.asList(
                 Board.builder().content("start content")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(1).title("title").build(),
+                        .updatedAt(timestamp)
+                        .title("title").build(),
                 Board.builder().content("start 2")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(10).title("title").build(),
+                        .updatedAt(timestamp)
+                        .title("title").build(),
                 Board.builder().build()
         );
     }
