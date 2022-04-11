@@ -46,7 +46,7 @@ public class HeartServiceImpl implements HeartService{
         boolean pushed;
 
         if (theLikeStatus.isEmpty()) {
-            Heart heart = Heart.builder().build();
+            Heart heart = new Heart();
             heart.setBoard(board);
             heart.setMember(member);
             heartRepository.addHeart(heart);
