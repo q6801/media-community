@@ -113,25 +113,6 @@ class HeartServiceImplTest {
         assertThat(likingMembers.size()).isEqualTo(1);
     }
 
-    @Test
-    public void cntHearts() {
-        //given
-        Board board = getStubBoardList().get(0);
-        given(boardService.findBoardById(board.getId())).willReturn(board);
-        given(heartRepository.cntHearts(board)).willReturn(
-                Long.valueOf(
-                    getStubHearts().stream()
-                    .filter(heart -> heart.getBoard().equals(board))
-                    .collect(Collectors.toList())
-                    .size()
-                )
-        );
-        //when
-        Long numOfHearts = heartService.cntHearts(board.getId());
-        //then
-        assertThat(numOfHearts).isEqualTo(1);
-    }
-
 
     private List<Board> getStubBoardList() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
