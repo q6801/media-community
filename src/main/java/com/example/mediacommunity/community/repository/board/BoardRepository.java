@@ -1,7 +1,8 @@
 package com.example.mediacommunity.community.repository.board;
 
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
+import com.example.mediacommunity.community.domain.board.BoardOrderCriterion;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.service.Pagination;
 
@@ -11,7 +12,7 @@ public interface BoardRepository {
     Board save(Board board);
     Board findBoardById(Long id);
     List<Board> findByWriterId(Member member);
-    List<Board> findBoards(Pagination pagination, String category);
+    List<Board> findBoards(Pagination pagination, String category, BoardOrderCriterion orderCriterion);
     List<Board> findAll();
     void update(Long BoardIdx, Board updateParam);
     void increaseViewCnt(Long id, int viewCnt);

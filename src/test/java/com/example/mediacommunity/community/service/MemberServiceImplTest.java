@@ -75,11 +75,11 @@ class MemberServiceImplTest {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         return Arrays.asList(
                 Board.builder().content("start content")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(1).title("title").build(),
+                        .updatedAt(timestamp)
+                        .title("title").build(),
                 Board.builder().content("start 2")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(10).title("title").build(),
+                        .updatedAt(timestamp)
+                        .title("title").build(),
                 Board.builder().build()
         );
     }
@@ -88,12 +88,10 @@ class MemberServiceImplTest {
         return Arrays.asList(
                 Member.builder()
                         .loginId("test121")
-                        .imageUrl("")
                         .nickname("test1!")
                         .password("password0").build(),
                 Member.builder()
                         .loginId("test1232")
-                        .imageUrl("")
                         .nickname("test!")
                         .password("password1").build()
         );

@@ -3,8 +3,8 @@ package com.example.mediacommunity.community.controller.board;
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.UserInfoNotFoundException;
 import com.example.mediacommunity.community.domain.reply.Reply;
-import com.example.mediacommunity.community.domain.reply.ReplyInfoDto;
-import com.example.mediacommunity.community.domain.reply.ReplyInputDto;
+import com.example.mediacommunity.community.domain.reply.ReplyDto;
+import com.example.mediacommunity.community.domain.reply.ReplyRequestDto;
 import com.example.mediacommunity.community.service.reply.ReplyService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -18,27 +18,28 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping("board/{boardIdx}/replies")
-    public List<ReplyInfoDto> replies(@PathVariable long boardIdx) {
+    public List<ReplyDto> replies(@PathVariable long boardIdx) {
         List<Reply> allReplies = replyService.findAllReplies(boardIdx);
         return allReplies.stream().map(reply -> reply.convertReplyToReplyInfoDto())
                 .collect(Collectors.toList());
     }
     
     @PostMapping("board/{boardId}/reply")
-    public ReplyInfoDto addReply(@RequestBody ReplyInputDto replyDto, @PathVariable Long boardId,
-                                @AuthenticationPrincipal UserInfo userInfo) {
+    public ReplyDto addReply(@RequestBody ReplyRequestDto replyDto, @PathVariable Long boardId,
+                             @AuthenticationPrincipal UserInfo userInfo) {
         checkUserAccount(userInfo);
         Reply reply = replyService.reply(boardId, userInfo.getUsername(), replyDto.getContent());
         return reply.convertReplyToReplyInfoDto();
     }
 
     @PutMapping("reply/{replyId}")
-    public ReplyInfoDto putReply(@RequestBody ReplyInputDto replyDto,
-                              @AuthenticationPrincipal UserInfo userInfo, @PathVariable Long replyId) {
+    public ReplyDto putReply(@RequestBody ReplyRequestDto replyDto,
+                             @AuthenticationPrincipal UserInfo userInfo, @PathVariable Long replyId) {
         checkUserAccount(userInfo);
         Reply reply = replyService.modifyReply(replyId, replyDto, userInfo.getUsername());
         return reply.convertReplyToReplyInfoDto();

@@ -1,7 +1,7 @@
 let board_id = window.location.pathname.split('/')[2]
 
 // BOARD
-axios.get('/boardInfo/' + board_id)
+axios.get('/api/board/' + board_id)
 .then(function(res) {
     let board = res.data
     console.log('board : ' +  res.data)
@@ -53,7 +53,7 @@ axios.get('/boardInfo/' + board_id)
     deleteBtn.setAttribute('class', 'btn btn-outline-secondary')
     deleteBtn.innerText = '글 삭제'
     deleteBtn.addEventListener('click', function() {
-        axios.delete('/board/' + board_id)
+        axios.delete('/api/board/' + board_id)
             .then(function() {
                 window.location.replace('/articles/community')
             }).catch(function(err) {
@@ -70,7 +70,7 @@ axios.get('/boardInfo/' + board_id)
 })
 
 // HEART
-axios.get('/boardInfo/' + board_id + '/hearts')
+axios.get('/api/board/' + board_id + '/hearts')
     .then(function(res) {
         console.log(res.data)
 
@@ -84,10 +84,10 @@ axios.get('/boardInfo/' + board_id + '/hearts')
         } else {
             button.setAttribute('class', 'btn btn-outline-secondary')
         }
-        button.innerText = '좋아요 수 : ' + hearts.heartsCnt
+        button.innerText = '좋아요 수 : ' + hearts.heartCnt
 
         button.addEventListener('click', function () {
-            axios.put('/board/' + board_id + '/heart')
+            axios.put('/api/board/' + board_id + '/heart')
                 .then(function(response) {
                     console.log('pushed : ' + response.data)
                     let pushedHeart = response.data
@@ -98,7 +98,7 @@ axios.get('/boardInfo/' + board_id + '/hearts')
                     } else {
                         button.setAttribute('class', 'btn btn-outline-secondary')
                     }
-                    button.innerText = '좋아요 수 : ' + pushedHeart.heartsCnt
+                    button.innerText = '좋아요 수 : ' + pushedHeart.heartCnt
                 })
                 .catch(function(err) {
                     console.log('err : ' +  err.response.data.errorCode)
@@ -111,7 +111,7 @@ axios.get('/boardInfo/' + board_id + '/hearts')
     })
 
 // REPLY들
-axios.get('/board/' + board_id + '/replies')
+axios.get('/api/board/' + board_id + '/replies')
 .then(function(res) {
     console.log(res.data)
 
@@ -120,7 +120,7 @@ axios.get('/board/' + board_id + '/replies')
     let total_div = document.createElement('div')
     replyInfo.appendChild(total_div)
 
-    axios.get('/memberInfo')
+    axios.get('/api/member')
         .then(function(memberRes) {
             for(idx in replies) {
                 let reply = replies[idx]
@@ -151,7 +151,7 @@ axios.get('/board/' + board_id + '/replies')
                     button_deletion.innerText = '삭제'
                     button_deletion.setAttribute('style', 'float:right;')
                     button_deletion.addEventListener('click', function() {
-                        axios.delete("/reply/" + reply.id)
+                        axios.delete("/api/reply/" + reply.id)
                         .then(function(res) {
                             window.location.reload()
                         })
@@ -197,7 +197,7 @@ let submit_reply = function(e) {
     let reply_content_dom = document.querySelector('#reply-content')
     let reply_content = reply_content_dom.value
 
-    let url = board_id + '/reply'
+    let url = '/api/board/' + board_id + '/reply'
 
     axios.post(url, {
         content: reply_content
@@ -231,7 +231,7 @@ let submit_reply = function(e) {
         button_deletion.innerText = '삭제'
         button_deletion.setAttribute('style', 'float:right;')
         button_deletion.addEventListener('click', function() {
-            axios.delete("/reply/" + reply.id)
+            axios.delete("/api/reply/" + reply.id)
             .then(function(res) {
                 window.location.reload()
             })

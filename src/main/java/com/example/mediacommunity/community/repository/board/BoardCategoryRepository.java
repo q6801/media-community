@@ -1,6 +1,6 @@
 package com.example.mediacommunity.community.repository.board;
 
-import com.example.mediacommunity.community.domain.board.BoardCategory;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

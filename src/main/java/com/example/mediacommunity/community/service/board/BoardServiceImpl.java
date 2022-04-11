@@ -1,9 +1,8 @@
 package com.example.mediacommunity.community.service.board;
 
-import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardAddingDto;
-import com.example.mediacommunity.community.domain.board.BoardCategoriesDto;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
+import com.example.mediacommunity.community.domain.board.*;
+import com.example.mediacommunity.community.domain.category.BoardCategoriesDto;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.Pagination;
@@ -13,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,29 +30,37 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Board findBoardById(Long id) {
         return boardRepository.findBoardById(id);
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<Board> findByWriterId(String writerId) {
         Member member = memberService.findMemberById(writerId);
         return boardRepository.findByWriterId(member);
     }
 
     @Override
-    public List<Board> findBoards(Pagination pagination, String category) {
-        return boardRepository.findBoards(pagination, category);
+    @Transactional(readOnly = true)
+    public List<Board> findBoards(Pagination pagination, String category, BoardOrderCriterion orderCriterion) {
+        List<Board> boards = boardRepository.findBoards(pagination, category, orderCriterion);
+        if (boards==null) {
+            return new ArrayList<>();
+        }
+        return boards;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Board> findAllBoards() {
         return boardRepository.findAll();
     }
 
     @Override
-    public boolean modifyBoardUsingDto(Long boardIdx, BoardAddingDto updateParam, String memberId) {
+    public boolean modifyBoardUsingDto(Long boardIdx, BoardRequestDto updateParam, String memberId) {
         Member member = memberService.findMemberById(memberId);
         Board board = boardRepository.findBoardById(boardIdx);
         BoardCategory category = boardCategoryService.findById(updateParam.getCategory());
@@ -65,8 +73,10 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void increaseViewCnt(Long id, int viewCnt) {
-        boardRepository.findBoardById(id).increaseViewCnt();
+    public Board increaseViewCnt(long boardId) {
+        Board board = boardRepository.findBoardById(boardId);
+        board.increaseViewCnt();
+        return board;
     }
 
     @Override
@@ -82,11 +92,13 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int getTotalBoardsNum(String category) {
         return boardRepository.getTotalBoardsNum(category);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BoardCategoriesDto findAllCategories() {
         BoardCategoriesDto bc = new BoardCategoriesDto();
         bc.setCategories(boardRepository.findAllCategories());
@@ -94,6 +106,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BoardCategory findCategory(String categoryId) {
         return boardRepository.findCategory(categoryId);
     }

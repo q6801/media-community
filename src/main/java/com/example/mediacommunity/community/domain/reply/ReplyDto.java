@@ -1,13 +1,16 @@
 package com.example.mediacommunity.community.domain.reply;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
-public class ReplyInputDto {
+public class ReplyDto {
+    private Long id;
+    private String writer;
     private String content;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 }

@@ -1,8 +1,8 @@
 package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardAddingDto;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
+import com.example.mediacommunity.community.domain.board.BoardRequestDto;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.board.BoardCategoryService;
@@ -72,7 +72,7 @@ class BoardServiceImplTest {
         String updatedContent = "updated content";
         Board board0 = getStubBoardList().get(0);
         Member writer = board0.getMember();
-        BoardAddingDto board0Alpha = new BoardAddingDto("title", updatedContent, "community", false);
+        BoardRequestDto board0Alpha = new BoardRequestDto("title", updatedContent, "community", false);
         given(boardRepository.findBoardById(board0.getId()))
                 .willReturn(board0);
         given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
@@ -93,12 +93,10 @@ class BoardServiceImplTest {
         return Arrays.asList(
                 Member.builder()
                         .loginId("test121")
-                        .imageUrl("")
                         .nickname("test1!")
                         .password("password0").build(),
                 Member.builder()
                         .loginId("test1232")
-                        .imageUrl("")
                         .nickname("test!")
                         .password("password1").build()
         );
@@ -110,14 +108,14 @@ class BoardServiceImplTest {
         BoardCategory bc = new BoardCategory("community");
 
         Board board0 = Board.builder().content("start content")
-                .createdAt(timestamp).updatedAt(timestamp).viewCnt(1).title("title").build();
+                .updatedAt(timestamp).title("title").build();
         Board board1 = Board.builder().content("start 2")
-                .createdAt(timestamp).updatedAt(timestamp).viewCnt(10).title("title").build();
+                .updatedAt(timestamp).title("title").build();
 
         board0.setMember(getStubMemberList().get(0));
         board1.setMember(getStubMemberList().get(1));
-        board0.setCategory(bc);
-        board1.setCategory(bc);
+        board0.setBoardCategory(bc);
+        board1.setBoardCategory(bc);
 
         return Arrays.asList(
                 board0, board1

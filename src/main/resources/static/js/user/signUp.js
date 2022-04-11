@@ -5,7 +5,7 @@ let pw = document.querySelector('#password')
 let nickname = document.querySelector('#nickname')
 
 sign_up_btn.addEventListener('click', function() {
-    axios.post('/signup', {
+    axios.post('/api/signup', {
         loginId : id.value,
         password : pw.value,
         nickname : nickname.value

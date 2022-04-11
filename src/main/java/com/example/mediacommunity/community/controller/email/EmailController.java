@@ -2,7 +2,7 @@ package com.example.mediacommunity.community.controller.email;
 
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.BadValueException;
-import com.example.mediacommunity.community.service.EmailConfirmationTokenService;
+import com.example.mediacommunity.community.service.email.EmailConfirmationTokenService;
 import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class EmailController {
 
     private final EmailConfirmationTokenService emailTokenService;

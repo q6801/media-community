@@ -3,7 +3,7 @@ package com.example.mediacommunity.community.controller.streaming;
 import com.example.mediacommunity.community.domain.chat.MsgInfoDto;
 import com.example.mediacommunity.community.domain.chat.Room;
 import com.example.mediacommunity.community.domain.chat.RoomType;
-import com.example.mediacommunity.community.service.CallHandler;
+import com.example.mediacommunity.community.service.StreamingService;
 import com.example.mediacommunity.community.service.RoomServiceImpl;
 import com.example.mediacommunity.security.userInfo.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,11 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class StreamingRoomController {
 
     private final RoomServiceImpl roomServiceImpl;
-    private final CallHandler callHandler;
+    private final StreamingService streamingService;
 
     @GetMapping("/streaming-rooms")
     public List<Room> rooms(Model model) {

@@ -2,6 +2,7 @@ package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.domain.heart.HeartDto;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
@@ -68,10 +69,10 @@ class HeartServiceImplTest {
         given(memberService.findMemberById(member.getLoginId())).willReturn(member);
 
         //when
-        Boolean pushed = heartService.toggleTheHeart(board.getId(), member.getLoginId());
+        HeartDto heartDto = heartService.toggleTheHeart(board.getId(), member.getLoginId());
 
         //then
-        assertThat(pushed).isEqualTo(false);
+        assertThat(heartDto.getPushed()).isEqualTo(false);
     }
 
     @Test
@@ -113,35 +114,16 @@ class HeartServiceImplTest {
         assertThat(likingMembers.size()).isEqualTo(1);
     }
 
-    @Test
-    public void cntHearts() {
-        //given
-        Board board = getStubBoardList().get(0);
-        given(boardService.findBoardById(board.getId())).willReturn(board);
-        given(heartRepository.cntHearts(board)).willReturn(
-                Long.valueOf(
-                    getStubHearts().stream()
-                    .filter(heart -> heart.getBoard().equals(board))
-                    .collect(Collectors.toList())
-                    .size()
-                )
-        );
-        //when
-        Long numOfHearts = heartService.cntHearts(board.getId());
-        //then
-        assertThat(numOfHearts).isEqualTo(1);
-    }
-
 
     private List<Board> getStubBoardList() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         return Arrays.asList(
                 Board.builder().content("start content")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(1).title("title").build(),
+                        .updatedAt(timestamp)
+                        .title("title").build(),
                 Board.builder().content("start 2")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(10).title("title").build(),
+                        .updatedAt(timestamp)
+                        .title("title").build(),
                 Board.builder().build()
         );
     }
@@ -150,20 +132,18 @@ class HeartServiceImplTest {
         return Arrays.asList(
                 Member.builder()
                         .loginId("test121")
-                        .imageUrl("")
                         .nickname("test1!")
                         .password("password0").build(),
                 Member.builder()
                         .loginId("test1232")
-                        .imageUrl("")
                         .nickname("test!")
                         .password("password1").build()
         );
     }
 
     private List<Heart> getStubHearts() {
-        Heart heart0 = Heart.builder().build();
-        Heart heart1 = Heart.builder().build();
+        Heart heart0 = new Heart();
+        Heart heart1 = new Heart();
 
         heart0.setMember(getStubMemberList().get(0));
         heart0.setBoard(getStubBoardList().get(0));

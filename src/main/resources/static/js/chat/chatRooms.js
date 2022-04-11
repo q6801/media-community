@@ -4,7 +4,7 @@ if (page == null) {
     page = 1
 }
 
-axios.get('/chat-rooms?page=' + page)
+axios.get('/api/chat-rooms?page=' + page)
     .then(function(res) {
         console.log(res.data)
         let msgRooms = res.data.rooms

@@ -1,10 +1,12 @@
 package com.example.mediacommunity.community.domain.board;
 
 import com.example.mediacommunity.community.domain.BaseTimeEntity;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
 import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
 import lombok.*;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -14,8 +16,10 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @EqualsAndHashCode(exclude = {"member", "replies", "hearts", "boardCategory"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(exclude = {"member", "replies", "hearts", "boardCategory"})
 public class Board extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -23,8 +27,18 @@ public class Board extends BaseTimeEntity {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
+
+    @Setter(AccessLevel.NONE)
     private int viewCnt;
+
+    @Setter(AccessLevel.NONE)
+    private int replyCnt;
+
+    @Setter(AccessLevel.NONE)
+    private int heartCnt;
+
     private String title;
+
     private Boolean anonymous=false;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,11 +55,9 @@ public class Board extends BaseTimeEntity {
     private BoardCategory boardCategory;
 
     @Builder
-    private Board(String content, int viewCnt, String title, Timestamp createdAt, Timestamp updatedAt, Boolean anonymous) {
+    private Board(String content, String title, Timestamp updatedAt, Boolean anonymous) {
         this.content = content;
-        this.viewCnt = viewCnt;
         this.title = title;
-        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.anonymous = anonymous;
     }
@@ -58,38 +70,30 @@ public class Board extends BaseTimeEntity {
         member.getBoards().add(this);   // 주인이 아니라서 저장 시 사용 안됨
     }
 
-    public void setCategory(BoardCategory bc) {
+    public void setBoardCategory(BoardCategory bc) {
         this.boardCategory = bc;
     }
 
-    public static Board convertBoardAddingDtoToBoard(BoardAddingDto boardDto, Member member, BoardCategory category) {
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        Board board = Board.builder()
-                .content(boardDto.getContent())
-                .title(boardDto.getTitle())
-                .createdAt(timestamp)
-                .updatedAt(timestamp)
-                .viewCnt(0)
-                .anonymous(boardDto.getAnonymous())
-                .build();
+    public static Board convertBoardRequestDtoToBoard(BoardRequestDto boardDto, Member member, BoardCategory category) {
+        Board board = new Board();
+        BeanUtils.copyProperties(boardDto, board);
         board.setMember(member);
         board.boardCategory = category;
         return board;
     }
 
-    public void updateBoardWithDto(BoardAddingDto updateParam, BoardCategory category) {
+    public void updateBoardWithDto(BoardRequestDto updateParams, BoardCategory category) {
+        BeanUtils.copyProperties(updateParams, this);
         this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        this.content = updateParam.getContent();
-        this.title = updateParam.getTitle();
-        this.anonymous = updateParam.getAnonymous();
         this.boardCategory = category;
     }
 
-    public BoardInfoDto convertBoardToBoardInfoDto() {
+    public BoardDto convertBoardToBoardDto() {
         String writer = checkAnomymousStatus();
-        return new BoardInfoDto(this.id, this.content, this.createdAt,
-                this.updatedAt, this.viewCnt, this.title, writer, this.replies.size(),
-                this.anonymous, this.boardCategory.getId());
+        BoardDto boardDto = new BoardDto();
+        BeanUtils.copyProperties(this, boardDto);
+        boardDto.setWriter(writer);
+        return boardDto;
     }
 
     private String checkAnomymousStatus() {
@@ -102,7 +106,21 @@ public class Board extends BaseTimeEntity {
         return writer;
     }
 
-    public void increaseViewCnt() {
-        this.viewCnt += 1;
+    public void increaseViewCnt() { this.viewCnt += 1; }
+    public void increaseHeartCnt() {
+        this.heartCnt += 1;
+    }
+    public void decreaseHeartCnt() {
+        if(this.heartCnt > 0) {
+            this.heartCnt -= 1;
+        }
+    }
+    public void decreaseReplyCnt() {
+        if (this.replyCnt > 0) {
+            this.replyCnt -= 1;
+        }
+    }
+    public void increaseReplyCnt() {
+        this.replyCnt += 1;
     }
 }

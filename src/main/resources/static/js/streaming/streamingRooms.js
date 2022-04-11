@@ -1,4 +1,4 @@
-axios.get('/streaming-rooms')
+axios.get('/api/streaming-rooms')
     .then(function(res) {
         console.log(res.data)
 

@@ -20,11 +20,6 @@ public class AmazonS3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String searchIcon() {
-        String fileName = "static/img/searchicon.png";
-        return amazonS3.getUrl(bucket, fileName).toString();
-    }
-
     public String searchDefaultProfile() {
         String fileName = "static/img/default-profile.png";
         return amazonS3.getUrl(bucket, fileName).toString();

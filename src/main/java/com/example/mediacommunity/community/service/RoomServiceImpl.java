@@ -34,14 +34,17 @@ public class RoomServiceImpl {
         return room;
     }
 
+    @Transactional(readOnly = true)
     public Room findById(UUID roomId) {
         return roomRepository.findByRoomId(roomId);
     }
 
+    @Transactional(readOnly = true)
     public Optional<Room> findByPresenter(String username, RoomType roomType) {
         return roomRepository.findByPresenter(username, roomType);
     }
 
+    @Transactional(readOnly = true)
     public List<Room> findRoomsByType(RoomType roomType) {
         return roomRepository.findRoomsByType(roomType);
     }

@@ -19,6 +19,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class MsgRoomController {
     private final RoomServiceImpl roomService;
     private final Pagination pagination;

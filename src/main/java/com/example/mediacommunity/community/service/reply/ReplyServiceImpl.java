@@ -3,7 +3,7 @@ package com.example.mediacommunity.community.service.reply;
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.Reply;
-import com.example.mediacommunity.community.domain.reply.ReplyInputDto;
+import com.example.mediacommunity.community.domain.reply.ReplyRequestDto;
 import com.example.mediacommunity.community.repository.reply.ReplyRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.member.MemberService;
@@ -23,11 +23,7 @@ public class ReplyServiceImpl implements ReplyService {
     private final MemberService memberService;
 
     @Override
-    public Reply saveReply(Reply reply) {
-        return replyRepository.saveReply(reply);
-    }
-
-    @Override
+    @Transactional(readOnly = true)
     public List<Reply> findAllReplies(Long boardId) {
         Board board = boardService.findBoardById(boardId);
         return replyRepository.findAllReplies(board);
@@ -38,6 +34,7 @@ public class ReplyServiceImpl implements ReplyService {
         Board board = boardService.findBoardById(boardId);
         Member member = memberService.findMemberById(memberId);
         Reply reply = Reply.createReply(member, board, content);
+        board.increaseReplyCnt();
 
         replyRepository.saveReply(reply);
         return reply;
@@ -46,11 +43,12 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void deleteReply(Long replyId) {
         Reply reply = replyRepository.findReplyById(replyId);
+        reply.getBoard().decreaseReplyCnt();
         replyRepository.deleteReply(reply);
     }
 
     @Override
-    public Reply modifyReply(Long replyId, ReplyInputDto replyDto, String memberId) {
+    public Reply modifyReply(Long replyId, ReplyRequestDto replyDto, String memberId) {
         Member member = memberService.findMemberById(memberId);
         Reply reply = replyRepository.findReplyById(replyId);
 

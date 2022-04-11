@@ -2,15 +2,14 @@ package com.example.mediacommunity.community.domain.heart;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.member.Member;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
-@EqualsAndHashCode(exclude={"member", "board"})
 @Entity
+@NoArgsConstructor
+@EqualsAndHashCode(exclude={"member", "board"})
 public class Heart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +22,6 @@ public class Heart {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "boardId")
     private Board board;
-
-    @Builder
-    protected Heart() {}
 
     public void setMember(Member member) {
         if (this.member != null) {

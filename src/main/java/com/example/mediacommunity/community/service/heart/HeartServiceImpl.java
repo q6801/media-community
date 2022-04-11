@@ -2,6 +2,7 @@ package com.example.mediacommunity.community.service.heart;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.domain.heart.HeartDto;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
@@ -24,6 +25,7 @@ public class HeartServiceImpl implements HeartService{
     private final MemberService memberService;
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Heart> findTheHeart(Long boardId, String memberId) {
         Board board = boardService.findBoardById(boardId);
         Member member = memberService.findMemberById(memberId);
@@ -34,42 +36,43 @@ public class HeartServiceImpl implements HeartService{
      *
      * @param boardId
      * @param memberId
-     * @return heart pushed여부 (true면 이제 누른것)
+     * @return HeartInfoDto
      */
     @Override
-    public Boolean toggleTheHeart(Long boardId, String memberId) {
+    public HeartDto toggleTheHeart(Long boardId, String memberId) {
         Board board = boardService.findBoardById(boardId);
         Member member = memberService.findMemberById(memberId);
         Optional<Heart> theLikeStatus = heartRepository.findTheHeart(board, member);
+        boolean pushed;
 
         if (theLikeStatus.isEmpty()) {
-            Heart heart = Heart.builder().build();
+            Heart heart = new Heart();
             heart.setBoard(board);
             heart.setMember(member);
             heartRepository.addHeart(heart);
-            return true;
+            board.increaseHeartCnt();
+            pushed=true;
         } else {
             board.getHearts().remove(theLikeStatus.get());
             heartRepository.deleteHeart(theLikeStatus.get());
-            return false;
+            board.decreaseHeartCnt();
+            pushed= false;
         }
+
+        return new HeartDto(board.getHeartCnt(), pushed);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Heart> findLikingBoards(String memberId) {
         Member member = memberService.findMemberById(memberId);
         return heartRepository.findLikingBoards(member);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Heart> findLikingMembers(Long boardId) {
         Board board = boardService.findBoardById(boardId);
         return heartRepository.findLikingMembers(board);
-    }
-
-    @Override
-    public Long cntHearts(Long boardId) {
-        Board board = boardService.findBoardById(boardId);
-        return heartRepository.cntHearts(board);
     }
 }

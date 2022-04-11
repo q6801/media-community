@@ -4,7 +4,7 @@ import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.UserInfoNotFoundException;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
-import com.example.mediacommunity.community.domain.member.MemberInfoDto;
+import com.example.mediacommunity.community.domain.member.MemberDto;
 import com.example.mediacommunity.community.domain.member.SignUpDto;
 import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
@@ -22,22 +22,23 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api")
 public class MemberController {
     private final MemberService memberService;
 
-    @GetMapping("/memberInfo")
-    public MemberInfoDto member(@AuthenticationPrincipal UserInfo userInfo) {
+    @GetMapping("/member")
+    public MemberDto member(@AuthenticationPrincipal UserInfo userInfo) {
         if (userInfo == null) {
             throw new UserInfoNotFoundException(ExceptionEnum.USER_INFO_NOT_FOUND);
         }
         Member member = memberService.findMemberById(userInfo.getUsername());
-        return new MemberInfoDto(member.getLoginId(), member.getEmail(),
+        return new MemberDto(member.getLoginId(), member.getEmail(),
                 member.getNickname(), member.getImageUrl());
     }
 
     @PutMapping("/member")
-    public String editMemberInfo(@ModelAttribute MemberEditDto memberEditDto,
-                                 @AuthenticationPrincipal UserInfo userInfo) throws IOException {
+    public String editMember(@ModelAttribute MemberEditDto memberEditDto,
+                             @AuthenticationPrincipal UserInfo userInfo) throws IOException {
         String role = userInfo.getRole();
         System.out.println("role = " + role);
 

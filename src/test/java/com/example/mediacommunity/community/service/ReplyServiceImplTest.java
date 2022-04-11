@@ -52,11 +52,11 @@ class ReplyServiceImplTest {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         return Arrays.asList(
                 Board.builder().content("start content")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(1).title("title").build(),
+                        .updatedAt(timestamp)
+                        .title("title").build(),
                 Board.builder().content("start 2")
-                        .createdAt(timestamp).updatedAt(timestamp)
-                        .viewCnt(10).title("title").build(),
+                        .updatedAt(timestamp)
+                        .title("title").build(),
                 Board.builder().build()
         );
     }
@@ -65,22 +65,18 @@ class ReplyServiceImplTest {
         return Arrays.asList(
                 Member.builder()
                         .loginId("test121")
-                        .imageUrl("")
                         .nickname("test1!")
                         .password("password0").build(),
                 Member.builder()
                         .loginId("test1232")
-                        .imageUrl("")
                         .nickname("test!")
                         .password("password1").build()
         );
     }
 
     private List<Reply> getStubReplies() {
-        Reply reply0 = Reply.builder()
-                .content("hello world!!").build();
-        Reply reply1 = Reply.builder()
-                .content("hello world12!!").build();
+        Reply reply0 = new Reply("hello world!!");
+        Reply reply1 = new Reply("hello world12!!");
         return Arrays.asList(
                 reply0, reply1
         );

@@ -3,7 +3,8 @@ package com.example.mediacommunity.community.repository.board;
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.NotFoundPageException;
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardCategory;
+import com.example.mediacommunity.community.domain.category.BoardCategory;
+import com.example.mediacommunity.community.domain.board.BoardOrderCriterion;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.community.service.Pagination;
@@ -46,9 +47,12 @@ public class JpaBoardRepository implements BoardRepository {
     }
 
     @Override
-    public List<Board> findBoards(Pagination pagination, String category) {
+    public List<Board> findBoards(Pagination pagination, String category, BoardOrderCriterion orderCriterion) {
         try {
-            return em.createQuery("select b from Board b  where b.boardCategory.id=:category order by b.updatedAt desc", Board.class)
+            String sequence = "desc";
+            String sql = "select b from Board b where b.boardCategory.id=:category " +
+                    "order by b." + orderCriterion.getCode() + " " + sequence + ", b.createdAt desc";
+            return em.createQuery(sql)
                     .setParameter("category", category)
                     .setFirstResult(pagination.getStartingBoardNumInPage())
                     .setMaxResults(pagination.getOnePageBoardsNum())

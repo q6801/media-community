@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
-public class CallHandler {
+public class StreamingService {
     private static final Gson gson = new GsonBuilder().create();
 
     private final ConcurrentHashMap<String, StreamingUserRepository> presenters = new ConcurrentHashMap<>();

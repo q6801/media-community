@@ -1,5 +1,5 @@
 
-axios.get('/memberInfo')
+axios.get('/api/member')
     .then(function(res) {
         console.log('user info', res.data)
         let memberInfo = res.data
@@ -40,7 +40,7 @@ axios.get('/memberInfo')
             card_body.appendChild(btn)
 
             btn.addEventListener('click', function() {
-                axios.post('/email', {
+                axios.post('/api/email', {
                     email: email_input.value
                 }).then(function(res) {
                     window.location.replace('/confirm-email')
@@ -63,7 +63,7 @@ axios.get('/memberInfo')
 
         sign_out.addEventListener('click', function() {
             if (sign_out_input.value === 'sign out') {
-                axios.delete('/member')
+                axios.delete('/api/member')
                     .then(function(res) {
                         window.location.replace('/')
                     })

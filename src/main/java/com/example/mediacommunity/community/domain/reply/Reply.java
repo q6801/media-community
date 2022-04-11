@@ -7,8 +7,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -33,7 +31,6 @@ public class Reply extends BaseTimeEntity {
     @JoinColumn(name = "boardId")
     private Board board;
 
-    @Builder
     public Reply(String content) {
         this.content = content;
     }
@@ -55,18 +52,17 @@ public class Reply extends BaseTimeEntity {
     }
 
     public static Reply createReply(Member member, Board board, String content) {
-        Reply reply = Reply.builder()
-                .content(content).build();
+        Reply reply = new Reply(content);
         reply.setReplyer(member);
         reply.setBoard(board);
         return reply;
     }
 
-    public ReplyInfoDto convertReplyToReplyInfoDto() {
-        return new ReplyInfoDto(this.id, this.member.getNickname(), this.content, this.createdAt, this.updatedAt);
+    public ReplyDto convertReplyToReplyInfoDto() {
+        return new ReplyDto(this.id, this.member.getNickname(), this.content, this.createdAt, this.updatedAt);
     }
 
-    public void updateReplyWithDto(ReplyInputDto replyInputDto) {
+    public void updateReplyWithDto(ReplyRequestDto replyInputDto) {
         this.updatedAt = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         this.content = replyInputDto.getContent();
     }

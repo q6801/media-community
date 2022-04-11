@@ -14,7 +14,7 @@ edit_form.addEventListener('submit', function(e) {
 
     axios({
         method: 'put',
-        url: '/member',
+        url: '/api/member',
         data: formData
     }).then(function(res) {
         window.location.replace('/user')
