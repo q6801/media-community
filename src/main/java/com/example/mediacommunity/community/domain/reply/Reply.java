@@ -31,7 +31,6 @@ public class Reply extends BaseTimeEntity {
     @JoinColumn(name = "boardId")
     private Board board;
 
-    @Builder
     public Reply(String content) {
         this.content = content;
     }
@@ -53,8 +52,7 @@ public class Reply extends BaseTimeEntity {
     }
 
     public static Reply createReply(Member member, Board board, String content) {
-        Reply reply = Reply.builder()
-                .content(content).build();
+        Reply reply = new Reply(content);
         reply.setReplyer(member);
         reply.setBoard(board);
         return reply;
