@@ -43,23 +43,18 @@ public class Member {
     private List<EmailConfirmationToken> emailTokens = new ArrayList<>();
 
     @Builder
-    private Member(String loginId, String password, String nickname, String imageUrl) {
+    private Member(String loginId, String password, String nickname) {
         this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;
-        this.imageUrl = imageUrl;
     };
 
-    public void hidePassword() {
-        this.password="";
-    }
-
-    public static Member createLocalMember(SignUpDto signUpDto, PasswordEncoder encoder, String defaultImageUrl) {
+    public static Member createLocalMember(SignUpDto signUpDto, PasswordEncoder encoder) {
         Member member = Member.builder()
                 .loginId(signUpDto.getLoginId())
                 .password(encoder.encode(signUpDto.getPassword()))
                 .nickname(signUpDto.getNickname())
-                .imageUrl(defaultImageUrl).build();
+                .build();
 
         member.provider = "local";
         member.roleType = RoleType.GUEST;
