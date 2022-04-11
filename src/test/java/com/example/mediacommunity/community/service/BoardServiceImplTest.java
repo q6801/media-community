@@ -108,14 +108,14 @@ class BoardServiceImplTest {
         BoardCategory bc = new BoardCategory("community");
 
         Board board0 = Board.builder().content("start content")
-                .createdAt(timestamp).updatedAt(timestamp).viewCnt(1).title("title").build();
+                .updatedAt(timestamp).title("title").build();
         Board board1 = Board.builder().content("start 2")
-                .createdAt(timestamp).updatedAt(timestamp).viewCnt(10).title("title").build();
+                .updatedAt(timestamp).title("title").build();
 
         board0.setMember(getStubMemberList().get(0));
         board1.setMember(getStubMemberList().get(1));
-        board0.setCategory(bc);
-        board1.setCategory(bc);
+        board0.setBoardCategory(bc);
+        board1.setBoardCategory(bc);
 
         return Arrays.asList(
                 board0, board1
