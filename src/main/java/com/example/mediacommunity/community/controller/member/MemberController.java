@@ -37,8 +37,8 @@ public class MemberController {
     }
 
     @PutMapping("/member")
-    public String editMemberInfo(@ModelAttribute MemberEditDto memberEditDto,
-                                 @AuthenticationPrincipal UserInfo userInfo) throws IOException {
+    public String editMember(@ModelAttribute MemberEditDto memberEditDto,
+                             @AuthenticationPrincipal UserInfo userInfo) throws IOException {
         String role = userInfo.getRole();
         System.out.println("role = " + role);
 
