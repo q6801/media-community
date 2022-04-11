@@ -162,8 +162,8 @@ class HeartServiceImplTest {
     }
 
     private List<Heart> getStubHearts() {
-        Heart heart0 = Heart.builder().build();
-        Heart heart1 = Heart.builder().build();
+        Heart heart0 = new Heart();
+        Heart heart1 = new Heart();
 
         heart0.setMember(getStubMemberList().get(0));
         heart0.setBoard(getStubBoardList().get(0));

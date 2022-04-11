@@ -77,10 +77,8 @@ class ReplyServiceImplTest {
     }
 
     private List<Reply> getStubReplies() {
-        Reply reply0 = Reply.builder()
-                .content("hello world!!").build();
-        Reply reply1 = Reply.builder()
-                .content("hello world12!!").build();
+        Reply reply0 = new Reply("hello world!!");
+        Reply reply1 = new Reply("hello world12!!");
         return Arrays.asList(
                 reply0, reply1
         );
