@@ -49,13 +49,14 @@ public class Member {
         this.nickname = nickname;
     };
 
-    public static Member createLocalMember(SignUpDto signUpDto, PasswordEncoder encoder) {
+    public static Member createLocalMember(SignUpDto signUpDto, PasswordEncoder encoder, String imageUrl) {
         Member member = Member.builder()
                 .loginId(signUpDto.getLoginId())
                 .password(encoder.encode(signUpDto.getPassword()))
                 .nickname(signUpDto.getNickname())
                 .build();
 
+        member.setImageUrl(imageUrl);
         member.provider = "local";
         member.roleType = RoleType.GUEST;
         return member;
