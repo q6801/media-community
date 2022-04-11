@@ -65,8 +65,9 @@ public class Member {
         Member member = Member.builder()
                 .loginId(userInfo.getId())
                 .password("")
-                .nickname(userInfo.getId())
-                .imageUrl(userInfo.getImageUrl()).build();
+                .nickname(userInfo.getId()).build();
+
+        member.imageUrl = userInfo.getImageUrl();
         member.email = userInfo.getEmail();
         member.provider = providerName;
         member.roleType = RoleType.USER;
