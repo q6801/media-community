@@ -88,12 +88,10 @@ class MemberServiceImplTest {
         return Arrays.asList(
                 Member.builder()
                         .loginId("test121")
-                        .imageUrl("")
                         .nickname("test1!")
                         .password("password0").build(),
                 Member.builder()
                         .loginId("test1232")
-                        .imageUrl("")
                         .nickname("test!")
                         .password("password1").build()
         );
