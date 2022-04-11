@@ -2,6 +2,7 @@ package com.example.mediacommunity.community.service;
 
 import com.example.mediacommunity.community.domain.board.Board;
 import com.example.mediacommunity.community.domain.heart.Heart;
+import com.example.mediacommunity.community.domain.heart.HeartDto;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
@@ -68,10 +69,10 @@ class HeartServiceImplTest {
         given(memberService.findMemberById(member.getLoginId())).willReturn(member);
 
         //when
-        Boolean pushed = heartService.toggleTheHeart(board.getId(), member.getLoginId());
+        HeartDto heartDto = heartService.toggleTheHeart(board.getId(), member.getLoginId());
 
         //then
-        assertThat(pushed).isEqualTo(false);
+        assertThat(heartDto.getPushed()).isEqualTo(false);
     }
 
     @Test
