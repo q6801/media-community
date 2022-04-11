@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberService {
-    void encodeAndSave(SignUpDto signUpDto);
+    Member encodeAndSave(SignUpDto signUpDto);
     Member findMemberById(String loginId) ;
     Member findMemberByName(String nickName);
     List<Member> findAllMembers();

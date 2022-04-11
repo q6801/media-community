@@ -42,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public void encodeAndSave(SignUpDto signUpDto) {
+    public Member encodeAndSave(SignUpDto signUpDto) {
         if (signUpDto.getLoginId().isBlank() || signUpDto.getPassword().isBlank() || signUpDto.getNickname().isBlank()) {
             throw new BlankExistException(ExceptionEnum.BLANK_EXIST);
         }
@@ -60,6 +60,7 @@ public class MemberServiceImpl implements MemberService {
         Member localMember = Member.createLocalMember(signUpDto, passwordEncoder,
                 amazonS3Service.searchDefaultProfile());
         memberRepository.save(localMember);
+        return localMember;
     }
 
     @Override
