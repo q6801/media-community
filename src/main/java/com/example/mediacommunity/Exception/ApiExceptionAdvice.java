@@ -1,7 +1,7 @@
 package com.example.mediacommunity.Exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.example.mediacommunity.utils.ApiResult;
+import com.example.mediacommunity.utils.ApiUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ApiExceptionAdvice {
 
     @ExceptionHandler({CustomRuntimeException.class})
-    public ResponseEntity<ApiErrorResponse> exceptionHandler(CustomRuntimeException ex) {
-        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(ex.getError().getCode(), ex.getError().getMessage());
-        return new ResponseEntity<>(apiErrorResponse, HttpStatus.BAD_REQUEST);
+    public ApiResult<?> exceptionHandler(CustomRuntimeException ex) {
+        ApiResult<?> error = ApiUtils.error(ex);
+        return error;
     }
 }
