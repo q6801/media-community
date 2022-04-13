@@ -6,6 +6,8 @@ import com.example.mediacommunity.community.domain.heart.HeartDto;
 import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.heart.HeartService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
+import com.example.mediacommunity.utils.ApiResult;
+import com.example.mediacommunity.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -18,20 +20,21 @@ public class HeartController {
     private final BoardService boardService;
 
     @GetMapping("board/{boardIdx}/hearts")
-    public HeartDto hearts(@PathVariable long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
+    public ApiResult<HeartDto> hearts(@PathVariable long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
         int cnt = boardService.findBoardById(boardIdx).getHeartCnt();
         Boolean pushed = false;
         if (userInfo != null && heartService.findTheHeart(boardIdx, userInfo.getUsername()).isPresent()) {
             pushed = true;
         }
-        return new HeartDto(cnt, pushed);
+        return ApiUtils.success(new HeartDto(cnt, pushed));
     }
 
     @PutMapping("board/{boardIdx}/heart")
-    public HeartDto hitTheLikeButton(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long boardIdx) {
+    public ApiResult<HeartDto> hitTheLikeButton(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long boardIdx) {
         if (userInfo == null) {
             throw new UserInfoNotFoundException(ExceptionEnum.USER_INFO_NOT_FOUND);
         }
-        return heartService.toggleTheHeart(boardIdx, userInfo.getUsername());
+        HeartDto heartDto = heartService.toggleTheHeart(boardIdx, userInfo.getUsername());
+        return ApiUtils.success(heartDto);
     }
 }

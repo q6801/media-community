@@ -10,10 +10,10 @@ import com.example.mediacommunity.community.service.Pagination;
 import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
+import com.example.mediacommunity.utils.ApiResult;
+import com.example.mediacommunity.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +33,7 @@ public class BoardController {
     private final MemberService memberService;
 
     @GetMapping("/boards/{category}")
-    public Map<String, Object> boards(@RequestParam(defaultValue = "1") int page, @PathVariable String category) {
+    public ApiResult<BoardDtos> boards(@RequestParam(defaultValue = "1") int page, @PathVariable String category) {
         int totalBoardsNum = boardService.getTotalBoardsNum(category);
 
         pagination.pageInfo(page, totalBoardsNum);
@@ -43,14 +43,12 @@ public class BoardController {
                 .map(Board::convertBoardToBoardDto)
                 .collect(Collectors.toList());
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("boards", boardInfoDtos);
-        map.put("pagination", pagination);
-        return map;
+        BoardDtos boardDtos = new BoardDtos(boardInfoDtos, pagination);
+        return ApiUtils.success(boardDtos);
     }
 
     @PostMapping("/boards/{category}")
-    public Map<String, Object> changeBoardsOrder(@RequestParam(defaultValue = "1") int page, @PathVariable String category,
+    public ApiResult<BoardDtos> changeBoardsOrder(@RequestParam(defaultValue = "1") int page, @PathVariable String category,
                                       @RequestBody Map<String, String> input) {
         int totalBoardsNum = boardService.getTotalBoardsNum(category);
         BoardOrderCriterion boardOrderCriterion = BoardOrderCriterion.valueOf(input.get("type"));
@@ -62,20 +60,18 @@ public class BoardController {
                 .map(Board::convertBoardToBoardDto)
                 .collect(Collectors.toList());
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("boards", boardInfoDtos);
-        map.put("pagination", pagination);
-        return map;
+        BoardDtos boardDtos = new BoardDtos(boardInfoDtos, pagination);
+        return ApiUtils.success(boardDtos);
     }
 
     @GetMapping("/board/{boardIdx}")
-    public BoardDto board(@PathVariable long boardIdx) {
+    public ApiResult<BoardDto> board(@PathVariable long boardIdx) {
         Board board = boardService.increaseViewCnt(boardIdx);
-        return board.convertBoardToBoardDto();
+        return ApiUtils.success(board.convertBoardToBoardDto());
     }
 
     @PostMapping("/board")
-    public ResponseEntity<?> addBoard(@RequestBody BoardRequestDto boardDto, @AuthenticationPrincipal UserInfo userInfo) {
+    public ApiResult<Map<String, Long>> addBoard(@RequestBody BoardRequestDto boardDto, @AuthenticationPrincipal UserInfo userInfo) {
         Member member = memberService.findMemberById(userInfo.getUsername());
         BoardCategory category = boardService.findCategory(boardDto.getCategory());
 
@@ -84,29 +80,29 @@ public class BoardController {
 
         Map<String, Long> result = new HashMap<>();
         result.put("boardIdx", board.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        return ApiUtils.success(result);
     }
 
     @PutMapping("/board/{boardIdx}")
-    public ResponseEntity<?> editBoard(@RequestBody BoardRequestDto boardDto, @PathVariable Long boardIdx,
+    public ApiResult<?> editBoard(@RequestBody BoardRequestDto boardDto, @PathVariable Long boardIdx,
                                        @AuthenticationPrincipal UserInfo userInfo) {
         if (boardService.modifyBoardUsingDto(boardIdx, boardDto, userInfo.getUsername())) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ApiUtils.success(null);
         }
         throw new NotAllowedAccessException(ExceptionEnum.NOT_ALLOWED_ACCESS);
     }
 
 
     @DeleteMapping("/board/{boardIdx}")
-    public ResponseEntity<?> deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
+    public ApiResult<?> deleteBoard(@PathVariable Long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
         if(boardService.deleteBoard(boardIdx, userInfo.getUsername())) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ApiUtils.success(null);
         }
         throw new NotAllowedAccessException(ExceptionEnum.NOT_ALLOWED_ACCESS);
     }
 
     @GetMapping("/board-category")
-    public BoardCategoriesDto category() {
-        return boardService.findAllCategories();
+    public ApiResult<BoardCategoriesDto> category() {
+        return ApiUtils.success(boardService.findAllCategories());
     }
 }
