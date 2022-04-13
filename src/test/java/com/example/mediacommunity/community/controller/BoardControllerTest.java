@@ -87,7 +87,7 @@ public class BoardControllerTest extends BeforeTest{
                         .content(objectMapper.writeValueAsString(boardAddingDto))
         );
         result.andDo(print())
-                .andExpect(status().isCreated())
+                .andExpect(status().is2xxSuccessful())
                 .andExpect(handler().handlerType(BoardController.class))
                 .andExpect(handler().methodName("addBoard"));
     }
@@ -103,11 +103,11 @@ public class BoardControllerTest extends BeforeTest{
                 put("/api/board/" + createdBoardId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(boardEditingDto))
-        ).andExpect(status().isCreated());
+        ).andExpect(status().is2xxSuccessful());
 
         mockMvc.perform(
                 delete("/api/board/" + createdBoardId)
                         .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isNoContent());
+        ).andExpect(status().is2xxSuccessful());
     }
 }
