@@ -38,7 +38,6 @@ public class BoardController {
 
         pagination.pageInfo(page, totalBoardsNum);
         List<Board> boards = boardService.findBoards(pagination, category, BoardOrderCriterion.CREATED);
-        System.out.println(boards);
         List<BoardDto> boardInfoDtos = boards.stream()
                 .map(Board::convertBoardToBoardDto)
                 .collect(Collectors.toList());
