@@ -2,8 +2,10 @@ package com.example.mediacommunity.utils;
 
 import com.example.mediacommunity.Exception.CustomRuntimeException;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class ApiError {
     private String errorCode;
     private String errorMessage;

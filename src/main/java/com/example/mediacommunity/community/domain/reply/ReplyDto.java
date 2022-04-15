@@ -13,4 +13,11 @@ public class ReplyDto {
     private String content;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    @Override
+    public String toString() {
+        return "ReplyDto{" +
+                "id=" + id +
+                '}';
+    }
 }
