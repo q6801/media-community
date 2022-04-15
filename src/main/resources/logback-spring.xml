@@ -10,7 +10,7 @@
     <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
     <!-- log file path -->
 <!--    <property name="LOG_PATH" value="${log.config.path}"/>-->
-    <property name="LOG_PATH" value="./logs/local"/>
+    <property name="LOG_PATH" value="./logs"/>
     <!-- log file name -->
 <!--    <property name="LOG_FILE_NAME" value="${log.config.filename}"/>-->
     <property name="LOG_FILE_NAME" value="local_log"/>-->
