@@ -3,8 +3,7 @@ let board_id = window.location.pathname.split('/')[2]
 // BOARD
 axios.get('/api/board/' + board_id)
 .then(function(res) {
-    let board = res.data
-    console.log('board : ' +  res.data)
+    let board = res.data.response
 
     let boardInfo = document.querySelector('#board')
 
@@ -57,24 +56,24 @@ axios.get('/api/board/' + board_id)
             .then(function() {
                 window.location.replace('/articles/community')
             }).catch(function(err) {
-                console.log('err : ' +  err.response.data.errorCode)
-                console.log('err : ' +  err.response.data.errorMessage)
-                alert(err.response.data.errorMessage)
+//                console.log('err : ' +  err.response.data.errorCode)
+//                console.log('err : ' +  err.response.data.errorMessage)
+                alert(err.response.data.error.errorMessage)
             })
     })
 })
 .catch(function(err) {
-    console.log('err : ' +  err.response.data.errorCode)
-    console.log('err : ' +  err.response.data.errorMessage)
+//    console.log('err : ' +  err.response.data.errorCode)
+//    console.log('err : ' +  err.response.data.errorMessage)
     window.location.replace('/articles/community')
 })
 
 // HEART
 axios.get('/api/board/' + board_id + '/hearts')
     .then(function(res) {
-        console.log(res.data)
+        console.log(res.data.response)
 
-        let hearts = res.data
+        let hearts = res.data.response
         let heartInfo = document.querySelector('#hearts')
         let button = document.createElement('button')
         heartInfo.appendChild(button)
@@ -89,8 +88,8 @@ axios.get('/api/board/' + board_id + '/hearts')
         button.addEventListener('click', function () {
             axios.put('/api/board/' + board_id + '/heart')
                 .then(function(response) {
-                    console.log('pushed : ' + response.data)
-                    let pushedHeart = response.data
+                    console.log('pushed : ' + response.data.response)
+                    let pushedHeart = response.data.response
                     button.removeAttribute('class')
 
                     if (pushedHeart.pushed) {
@@ -101,10 +100,7 @@ axios.get('/api/board/' + board_id + '/hearts')
                     button.innerText = '좋아요 수 : ' + pushedHeart.heartCnt
                 })
                 .catch(function(err) {
-                    console.log('err : ' +  err.response.data.errorCode)
-                    console.log('err : ' +  err.response.data.errorMessage)
-
-                    alert(err.response.data.errorMessage)
+                    alert(err.response.data.error.errorMessage)
                 })
         })
 
@@ -115,7 +111,7 @@ axios.get('/api/board/' + board_id + '/replies')
 .then(function(res) {
     console.log(res.data)
 
-    let replies = res.data
+    let replies = res.data.response
     let replyInfo = document.querySelector('#replies')
     let total_div = document.createElement('div')
     replyInfo.appendChild(total_div)
@@ -142,11 +138,11 @@ axios.get('/api/board/' + board_id + '/replies')
                 hr = document.createElement('hr')
                 hr.setAttribute('class', 'mt-3 mb-3')
 
-                console.log('username', memberRes.data.nickname)
+                console.log('username', memberRes.data.response.nickname)
                 console.log('writer', reply.writer)
 
                 total_div.appendChild(container_div)
-                if (memberRes.data.nickname == reply.writer) {
+                if (memberRes.data.response.nickname == reply.writer) {
                     let button_deletion = document.createElement('button')
                     button_deletion.innerText = '삭제'
                     button_deletion.setAttribute('style', 'float:right;')
@@ -204,7 +200,7 @@ let submit_reply = function(e) {
     }).then(function(res) {
         reply_content_dom.value = ''
 
-        let reply = res.data
+        let reply = res.data.response
 
         let replyInfo = document.querySelector('#replies')
         let total_div = document.createElement('div')
@@ -243,10 +239,10 @@ let submit_reply = function(e) {
         total_div.appendChild(hr)
     })
     .catch(function(err) {
-        console.log('err : ' +  err.response.data.errorCode)
-        console.log('err : ' +  err.response.data.errorMessage)
+//        console.log('err : ' +  err.response.data.errorCode)
+//        console.log('err : ' +  err.response.data.errorMessage)
 
-        alert(err.response.data.errorMessage)
+        alert(err.response.data.error.errorMessage)
     })
 }
 add_reply_form.addEventListener('submit', submit_reply)

@@ -21,7 +21,7 @@ let quill = new Quill('#editor', {
 let category = document.querySelector('#category')
 axios.get('/api/board-category')
 .then(function(res) {
-  let categories = res.data.categories
+  let categories = res.data.response.categories
   console.log(res)
 
   for (c in categories) {
@@ -40,8 +40,7 @@ editBtn.addEventListener('click', post)
 
 axios.get('/api/board/' + board_id)
 .then(function(res) {
-    console.log('board : ' + res.data)
-    let board = res.data
+    let board = res.data.response
 
     let title = document.querySelector('#title')
 

@@ -18,14 +18,14 @@ sign_form.addEventListener('submit', function(e) {
     }).then(function(res) {
         window.location.replace('/')
     }).catch(function(err) {
-        console.log('err : ' +  err.response.data.errorCode)
-        console.log('err : ' +  err.response.data.errorMessage)
+//        console.log('err : ' +  err.response.data.errorCode)
+//        console.log('err : ' +  err.response.data.errorMessage)
 
         id.value = ''
         pw.value = ''
 
         let error_dom = document.querySelector('#error')
-        error_dom.innerText = err.response.data.errorMessage
+        error_dom.innerText = err.response.data.error.errorMessage
 
     })
 })

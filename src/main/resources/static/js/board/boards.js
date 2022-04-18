@@ -11,10 +11,10 @@ let categoryDom = document.querySelector('#category')
 axios.get('/api/boards/' + category + '?page=' + page)
 .then(function(res) {
     console.log('page : ', page)
-    console.log(res.data)
+    console.log(res.data.response)
 
-    let boards = res.data.boards
-    let pagination = res.data.pagination
+    let boards = res.data.response.boardInfoDtos
+    let pagination = res.data.response.pagination
 
     // boards
     let boards_dom = document.querySelector('#boards')
@@ -91,8 +91,7 @@ axios.get('/api/boards/' + category + '?page=' + page)
 
 axios.get('/api/board-category')
 .then(function(res) {
-    let categories = res.data.categories
-    console.log(res)
+    let categories = res.data.response.categories
 
     for (c in categories) {
         let li = document.createElement('li')
