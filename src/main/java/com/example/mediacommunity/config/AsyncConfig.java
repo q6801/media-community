@@ -1,5 +1,6 @@
 package com.example.mediacommunity.config;
 
+import com.example.mediacommunity.filter.LoggingTaskDecorator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -18,6 +19,7 @@ public class AsyncConfig extends AsyncConfigurerSupport {
         executor.setMaxPoolSize(10);
         executor.setQueueCapacity(500);
         executor.setThreadNamePrefix("hanumoka-async-");
+        executor.setTaskDecorator(new LoggingTaskDecorator());
         executor.initialize();
         return executor;
     }

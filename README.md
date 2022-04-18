@@ -53,3 +53,17 @@
 ```Bug Fixes```
 - 게시물에서 ql-editor 태그 부제로 에디터의 css 적용 안되던 것 수정
 - 회원탈퇴 안되던 것 수정 (delete cascade가 안 되어 있었음)
+
+---
+
+***version_1.3.0***
+
+```Changes```
+- 기본 정렬 상태를 createdAt으로 수정
+- 정렬 기준을 createdAt, viewCnt, replyCnt, heartCnt로 선택할 수 있고 
+  기준과 상관없이 createdAt을 2번째 기준으로 삼는다.
+  - 정렬은 API상에서만 구현되어있다. (아직 client가 선택 불가능)
+  - board table에 reply_cnt, heart_cnt 속성 추가 
+
+```Bug Fixes```
+- createdAt으로 정렬되지 않고 매번 정렬이 바뀌던 상황 해결

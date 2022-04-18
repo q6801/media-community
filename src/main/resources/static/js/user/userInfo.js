@@ -2,7 +2,7 @@
 axios.get('/api/member')
     .then(function(res) {
         console.log('user info', res.data)
-        let memberInfo = res.data
+        let memberInfo = res.data.response
         let user_dom = document.querySelector('#user-info')
         
         let card = document.createElement('div')

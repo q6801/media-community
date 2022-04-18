@@ -78,7 +78,7 @@ public class MemberControllerTest extends BeforeTest{
                 .content(objectMapper.writeValueAsString(signUpDto)));
 
         result.andDo(print())
-                .andExpect(status().isCreated())
+                .andExpect(status().is2xxSuccessful())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("signUp"));
     }
@@ -90,7 +90,7 @@ public class MemberControllerTest extends BeforeTest{
                 .contentType(MediaType.APPLICATION_JSON));
 
         result.andDo(print())
-                .andExpect(status().isNoContent())
+                .andExpect(status().is2xxSuccessful())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("signout"));
     }

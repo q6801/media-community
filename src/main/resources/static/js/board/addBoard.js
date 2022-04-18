@@ -21,7 +21,7 @@ let quill = new Quill('#editor', {
 let category = document.querySelector('#category')
 axios.get('/api/board-category')
 .then(function(res) {
-    let categories = res.data.categories
+    let categories = res.data.response.categories
     console.log(res)
 
     for (c in categories) {
@@ -51,9 +51,10 @@ function post(e) {
     ).then(function(res) {
         console.log(res.data)
 
-        window.location.replace('/board/' + res.data.boardIdx)
+        window.location.replace('/board/' + res.data.response.boardIdx)
     }).catch(function(err) {
         console.log(err);
+        alert(err.response.data.error.errorMessage)
     })
 }
 

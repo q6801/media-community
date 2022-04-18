@@ -9,11 +9,8 @@ import java.io.IOException;
 public class CustomXssFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        System.out.println(request.getContentType());
-
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         if (MediaType.APPLICATION_JSON_VALUE.equals(request.getContentType())) {
-            System.out.println(MediaType.APPLICATION_JSON_VALUE);
             HttpServletRequest requestWrapper = new RequestWrapper(httpRequest);
             chain.doFilter(requestWrapper, response);
         } else {

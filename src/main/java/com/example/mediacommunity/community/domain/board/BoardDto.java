@@ -1,9 +1,6 @@
 package com.example.mediacommunity.community.domain.board;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -23,4 +20,12 @@ public class BoardDto {
     private String writer;
     private boolean anonymous;
     private String category;
+
+
+    @Override
+    public String toString() {
+        return "BoardDto{" +
+                "id=" + id +
+                '}';
+    }
 }

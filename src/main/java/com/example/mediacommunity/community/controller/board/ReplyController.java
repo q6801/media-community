@@ -7,12 +7,13 @@ import com.example.mediacommunity.community.domain.reply.ReplyDto;
 import com.example.mediacommunity.community.domain.reply.ReplyRequestDto;
 import com.example.mediacommunity.community.service.reply.ReplyService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
+import com.example.mediacommunity.utils.ApiResult;
+import com.example.mediacommunity.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,34 +24,35 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping("board/{boardIdx}/replies")
-    public List<ReplyDto> replies(@PathVariable long boardIdx) {
+    public ApiResult<List<ReplyDto>> replies(@PathVariable long boardIdx) {
         List<Reply> allReplies = replyService.findAllReplies(boardIdx);
-        return allReplies.stream().map(reply -> reply.convertReplyToReplyInfoDto())
+        List<ReplyDto> replyDtos = allReplies.stream().map(reply -> reply.convertReplyToReplyInfoDto())
                 .collect(Collectors.toList());
+        return ApiUtils.success(replyDtos);
     }
     
     @PostMapping("board/{boardId}/reply")
-    public ReplyDto addReply(@RequestBody ReplyRequestDto replyDto, @PathVariable Long boardId,
-                             @AuthenticationPrincipal UserInfo userInfo) {
+    public ApiResult<ReplyDto> addReply(@Valid @RequestBody ReplyRequestDto replyDto, @PathVariable Long boardId,
+                                        @AuthenticationPrincipal UserInfo userInfo) {
         checkUserAccount(userInfo);
         Reply reply = replyService.reply(boardId, userInfo.getUsername(), replyDto.getContent());
-        return reply.convertReplyToReplyInfoDto();
+        return ApiUtils.success(reply.convertReplyToReplyInfoDto());
     }
 
     @PutMapping("reply/{replyId}")
-    public ReplyDto putReply(@RequestBody ReplyRequestDto replyDto,
-                             @AuthenticationPrincipal UserInfo userInfo, @PathVariable Long replyId) {
+    public ApiResult<ReplyDto> putReply(@Valid @RequestBody ReplyRequestDto replyDto,
+                                        @AuthenticationPrincipal UserInfo userInfo, @PathVariable Long replyId) {
         checkUserAccount(userInfo);
         Reply reply = replyService.modifyReply(replyId, replyDto, userInfo.getUsername());
-        return reply.convertReplyToReplyInfoDto();
+        return ApiUtils.success(reply.convertReplyToReplyInfoDto());
     }
 
 
     @DeleteMapping("reply/{replyId}")
-    public ResponseEntity<?> deleteReply(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long replyId) {
+    public ApiResult<?> deleteReply(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long replyId) {
         checkUserAccount(userInfo);
         replyService.deleteReply(replyId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ApiUtils.success(null);
     }
 
     private void checkUserAccount(@AuthenticationPrincipal UserInfo userInfo) {

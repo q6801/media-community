@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MsgRoomDto {
+public class MsgRoomRequestDto {
     private String roomName;
 }

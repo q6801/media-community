@@ -4,11 +4,11 @@ axios.get('/api/member')
         let user = document.querySelector('#user');
         let welcome = document.createElement('a')
 
-        welcome.innerText = response.data.nickname + '님 환영합니다.'
+        welcome.innerText = response.data.response.nickname + '님 환영합니다.'
         welcome.setAttribute('class', 'nav-link active')
         welcome.setAttribute('href', '/user')
 
-        
+
         let logout_btn = document.createElement('a');
 
         logout_btn.setAttribute('href', '/logout')
@@ -19,7 +19,8 @@ axios.get('/api/member')
         user.appendChild(logout_btn)
     })
     .catch(function(err) {
-        console.log('err : ' +  err.response.data.errorCode)
+        console.log(err)
+        console.log('err : ' +  err.response.data.error.errorCode)
         console.log('err : ' +  err.response.data.errorMessage)
 
         let user = document.querySelector('#user');

@@ -1,8 +1,9 @@
 package com.example.mediacommunity.security.handler;
 
-import com.example.mediacommunity.Exception.ApiErrorResponse;
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.security.BadProviderException;
+import com.example.mediacommunity.utils.ApiResult;
+import com.example.mediacommunity.utils.ApiUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -18,11 +19,8 @@ import java.io.IOException;
 @Component
 public class FormLoginFailureHandler implements AuthenticationFailureHandler {
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        Boolean idFail = false;
-        Boolean pwFail = false;
-        Boolean providerFail = false;
-
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                        AuthenticationException exception) throws IOException, ServletException {
         if (exception instanceof BadProviderException) {
             setResponse(response, ExceptionEnum.BAD_PROVIDER);
         } else if (exception instanceof InternalAuthenticationServiceException) {
@@ -36,10 +34,10 @@ public class FormLoginFailureHandler implements AuthenticationFailureHandler {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
-        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(exceptionEnum.getCode(), exceptionEnum.getMessage());
+        ApiResult<Object> error = ApiUtils.error(exceptionEnum.getCode(), exceptionEnum.getMessage());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String responseJson = objectMapper.writeValueAsString(apiErrorResponse);
+        String responseJson = objectMapper.writeValueAsString(error);
 
         response.getWriter().print(responseJson);
     }
