@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public class ReplyController {
     }
     
     @PostMapping("board/{boardId}/reply")
-    public ApiResult<ReplyDto> addReply(@RequestBody ReplyRequestDto replyDto, @PathVariable Long boardId,
+    public ApiResult<ReplyDto> addReply(@Valid @RequestBody ReplyRequestDto replyDto, @PathVariable Long boardId,
                                         @AuthenticationPrincipal UserInfo userInfo) {
         checkUserAccount(userInfo);
         Reply reply = replyService.reply(boardId, userInfo.getUsername(), replyDto.getContent());
@@ -39,7 +40,7 @@ public class ReplyController {
     }
 
     @PutMapping("reply/{replyId}")
-    public ApiResult<ReplyDto> putReply(@RequestBody ReplyRequestDto replyDto,
+    public ApiResult<ReplyDto> putReply(@Valid @RequestBody ReplyRequestDto replyDto,
                                         @AuthenticationPrincipal UserInfo userInfo, @PathVariable Long replyId) {
         checkUserAccount(userInfo);
         Reply reply = replyService.modifyReply(replyId, replyDto, userInfo.getUsername());

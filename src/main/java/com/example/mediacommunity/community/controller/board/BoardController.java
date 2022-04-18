@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class BoardController {
     }
 
     @PostMapping("/board")
-    public ApiResult<Map<String, Long>> addBoard(@RequestBody BoardRequestDto boardDto, @AuthenticationPrincipal UserInfo userInfo) {
+    public ApiResult<Map<String, Long>> addBoard(@Valid @RequestBody BoardRequestDto boardDto, @AuthenticationPrincipal UserInfo userInfo) {
         Member member = memberService.findMemberById(userInfo.getUsername());
         BoardCategory category = boardService.findCategory(boardDto.getCategory());
 
@@ -83,7 +84,7 @@ public class BoardController {
     }
 
     @PutMapping("/board/{boardIdx}")
-    public ApiResult<?> editBoard(@RequestBody BoardRequestDto boardDto, @PathVariable Long boardIdx,
+    public ApiResult<?> editBoard(@Valid @RequestBody BoardRequestDto boardDto, @PathVariable Long boardIdx,
                                        @AuthenticationPrincipal UserInfo userInfo) {
         if (boardService.modifyBoardUsingDto(boardIdx, boardDto, userInfo.getUsername())) {
             return ApiUtils.success(null);

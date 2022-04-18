@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -38,7 +39,7 @@ public class MemberController {
     }
 
     @PutMapping("/member")
-    public ApiResult<?> editMember(@ModelAttribute MemberEditDto memberEditDto,
+    public ApiResult<?> editMember(@Valid @ModelAttribute MemberEditDto memberEditDto,
                                         @AuthenticationPrincipal UserInfo userInfo) throws IOException {
         String role = userInfo.getRole();
         System.out.println("role = " + role);
@@ -50,7 +51,7 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ApiResult<Object> signUp(@RequestBody SignUpDto signUpDto) {
+    public ApiResult<Object> signUp(@Valid @RequestBody SignUpDto signUpDto) {
         memberService.encodeAndSave(signUpDto);
         return ApiUtils.success(null);
     }
