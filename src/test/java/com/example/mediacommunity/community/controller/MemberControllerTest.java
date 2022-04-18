@@ -1,7 +1,6 @@
 package com.example.mediacommunity.community.controller;
 
 import com.example.mediacommunity.community.controller.member.MemberController;
-import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
 import com.example.mediacommunity.community.domain.member.SignUpDto;
 import com.example.mediacommunity.community.service.member.MemberService;
@@ -13,14 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -58,10 +57,13 @@ public class MemberControllerTest extends BeforeTest{
     @Test
     @WithMockCustomUser
     public void editMember() throws Exception {
-        MemberEditDto memberEditDto = new MemberEditDto(null, "hello world");
-        ResultActions result = mockMvc.perform(put("/api/member")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(memberEditDto)));
+        MockMultipartHttpServletRequestBuilder builder = multipart("/api/member")
+                .part(new MockPart("nickname", "foo".getBytes(StandardCharsets.UTF_8)));
+        builder.with(request -> {
+            request.setMethod("PUT");
+            return request;
+        });
+        ResultActions result = mockMvc.perform(builder);
 
         result.andDo(print())
                 .andExpect(status().isOk())
