@@ -1,10 +1,13 @@
 package com.example.mediacommunity.community.domain.board;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardRequestDto {
     @NotBlank
     private String title;
@@ -17,7 +20,6 @@ public class BoardRequestDto {
 
     private Boolean anonymous;
 
-    public BoardRequestDto() {}
     public BoardRequestDto(String title, String content, String category, Boolean anonymous) {
         this.title = title;
         this.content = content;
