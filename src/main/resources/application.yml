@@ -27,8 +27,15 @@ spring:
           timeout: 5000
           writetimeout: 5000
 
-logging.level:
-  org.hibernate.SQL: debug
+logging:
+  level:
+    org.hibernate.SQL: debug
+    root: info
+
+log:
+  config:
+    path: /logs/local
+  filename: local_log
 
 
 jasypt:
