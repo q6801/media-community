@@ -1,0 +1,28 @@
+spring:
+  config:
+    activate:
+      on-profile: "test"
+  datasource:
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    url: "jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
+    username: "root"
+    password: "ENC(hodL7FcGAPWk44ZlxM5l6Q==)"
+
+server:
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: kurento
+    key-store-type: JKS
+    key-alias: kurento-selfsigned
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "devOauth"
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirectUri: http://localhost:8080/login/oauth2/code/kakao

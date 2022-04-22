@@ -3,7 +3,8 @@ spring:
     group:
       "dev": "common, oauth, dev, devOauth"
       "prod": "common, oauth, prod, prodOauth"
-    active: dev
+      "test": "common, oauth, test, devOauth"
+    active: test
   jpa:
     hibernate:
       ddl-auto: update
