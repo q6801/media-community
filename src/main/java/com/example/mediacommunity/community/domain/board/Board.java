@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = {"member", "replies", "hearts", "boardCategory"})
+@EqualsAndHashCode(exclude = {"member", "replies", "hearts", "boardCategory"}, callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(exclude = {"member", "replies", "hearts", "boardCategory"})
 public class Board extends BaseTimeEntity {
