@@ -19,22 +19,22 @@ public class HeartController {
     private final HeartService heartService;
     private final BoardService boardService;
 
-    @GetMapping("board/{boardIdx}/hearts")
-    public ApiResult<HeartDto> hearts(@PathVariable long boardIdx, @AuthenticationPrincipal UserInfo userInfo) {
-        int cnt = boardService.findBoardById(boardIdx).getHeartCnt();
+    @GetMapping("board/{boardId}/hearts")
+    public ApiResult<HeartDto> hearts(@PathVariable long boardId, @AuthenticationPrincipal UserInfo userInfo) {
+        int heartsCnt = boardService.findBoardById(boardId).getHeartsCnt();
         Boolean pushed = false;
-        if (userInfo != null && heartService.findTheHeart(boardIdx, userInfo.getUsername()).isPresent()) {
+        if (userInfo != null && heartService.findTheHeart(boardId, userInfo.getUsername()).isPresent()) {
             pushed = true;
         }
-        return ApiUtils.success(new HeartDto(cnt, pushed));
+        return ApiUtils.success(new HeartDto(heartsCnt, pushed));
     }
 
-    @PutMapping("board/{boardIdx}/heart")
-    public ApiResult<HeartDto> hitTheLikeButton(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long boardIdx) {
+    @PutMapping("board/{boardId}/heart")
+    public ApiResult<HeartDto> hitTheLikeButton(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long boardId) {
         if (userInfo == null) {
             throw new UserInfoNotFoundException(ExceptionEnum.USER_INFO_NOT_FOUND);
         }
-        HeartDto heartDto = heartService.toggleTheHeart(boardIdx, userInfo.getUsername());
+        HeartDto heartDto = heartService.toggleTheHeart(boardId, userInfo.getUsername());
         return ApiUtils.success(heartDto);
     }
 }

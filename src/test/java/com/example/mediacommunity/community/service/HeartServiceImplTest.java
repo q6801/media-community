@@ -8,12 +8,12 @@ import com.example.mediacommunity.community.repository.heart.HeartRepository;
 import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.heart.HeartServiceImpl;
 import com.example.mediacommunity.community.service.member.MemberService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataAccessException;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class HeartServiceImplTest {
@@ -57,7 +57,8 @@ class HeartServiceImplTest {
     }
 
     @Test
-    void toggleTheHeart() {
+    @DisplayName("좋아요가 있는 상태에서 좋아요 toggle 성공")
+    void successToToggleTheHeart0() {
         //given
         Member member = getStubMemberList().get(0);
         Board board = getStubBoardList().get(0);
@@ -76,6 +77,25 @@ class HeartServiceImplTest {
     }
 
     @Test
+    @DisplayName("좋아요가 없는 상태에서 좋아요 toggle 성공")
+    void successToToggleTheHeart1() {
+        //given
+        Member member = getStubMemberList().get(1);
+        Board board = getStubBoardList().get(1);
+
+        given(heartRepository.findTheHeart(board, member))
+                .willReturn(Optional.empty());
+        given(boardService.findBoardById(board.getId())).willReturn(board);
+        given(memberService.findMemberById(member.getLoginId())).willReturn(member);
+
+        //when
+        HeartDto heartDto = heartService.toggleTheHeart(board.getId(), member.getLoginId());
+
+        //then
+        assertThat(heartDto.getPushed()).isEqualTo(true);
+    }
+
+    @Test
     public void findLikingBoards() {
         //given
         Member member = getStubMemberList().get(0);
@@ -84,7 +104,7 @@ class HeartServiceImplTest {
         given(memberService.findMemberById(memberId)).willReturn(member);
         given(heartRepository.findLikingBoards(member)).willReturn(
                         getStubHearts().stream()
-                        .filter(heart -> heart.getMember().equals(member))
+                        .filter(heart -> heart.getMember().getLoginId().equals(member.getLoginId()))
                         .collect(Collectors.toList())
                 );
         //when
@@ -108,8 +128,7 @@ class HeartServiceImplTest {
 
         //when
         List<Heart> likingMembers = heartService.findLikingMembers(board.getId());
-
-        //then
+       //then
         assertThat(likingMembers).contains(getStubHearts().get(0));
         assertThat(likingMembers.size()).isEqualTo(1);
     }
@@ -118,10 +137,12 @@ class HeartServiceImplTest {
     private List<Board> getStubBoardList() {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         return Arrays.asList(
-                Board.builder().content("start content")
+                Board.builder()
+                        .content("start content")
                         .updatedAt(timestamp)
                         .title("title").build(),
-                Board.builder().content("start 2")
+                Board.builder()
+                        .content("start 2")
                         .updatedAt(timestamp)
                         .title("title").build(),
                 Board.builder().build()
@@ -143,14 +164,9 @@ class HeartServiceImplTest {
 
     private List<Heart> getStubHearts() {
         Heart heart0 = new Heart();
-        Heart heart1 = new Heart();
-
         heart0.setMember(getStubMemberList().get(0));
         heart0.setBoard(getStubBoardList().get(0));
 
-        heart1.setMember(getStubMemberList().get(1));
-        heart1.setBoard(getStubBoardList().get(1));
-
-        return Arrays.asList(heart0, heart1);
+        return Arrays.asList(heart0);
     }
 }

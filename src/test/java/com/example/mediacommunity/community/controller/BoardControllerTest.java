@@ -19,6 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
@@ -63,16 +66,31 @@ public class BoardControllerTest extends BeforeTest{
 
     @Test
     @WithMockCustomUser
-    @DisplayName("board 조회 성공 테스트")
+    @DisplayName("정렬 순서 바꾼 boards 조회 성공")
     public void board() throws Exception {
+        Map<String, String> input = new HashMap<>();
+        input.put("type", "heartCnt");
         ResultActions result = mockMvc.perform(
-                get("/api/board/" + createdBoardId)
+                post("/api/boards/" + categoryName)
                 .accept(MediaType.APPLICATION_JSON));
         result.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(handler().handlerType(BoardController.class))
-                .andExpect(handler().methodName("board"));
+                .andExpect(handler().methodName("changeBoardsOrder"));
 
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("board 조회 성공 테스트")
+    public void successToChangeBoardsOrder() throws Exception {
+        ResultActions result = mockMvc.perform(
+                get("/api/board/" + createdBoardId)
+                        .accept(MediaType.APPLICATION_JSON));
+        result.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(handler().handlerType(BoardController.class))
+                .andExpect(handler().methodName("board"));
     }
 
     @Test

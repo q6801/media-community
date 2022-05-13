@@ -17,9 +17,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = {"member", "replies", "hearts", "boardCategory"})
+@EqualsAndHashCode(exclude = {"member", "replies", "hearts", "boardCategory"}, callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(exclude = {"member", "replies", "hearts", "boardCategory"})
+@ToString(exclude = {"member", "replies", "hearts", "boardCategory"}, callSuper = true)
 public class Board extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -30,12 +30,6 @@ public class Board extends BaseTimeEntity {
 
     @Setter(AccessLevel.NONE)
     private int viewCnt;
-
-    @Setter(AccessLevel.NONE)
-    private int replyCnt;
-
-    @Setter(AccessLevel.NONE)
-    private int heartCnt;
 
     private String title;
 
@@ -93,6 +87,8 @@ public class Board extends BaseTimeEntity {
         BoardDto boardDto = new BoardDto();
         BeanUtils.copyProperties(this, boardDto);
         boardDto.setWriter(writer);
+        boardDto.setHeartCnt(hearts.size());
+        boardDto.setReplyCnt(replies.size());
         return boardDto;
     }
 
@@ -106,21 +102,15 @@ public class Board extends BaseTimeEntity {
         return writer;
     }
 
-    public void increaseViewCnt() { this.viewCnt += 1; }
-    public void increaseHeartCnt() {
-        this.heartCnt += 1;
+    public int getRepliesCnt() {
+        return this.replies.size();
     }
-    public void decreaseHeartCnt() {
-        if(this.heartCnt > 0) {
-            this.heartCnt -= 1;
-        }
+    public int getHeartsCnt() {
+        return this.hearts.size();
     }
-    public void decreaseReplyCnt() {
-        if (this.replyCnt > 0) {
-            this.replyCnt -= 1;
-        }
+
+    public void increaseViewCnt() {
+        this.viewCnt += 1;
     }
-    public void increaseReplyCnt() {
-        this.replyCnt += 1;
-    }
+
 }

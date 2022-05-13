@@ -3,12 +3,15 @@ package com.example.mediacommunity.community.service.board;
 import com.example.mediacommunity.community.domain.board.*;
 import com.example.mediacommunity.community.domain.category.BoardCategoriesDto;
 import com.example.mediacommunity.community.domain.category.BoardCategory;
+import com.example.mediacommunity.community.domain.heart.Heart;
 import com.example.mediacommunity.community.domain.member.Member;
+import com.example.mediacommunity.community.domain.reply.Reply;
 import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.Pagination;
 import com.example.mediacommunity.community.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,12 +57,6 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Board> findAllBoards() {
-        return boardRepository.findAll();
-    }
-
-    @Override
     public boolean modifyBoardUsingDto(Long boardIdx, BoardRequestDto updateParam, String memberId) {
         Member member = memberService.findMemberById(memberId);
         Board board = boardRepository.findBoardById(boardIdx);
@@ -91,6 +88,10 @@ public class BoardServiceImpl implements BoardService{
         return false;
     }
 
+    private boolean compareUserAndWriter(Member member, Board board) {
+        return member != null && member.equals(board.getMember());
+    }
+
     @Override
     @Transactional(readOnly = true)
     public int getTotalBoardsNum(String category) {
@@ -111,7 +112,12 @@ public class BoardServiceImpl implements BoardService{
         return boardRepository.findCategory(categoryId);
     }
 
-    private boolean compareUserAndWriter(Member member, Board board) {
-        return member != null && member.equals(board.getMember());
+    @Override
+    public BoardDto convertBoardToBoardDto(long boardId) {
+        Board board = boardRepository.findBoardById(boardId);
+        return board.convertBoardToBoardDto();
     }
+
+
+
 }

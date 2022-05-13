@@ -67,3 +67,12 @@
 
 ```Bug Fixes```
 - createdAt으로 정렬되지 않고 매번 정렬이 바뀌던 상황 해결
+
+
+---
+
+***version_1.3.1***
+
+```Changes```
+- API return 형식을 통일
+- 로그를 file 형태로 저장

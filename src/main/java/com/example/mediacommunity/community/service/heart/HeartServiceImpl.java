@@ -50,16 +50,14 @@ public class HeartServiceImpl implements HeartService{
             heart.setBoard(board);
             heart.setMember(member);
             heartRepository.addHeart(heart);
-            board.increaseHeartCnt();
             pushed=true;
         } else {
             board.getHearts().remove(theLikeStatus.get());
             heartRepository.deleteHeart(theLikeStatus.get());
-            board.decreaseHeartCnt();
             pushed= false;
         }
 
-        return new HeartDto(board.getHeartCnt(), pushed);
+        return new HeartDto(board.getHeartsCnt(), pushed);
     }
 
     @Override

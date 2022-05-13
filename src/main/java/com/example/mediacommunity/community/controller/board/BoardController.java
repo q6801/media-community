@@ -36,11 +36,10 @@ public class BoardController {
     @GetMapping("/boards/{category}")
     public ApiResult<BoardDtos> boards(@RequestParam(defaultValue = "1") int page, @PathVariable String category) {
         int totalBoardsNum = boardService.getTotalBoardsNum(category);
-
         pagination.pageInfo(page, totalBoardsNum);
         List<Board> boards = boardService.findBoards(pagination, category, BoardOrderCriterion.CREATED);
         List<BoardDto> boardInfoDtos = boards.stream()
-                .map(Board::convertBoardToBoardDto)
+                .map(board -> boardService.convertBoardToBoardDto(board.getId()))
                 .collect(Collectors.toList());
 
         BoardDtos boardDtos = new BoardDtos(boardInfoDtos, pagination);
@@ -57,7 +56,7 @@ public class BoardController {
         List<Board> boards = boardService.findBoards(pagination, category, boardOrderCriterion);
 
         List<BoardDto> boardInfoDtos = boards.stream()
-                .map(Board::convertBoardToBoardDto)
+                .map(board -> boardService.convertBoardToBoardDto(board.getId()))
                 .collect(Collectors.toList());
 
         BoardDtos boardDtos = new BoardDtos(boardInfoDtos, pagination);
@@ -67,6 +66,7 @@ public class BoardController {
     @GetMapping("/board/{boardIdx}")
     public ApiResult<BoardDto> board(@PathVariable long boardIdx) {
         Board board = boardService.increaseViewCnt(boardIdx);
+        System.out.println(board);
         return ApiUtils.success(board.convertBoardToBoardDto());
     }
 

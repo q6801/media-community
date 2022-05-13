@@ -7,13 +7,10 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor
 @EqualsAndHashCode
-@ToString
+//@ToString
 public class Room {
 
     @Id
@@ -30,4 +27,10 @@ public class Room {
 
     @Enumerated
     private RoomType roomType = RoomType.CHAT;
+
+    public Room(String roomName, String presenter, RoomType roomType) {
+        this.roomName = roomName;
+        this.presenter = presenter;
+        this.roomType = roomType;
+    }
 }

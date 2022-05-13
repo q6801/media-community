@@ -3,6 +3,7 @@ spring:
     group:
       "dev": "common, oauth, dev, devOauth"
       "prod": "common, oauth, prod, prodOauth"
+      "test": "common, oauth, test, devOauth"
     active: prod
   jpa:
     hibernate:

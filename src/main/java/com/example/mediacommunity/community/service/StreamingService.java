@@ -57,6 +57,7 @@ public class StreamingService {
         UserSession presenterUserSession = new UserSession();
         presenters.put(userInfo.getMemberId(), new StreamingUserRepository(
                 presenterUserSession, sessionId, userInfo.getUserUUID()));
+        System.out.println(pipeline);
 
         presenterUserSession.setWebRtcEndpoint(new WebRtcEndpoint.Builder(pipeline).build());
         WebRtcEndpoint presenterWebRtc = presenterUserSession.getWebRtcEndpoint();

@@ -34,7 +34,6 @@ public class ReplyServiceImpl implements ReplyService {
         Board board = boardService.findBoardById(boardId);
         Member member = memberService.findMemberById(memberId);
         Reply reply = Reply.createReply(member, board, content);
-        board.increaseReplyCnt();
 
         replyRepository.saveReply(reply);
         return reply;
@@ -43,7 +42,6 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void deleteReply(Long replyId) {
         Reply reply = replyRepository.findReplyById(replyId);
-        reply.getBoard().decreaseReplyCnt();
         replyRepository.deleteReply(reply);
     }
 

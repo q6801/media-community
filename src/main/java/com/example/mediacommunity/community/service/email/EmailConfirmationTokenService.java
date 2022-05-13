@@ -26,10 +26,6 @@ public class EmailConfirmationTokenService {
 //        return emailTokenRepository.findRecentMail(id);
 //    }
 
-    public void save(EmailConfirmationToken emailToken) {
-        emailTokenRepository.save(emailToken);
-    }
-
     public void delete(EmailConfirmationToken emailToken) {
         emailTokenRepository.delete(emailToken);
     }
