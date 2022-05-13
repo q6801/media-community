@@ -104,7 +104,7 @@ class HeartServiceImplTest {
         given(memberService.findMemberById(memberId)).willReturn(member);
         given(heartRepository.findLikingBoards(member)).willReturn(
                         getStubHearts().stream()
-                        .filter(heart -> heart.getMember().equals(member))
+                        .filter(heart -> heart.getMember().getLoginId().equals(member.getLoginId()))
                         .collect(Collectors.toList())
                 );
         //when

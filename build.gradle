@@ -52,6 +52,10 @@ dependencies {
 
 }
 
+//lombok.config{
+//	lombok.addLombokGeneratedAnnotation = true
+//}
+
 jacoco {
 	toolVersion = "0.8.5"
 }
@@ -108,6 +112,8 @@ jacocoTestCoverageVerification {
 test {
 	jacoco {
 		destinationFile = file("$buildDir/jacoco/jacoco.exec")
+//		excludes += ["com/example/mediacommunity/community/service/StreamingService.class"]
+//		com.example.mediacommunity.community.service
 	}
 
 	useJUnitPlatform()
@@ -125,6 +131,15 @@ jacocoTestReport {
 //      각 리포트 타입 마다 리포트 저장 경로를 설정할 수 있다.
       html.destination file("$buildDir/jacocoHtml")
 //      xml.destination file("$buildDir/jacoco.xml")
+	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					"com/example/**/StreamingService.class",
+//					"com/baeldung/**/*DTO.*",
+//					"**/config/*"
+			])
+		}))
 	}
 
 	finalizedBy 'jacocoTestCoverageVerification'

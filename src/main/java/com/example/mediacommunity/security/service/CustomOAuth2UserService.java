@@ -20,12 +20,16 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-
     private final MemberRepository memberRepository;
+    private final DefaultOAuth2UserService delegate;
+
+//    public CustomOAuth2UserService(MemberRepository memberRepository, DefaultOAuth2UserService defaultOAuth2UserService) {
+//        memberRepository = memberRepository;
+//        delegate = defaultOAuth2UserService;
+//    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
         String providerType = userRequest.getClientRegistration().getRegistrationId();                // google
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oAuth2User.getAttributes());

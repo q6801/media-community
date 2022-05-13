@@ -4,7 +4,7 @@ spring:
       "dev": "common, oauth, dev, devOauth"
       "prod": "common, oauth, prod, prodOauth"
       "test": "common, oauth, test, devOauth"
-    active: test
+    active: dev
   jpa:
     hibernate:
       ddl-auto: update
@@ -60,6 +60,8 @@ path:
 
 server:
   port: 8000
+
+
 
 ---
 

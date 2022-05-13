@@ -86,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Optional<String> updateProfile(String loginId, MemberEditDto memberEditDto) throws IOException {
         Member member = memberRepository.findByLoginId(loginId).orElseThrow(() -> new RuntimeException("member 없음"));
-        log.info("before change the profile: image-{} nickname-{}", member.getImageUrl(), member.getNickname());
+        log.info("before change the profile: image-({}) nickname-({})", member.getImageUrl(), member.getNickname());
         MultipartFile file = memberEditDto.getFile();
         String newNickname = memberEditDto.getNickname();
         String newImageUrl;

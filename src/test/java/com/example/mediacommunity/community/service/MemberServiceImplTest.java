@@ -4,7 +4,6 @@ import com.example.mediacommunity.Exception.custom.BlankExistException;
 import com.example.mediacommunity.Exception.custom.NicknameAlreadyExistException;
 import com.example.mediacommunity.Exception.custom.UserAlreadyExistException;
 import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.chat.Message;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
 import com.example.mediacommunity.community.domain.member.RoleType;
@@ -12,25 +11,20 @@ import com.example.mediacommunity.community.domain.member.SignUpDto;
 import com.example.mediacommunity.community.repository.member.MemberRepository;
 import com.example.mediacommunity.community.service.member.MemberServiceImpl;
 import com.example.mediacommunity.security.userInfo.UserInfo;
-import org.apache.catalina.User;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -118,7 +112,7 @@ class MemberServiceImplTest {
         //when
         assertThatThrownBy(() ->
                 memberService.encodeAndSave(signUpDto))
-                .isInstanceOf(UserAlreadyExistException.class);
+                .isInstanceOf(NicknameAlreadyExistException.class);
     }
 
 

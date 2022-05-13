@@ -1,8 +1,11 @@
 package com.example.mediacommunity.community.service;
 
+import com.example.mediacommunity.Exception.custom.BlankExistException;
 import com.example.mediacommunity.community.domain.chat.Room;
 import com.example.mediacommunity.community.domain.chat.RoomType;
 import com.example.mediacommunity.community.repository.streaming.RoomRepository;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 @Transactional
@@ -32,7 +36,8 @@ public class RoomServiceTest {
     private UUID id1 = UUID.randomUUID();
 
     @Test
-    public void createRoom() {
+    @DisplayName("방 생성 성공")
+    public void successToCreateRoom() {
         // given
         Room room = getStubRoomList().get(1);
 
@@ -42,6 +47,18 @@ public class RoomServiceTest {
 
         //then
         assertThat(room).isEqualTo(createdRoom);
+//        Assertions.assertTrue(room.equals(createdRoom));
+//        Assertions.assertFalse(createdRoom.equals(null));
+    }
+
+    @Test
+    @DisplayName("방 이름을 비워서 방 생성 실패")
+    public void failToCreateRoom() {
+        Room room = getStubRoomList().get(1);
+
+        assertThatThrownBy(() -> roomServiceImpl
+                .createRoom("", room.getPresenter(), RoomType.STREAMING))
+                .isInstanceOf(BlankExistException.class);
     }
 
     @Test
@@ -74,15 +91,14 @@ public class RoomServiceTest {
     @Test
     public void findAllRoom() {
         //given
-        given(roomRepository.findRoomsByType(RoomType.STREAMING)).willReturn(getStubRoomList());
+        List<Room> roomList = getStubRoomList();
+        given(roomRepository.findRoomsByType(RoomType.STREAMING)).willReturn(roomList);
 
         //when
         List<Room> allRoom = roomServiceImpl.findRoomsByType(RoomType.STREAMING);
 
         //then
-        System.out.println(getStubRoomList().get(0));
-        System.out.println(allRoom);
-        assertThat(allRoom).contains(getStubRoomList().get(0));
+        assertThat(allRoom).contains(roomList.get(0));
         assertThat(allRoom.size()).isEqualTo(2);
     }
 
@@ -91,17 +107,8 @@ public class RoomServiceTest {
     private List<Room> getStubRoomList() {
 
         return Arrays.asList(
-                Room.builder()
-                        .roomName("room0")
-                        .id(id0)
-                        .presenter("tester0")
-                        .roomType(RoomType.STREAMING)
-                        .build(),
-                Room.builder()
-                        .roomName("room1")
-                        .presenter("tester1")
-                        .roomType(RoomType.STREAMING)
-                        .build()
+                new Room("room0", "tester0", RoomType.STREAMING),
+                new Room("room1", "tester1", RoomType.STREAMING)
         );
     }
 

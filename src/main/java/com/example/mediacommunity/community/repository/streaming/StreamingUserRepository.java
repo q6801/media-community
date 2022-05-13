@@ -1,11 +1,17 @@
 package com.example.mediacommunity.community.repository.streaming;
 
 import com.example.mediacommunity.community.domain.UserSession;
+import jdk.jfr.Registered;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-@Data
+@RequiredArgsConstructor
+@Setter
+@Getter
 public class StreamingUserRepository {
     private UserSession presenter;
     private String presenterUUID;

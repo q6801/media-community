@@ -25,11 +25,7 @@ public class RoomServiceImpl {
         if (roomName.isBlank()) {
             throw new BlankExistException(ExceptionEnum.BLANK_EXIST);
         }
-        Room room = Room.builder()
-                .roomName(roomName)
-                .presenter(memberId)
-                .roomType(roomType)
-                .build();
+        Room room = new Room(roomName, memberId, roomType);
         roomRepository.saveRoom(room);
         return room;
     }

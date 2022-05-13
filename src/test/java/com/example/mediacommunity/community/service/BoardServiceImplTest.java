@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,6 +51,8 @@ class BoardServiceImplTest {
         Board foundBoard = boardService.findBoardById(board0.getId());
 
         //then
+        assertTrue(board0.equals(foundBoard));
+        assertFalse(foundBoard.equals(null));
         assertThat(foundBoard).isEqualTo(board0);
     }
 
@@ -164,7 +168,7 @@ class BoardServiceImplTest {
 //        given(boardRepository.delete(board0))
 
         boolean result = boardService.deleteBoard(board0.getId(), writer.getLoginId());
-        assertThat(result).isTrue();
+        assertThat(result).isFalse();
     }
 
 

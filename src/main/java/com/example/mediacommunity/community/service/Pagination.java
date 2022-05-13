@@ -1,9 +1,11 @@
 package com.example.mediacommunity.community.service;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
-@Data
+@Getter
 @Component
 public class Pagination {
     private  int onePageBoardsNum = 10;
