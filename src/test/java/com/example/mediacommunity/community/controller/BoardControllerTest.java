@@ -64,21 +64,21 @@ public class BoardControllerTest extends BeforeTest{
                 .andExpect(handler().methodName("boards"));
     }
 
-    @Test
-    @WithMockCustomUser
-    @DisplayName("정렬 순서 바꾼 boards 조회 성공")
-    public void board() throws Exception {
-        Map<String, String> input = new HashMap<>();
-        input.put("type", "heartCnt");
-        ResultActions result = mockMvc.perform(
-                post("/api/boards/" + categoryName)
-                .accept(MediaType.APPLICATION_JSON));
-        result.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(handler().handlerType(BoardController.class))
-                .andExpect(handler().methodName("changeBoardsOrder"));
-
-    }
+//    @Test
+//    @WithMockCustomUser
+//    @DisplayName("정렬 순서 바꾼 boards 조회 성공")
+//    public void board() throws Exception {
+//        Map<String, String> input = new HashMap<>();
+//        input.put("type", "heartCnt");
+//        ResultActions result = mockMvc.perform(
+//                post("/api/boards/" + categoryName)
+//                .accept(MediaType.APPLICATION_JSON));
+//        result.andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(handler().handlerType(BoardController.class))
+//                .andExpect(handler().methodName("changeBoardsOrder"));
+//
+//    }
 
     @Test
     @WithMockCustomUser
