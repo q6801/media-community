@@ -49,7 +49,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
     }
 
     private void xssDefence(Map<String, String> map) {
-        Safelist safelist = Safelist.basic();
+        Safelist safelist = Safelist.relaxed();
         safelist.addAttributes(":all", "class");
 
         for(String key : map.keySet()) {
