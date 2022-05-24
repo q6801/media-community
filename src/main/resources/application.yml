@@ -60,9 +60,11 @@ path:
 
 server:
   port: 8000
+  forward-headers-strategy: native
   tomcat:
-    protocol-header: x-forwarded-proto
-    remote-ip-header: x-forwarded-for
+    remoteip:
+      protocol-header: "X-Forwarded-Proto"
+      remote-ip-header: "X-Forwarded-For"
 ---
 
 spring:
