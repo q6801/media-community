@@ -8,16 +8,15 @@ spring:
     username: "q6801"
     password: "ENC(cEbFjyIRWamKyEuiVg1Q6SRsgpjrmHNP)"
 
-server:
-  ssl:
-    key-store: classpath:keystore.jks
-    key-store-password: kurento
-    key-store-type: JKS
-    key-alias: kurento-selfsigned
+#server:
+#  ssl:
 #    key-store: /var/jenkins_home/workspace/media-community/media-community-cert/keystore.p12
 ##    key-store: /jenkins/workspace/media-community/media-community-cert/keystore.p12
 #    key-store-type: PKCS12
 #    key-store-password: ENC(1FGPcfMNAfUPjtyPyiKbn2ofOrVr1nYt)
+server:
+  tomcat:
+    protocol-header: x-forwarded-proto
 ---
 
 spring:
