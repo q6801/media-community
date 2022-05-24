@@ -3,8 +3,8 @@ package com.example.mediacommunity.community.controller.member;
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.UserInfoNotFoundException;
 import com.example.mediacommunity.community.domain.member.Member;
-import com.example.mediacommunity.community.domain.member.MemberEditDto;
 import com.example.mediacommunity.community.domain.member.MemberDto;
+import com.example.mediacommunity.community.domain.member.MemberEditDto;
 import com.example.mediacommunity.community.domain.member.SignUpDto;
 import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.security.userInfo.UserInfo;
@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -45,14 +46,15 @@ public class MemberController {
         System.out.println("role = " + role);
 
         Optional<String> imageUrl = memberService.updateProfile(userInfo.getUsername(), memberEditDto);
-        imageUrl.orElseThrow(() -> new RuntimeException());
+        imageUrl.orElseThrow(RuntimeException::new);
 
         return ApiUtils.success(null);
     }
 
     @PostMapping("/signup")
-    public ApiResult<Object> signUp(@Valid @RequestBody SignUpDto signUpDto) {
+    public ApiResult<Object> signUp(@Valid @RequestBody SignUpDto signUpDto, HttpServletResponse response) throws IOException {
         memberService.encodeAndSave(signUpDto);
+        response.sendRedirect("/");
         return ApiUtils.success(null);
     }
 
