@@ -95,7 +95,7 @@ public class MemberControllerTest extends BeforeTest{
                 .content(objectMapper.writeValueAsString(signUpDto)));
 
         result.andDo(print())
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("signUp"));
     }
