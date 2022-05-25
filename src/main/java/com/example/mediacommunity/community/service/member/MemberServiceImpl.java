@@ -1,5 +1,6 @@
 package com.example.mediacommunity.community.service.member;
 
+import com.example.mediacommunity.Exception.CustomRuntimeException;
 import com.example.mediacommunity.Exception.ExceptionEnum;
 import com.example.mediacommunity.Exception.custom.BlankExistException;
 import com.example.mediacommunity.Exception.custom.NicknameAlreadyExistException;
@@ -45,6 +46,9 @@ public class MemberServiceImpl implements MemberService {
     public Member encodeAndSave(SignUpDto signUpDto) {
         if (signUpDto.getLoginId().isBlank() || signUpDto.getPassword().isBlank() || signUpDto.getNickname().isBlank()) {
             throw new BlankExistException(ExceptionEnum.BLANK_EXIST);
+        }
+        if (!signUpDto.getPassword().equals(signUpDto.getPasswordChecker())) {
+            throw new CustomRuntimeException(ExceptionEnum.PASSWORD_MISMATCH);
         }
 
         Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
@@ -127,7 +131,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void updateMemberRoleToUser(String memberId) {
         Member member = memberRepository.findByLoginId(memberId).orElseThrow();
-        log.info("before change the role: ", member.getRoleType());
+        log.info("before change the role: {}", member.getRoleType());
         member.setRoleType(RoleType.USER);
 
         UserInfo userInfo = new UserInfo(member);
@@ -135,7 +139,7 @@ public class MemberServiceImpl implements MemberService {
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(userInfo, auth.getCredentials(), userInfo.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
-        log.info("after change the role: ", member.getRoleType());
+        log.info("after change the role: {}", member.getRoleType());
     }
 
 }
