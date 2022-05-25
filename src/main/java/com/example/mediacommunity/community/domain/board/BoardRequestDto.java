@@ -9,16 +9,16 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardRequestDto {
-    @NotBlank
+    @NotBlank(message = "title은 빈 값이 될 수 없습니다.")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "본문은 빈 값이 될 수 없습니다.")
     private String content;
 
-    @NotBlank
+    @NotBlank(message = "category는 빈 값이 될 수 없습니다.")
     private String category;
 
-    private Boolean anonymous;
+    private boolean anonymous;
 
     public BoardRequestDto(String title, String content, String category, Boolean anonymous) {
         this.title = title;

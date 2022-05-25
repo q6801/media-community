@@ -54,7 +54,7 @@ class MemberServiceImplTest {
     void successToEncodeAndSave() {
         //given
         String defaultImageURL = "something url";
-        SignUpDto signUpDto = new SignUpDto("id", "pw", "nickname");
+        SignUpDto signUpDto = new SignUpDto("id", "pw","pw", "nickname");
         given(memberRepository.findByLoginId("id")).willReturn(Optional.empty());
         given(memberRepository.findByNickname("nickname")).willReturn(Optional.empty());
         given(amazonS3Service.searchDefaultProfile()).willReturn(defaultImageURL);
@@ -76,9 +76,9 @@ class MemberServiceImplTest {
     @DisplayName("id, pw, nickname중 하나가 blank라서 회원가입 실패")
     void failToSignUpWithEmptyValue() {
         //given
-        SignUpDto signUpDto0 = new SignUpDto("", "pw", "nickname");
-        SignUpDto signUpDto1 = new SignUpDto("id", "", "nickname");
-        SignUpDto signUpDto2 = new SignUpDto("id", "pw", "");
+        SignUpDto signUpDto0 = new SignUpDto("", "pw","pw", "nickname");
+        SignUpDto signUpDto1 = new SignUpDto("id", "","", "nickname");
+        SignUpDto signUpDto2 = new SignUpDto("id", "pw","pw", "");
 
         //when
         assertThatThrownBy(() -> memberService.encodeAndSave(signUpDto0))
@@ -93,7 +93,7 @@ class MemberServiceImplTest {
     @DisplayName("회원가입 id 중복으로 인한 실패")
     void failToSignUpWithExistId() {
         //given
-        SignUpDto signUpDto = new SignUpDto("id", "pw", "nickname");
+        SignUpDto signUpDto = new SignUpDto("id", "pw", "pw","nickname");
         given(memberRepository.findByLoginId("id"))
                 .willReturn(Optional.of(getStubMemberList().get(0)));
         //when
@@ -106,7 +106,7 @@ class MemberServiceImplTest {
     @DisplayName("회원가입 nickname 중복으로 인한 실패")
     void failToSignUpWithExistNickname() {
         //given
-        SignUpDto signUpDto = new SignUpDto("id", "pw", "nickname");
+        SignUpDto signUpDto = new SignUpDto("id", "pw", "pw","nickname");
         given(memberRepository.findByLoginId("id")).willReturn(Optional.empty());
         given(memberRepository.findByNickname("nickname")).willReturn(Optional.of(getStubMemberList().get(0)));
         //when
@@ -202,7 +202,7 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("profile nickname 중복으로 인한 실패")
-    public void failToUpdateProfile() throws IOException {
+    public void failToUpdateProfile() {
         Member member = getStubMemberList().get(0);
         member.setImageUrl("default image url");
         String thumbnailPath = "thumbnail path";

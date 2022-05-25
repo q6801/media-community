@@ -25,9 +25,9 @@ public class ApiExceptionAdvice {
         BindingResult bindingResult = ex.getBindingResult();
         StringBuilder sb = new StringBuilder();
         for (FieldError fieldError: bindingResult.getFieldErrors()) {
-            sb.append("[").append(fieldError.getField()).append("]은(는) ");
+//            sb.append("[").append(fieldError.getField()).append("]은(는) ");
             sb.append(fieldError.getDefaultMessage());
-            sb.append(". ");
+            sb.append("\n");
         }
         return ApiUtils.error("common-002", sb.toString());
     }
