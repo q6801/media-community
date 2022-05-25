@@ -12,7 +12,7 @@ import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.community.service.reply.ReplyService;
 
 public class BeforeTest {
-     protected long createBoard(BoardService boardService, String categoryName, Member member) throws Exception {
+     protected long createBoard(BoardService boardService, String categoryName, Member member) {
         Board board = Board.convertBoardRequestDtoToBoard(
                 new BoardRequestDto("newTitle", "newContent", categoryName, false),
                 member,
@@ -27,8 +27,8 @@ public class BeforeTest {
         boardCategoryService.save(bc);
     }
 
-    protected Member saveMember(MemberService memberService) throws Exception {
-        return memberService.encodeAndSave(new SignUpDto("tester0", "password", "tester0"));
+    protected Member saveMember(MemberService memberService) {
+        return memberService.encodeAndSave(new SignUpDto("tester0", "password", "password","tester0"));
     }
 
     protected Reply createReply(ReplyService replyService, long boardId, String memberId) {
