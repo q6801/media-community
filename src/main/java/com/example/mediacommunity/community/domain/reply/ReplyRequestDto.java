@@ -13,6 +13,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReplyRequestDto {
-    @NotBlank
+    @NotBlank(message = "내용은 빈 값이 될 수 없습니다.")
     private String content;
 }
