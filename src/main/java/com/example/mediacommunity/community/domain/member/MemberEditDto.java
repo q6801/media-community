@@ -13,6 +13,6 @@ import javax.validation.constraints.NotBlank;
 public class MemberEditDto {
     private MultipartFile file;
 
-    @NotBlank
+    @NotBlank(message = "nickname은 빈 값이 될 수 없습니다.")
     private String nickname;
 }

@@ -89,7 +89,7 @@ public class MemberControllerTest extends BeforeTest{
     @Test
     @WithMockCustomUser
     public void signup() throws Exception {
-        SignUpDto signUpDto = new SignUpDto("hello", "hello", "hello");
+        SignUpDto signUpDto = new SignUpDto("hello", "hello", "hello","hello");
         ResultActions result = mockMvc.perform(post("/api/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(signUpDto)));
