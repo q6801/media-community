@@ -47,18 +47,18 @@ public class MemberServiceImpl implements MemberService {
         if (signUpDto.getLoginId().isBlank() || signUpDto.getPassword().isBlank() || signUpDto.getNickname().isBlank()) {
             throw new BlankExistException(ExceptionEnum.BLANK_EXIST);
         }
-        if (!signUpDto.getPassword().equals(signUpDto.getPasswordChecker())) {
-            throw new CustomRuntimeException(ExceptionEnum.PASSWORD_MISMATCH);
+        if (!signUpDto.getPassword().equals(signUpDto.getPasswordChecker())) {  
+            throw new CustomRuntimeException(ExceptionEnum.PASSWORD_MISMATCH);  // password와 passwor확인이 다르게 적힘
         }
 
         Optional<Member> duplicatedId = memberRepository.findByLoginId(signUpDto.getLoginId());
         duplicatedId.ifPresent((d) -> {
-            throw new UserAlreadyExistException(ExceptionEnum.USER_ALREADY_EXIST);
+            throw new UserAlreadyExistException(ExceptionEnum.USER_ALREADY_EXIST);  // 해당하는 id가 이미 사용중임
         });
 
         Optional<Member> duplicatedName = memberRepository.findByNickname(signUpDto.getNickname());
         duplicatedName.ifPresent((d) -> {
-            throw new NicknameAlreadyExistException(ExceptionEnum.NICKNAME_ALREADY_EXIST);
+            throw new NicknameAlreadyExistException(ExceptionEnum.NICKNAME_ALREADY_EXIST); // 해당 닉네임이 이미 사용중임
         });
 
         Member localMember = Member.createLocalMember(signUpDto, passwordEncoder,

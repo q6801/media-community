@@ -3,6 +3,7 @@ package com.example.mediacommunity.community.controller;
 import com.example.mediacommunity.community.controller.board.BoardController;
 import com.example.mediacommunity.community.domain.board.BoardRequestDto;
 import com.example.mediacommunity.community.domain.member.Member;
+import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.board.BoardCategoryService;
 import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.member.MemberService;
@@ -40,7 +41,7 @@ public class BoardControllerTest extends BeforeTest{
     @Autowired
     private MemberService memberService;
     @Autowired
-    private BoardService boardService;
+    private BoardRepository boardRepository;
 
     private String categoryName = "testCategory";
     private long createdBoardId;
@@ -49,7 +50,7 @@ public class BoardControllerTest extends BeforeTest{
     public void beforeTest() throws Exception {
         createCategory(boardCategoryService, categoryName);
         Member member = saveMember(memberService);
-        createdBoardId = createBoard(boardService, categoryName, member);
+        createdBoardId = createBoard(boardRepository, categoryName, member);
     }
 
     @Test

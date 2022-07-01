@@ -3,6 +3,7 @@ package com.example.mediacommunity.community.controller;
 import com.example.mediacommunity.community.controller.board.ReplyController;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.reply.ReplyRequestDto;
+import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.board.BoardCategoryService;
 import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.member.MemberService;
@@ -33,7 +34,7 @@ public class ReplyControllerTest extends BeforeTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private BoardService boardService;
+    private BoardRepository boardRepository;
     @Autowired
     private BoardCategoryService boardCategoryService;
     @Autowired
@@ -49,7 +50,7 @@ public class ReplyControllerTest extends BeforeTest {
     public void beforeTest() throws Exception {
         createCategory(boardCategoryService, categoryName);
         Member member = saveMember(memberService);
-        createdBoardId = createBoard(boardService, categoryName, member);
+        createdBoardId = createBoard(boardRepository, categoryName, member);
         createdReplyId = createReply(replyService, createdBoardId, member.getLoginId()).getId();
     }
 
