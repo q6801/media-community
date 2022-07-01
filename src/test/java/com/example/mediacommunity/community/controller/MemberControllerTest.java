@@ -51,6 +51,7 @@ public class MemberControllerTest extends BeforeTest{
     @Test
     @WithMockCustomUser
     public void memberController() throws Exception {
+
         ResultActions result = mockMvc.perform(get("/api/member")
                 .contentType(MediaType.APPLICATION_JSON));
         result.andDo(print())
@@ -89,7 +90,7 @@ public class MemberControllerTest extends BeforeTest{
     @Test
     @WithMockCustomUser
     public void signup() throws Exception {
-        SignUpDto signUpDto = new SignUpDto("hello", "hello", "hello","hello");
+        SignUpDto signUpDto = new SignUpDto("hello123", "hello1234", "hello1234","hello");
         ResultActions result = mockMvc.perform(post("/api/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(signUpDto)));

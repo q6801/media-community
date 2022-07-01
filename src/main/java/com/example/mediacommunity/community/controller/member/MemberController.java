@@ -1,8 +1,7 @@
 package com.example.mediacommunity.community.controller.member;
 
+import com.example.mediacommunity.Exception.CustomRuntimeException;
 import com.example.mediacommunity.Exception.ExceptionEnum;
-import com.example.mediacommunity.Exception.custom.UserInfoNotFoundException;
-import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.MemberDto;
 import com.example.mediacommunity.community.domain.member.MemberEditDto;
 import com.example.mediacommunity.community.domain.member.SignUpDto;
@@ -12,6 +11,7 @@ import com.example.mediacommunity.utils.ApiResult;
 import com.example.mediacommunity.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,21 +30,15 @@ public class MemberController {
 
     @GetMapping("/member")
     public ApiResult<MemberDto> member(@AuthenticationPrincipal UserInfo userInfo) {
-        if (userInfo == null) {
-            throw new UserInfoNotFoundException(ExceptionEnum.USER_INFO_NOT_FOUND);
-        }
-        Member member = memberService.findMemberById(userInfo.getUsername());
-        MemberDto memberDto = new MemberDto(member.getLoginId(), member.getEmail(),
-                member.getNickname(), member.getImageUrl());
+        if(userInfo == null)
+            throw new CustomRuntimeException(ExceptionEnum.USER_INFO_NOT_FOUND);
+        MemberDto memberDto = memberService.findMemberById(userInfo.getUsername()).convertMemberToDto();
         return ApiUtils.success(memberDto);
     }
 
     @PutMapping("/member")
     public ApiResult<?> editMember(@Valid @ModelAttribute MemberEditDto memberEditDto,
                                         @AuthenticationPrincipal UserInfo userInfo) throws IOException {
-        String role = userInfo.getRole();
-        System.out.println("role = " + role);
-
         Optional<String> imageUrl = memberService.updateProfile(userInfo.getUsername(), memberEditDto);
         imageUrl.orElseThrow(RuntimeException::new);
 

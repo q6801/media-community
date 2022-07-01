@@ -1,12 +1,8 @@
 package com.example.mediacommunity.community.service;
 
-import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 @Getter
-@Component
 public class Pagination {
     private  int onePageBoardsNum = 10;
     private int rangeSize = 7;
@@ -30,12 +26,11 @@ public class Pagination {
         this.totalPagesNum = (int) Math.ceil((double)totalBoardsNum / onePageBoardsNum);
         this.endPage = this.startPage + rangeSize - 1;
         this.startingBoardNumInPage = (page - 1) * onePageBoardsNum;
-        this.prev = (this.startPage == 1) ? false : true;
-        this.next = (endPage >= totalPagesNum) ? false : true;
+        this.prev = this.startPage != 1;
+        this.next = endPage < totalPagesNum;
 
         if (this.endPage > this.totalPagesNum) {
             this.endPage = this.totalPagesNum;
-            this.next = false;
         }
     }
 }

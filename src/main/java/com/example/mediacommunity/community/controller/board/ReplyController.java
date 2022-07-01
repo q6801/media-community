@@ -26,7 +26,8 @@ public class ReplyController {
     @GetMapping("board/{boardIdx}/replies")
     public ApiResult<List<ReplyDto>> replies(@PathVariable long boardIdx) {
         List<Reply> allReplies = replyService.findAllReplies(boardIdx);
-        List<ReplyDto> replyDtos = allReplies.stream().map(reply -> reply.convertReplyToReplyInfoDto())
+        List<ReplyDto> replyDtos = allReplies.stream()
+                .map(Reply::convertReplyToReplyInfoDto)
                 .collect(Collectors.toList());
         return ApiUtils.success(replyDtos);
     }
@@ -34,7 +35,6 @@ public class ReplyController {
     @PostMapping("board/{boardId}/reply")
     public ApiResult<ReplyDto> addReply(@Valid @RequestBody ReplyRequestDto replyDto, @PathVariable Long boardId,
                                         @AuthenticationPrincipal UserInfo userInfo) {
-        checkUserAccount(userInfo);
         Reply reply = replyService.reply(boardId, userInfo.getUsername(), replyDto.getContent());
         return ApiUtils.success(reply.convertReplyToReplyInfoDto());
     }
@@ -42,7 +42,6 @@ public class ReplyController {
     @PutMapping("reply/{replyId}")
     public ApiResult<ReplyDto> putReply(@Valid @RequestBody ReplyRequestDto replyDto,
                                         @AuthenticationPrincipal UserInfo userInfo, @PathVariable Long replyId) {
-        checkUserAccount(userInfo);
         Reply reply = replyService.modifyReply(replyId, replyDto, userInfo.getUsername());
         return ApiUtils.success(reply.convertReplyToReplyInfoDto());
     }
@@ -50,15 +49,9 @@ public class ReplyController {
 
     @DeleteMapping("reply/{replyId}")
     public ApiResult<?> deleteReply(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long replyId) {
-        checkUserAccount(userInfo);
-        replyService.deleteReply(replyId);
+        replyService.deleteReply(userInfo.getUsername(), replyId);
         return ApiUtils.success(null);
     }
 
-    private void checkUserAccount(@AuthenticationPrincipal UserInfo userInfo) {
-        if (userInfo == null) {
-            throw new UserInfoNotFoundException(ExceptionEnum.USER_INFO_NOT_FOUND);
-        }
-    }
 
 }
