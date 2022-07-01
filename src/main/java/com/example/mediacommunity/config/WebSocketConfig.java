@@ -30,13 +30,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/pub");
     }
 
-    @Bean
-    public MediaPipeline mediaPipeline() {
-        return kurentoClient().createMediaPipeline();
-    }
-
-    @Bean
-    public KurentoClient kurentoClient() {
-        return KurentoClient.create();
-    }
+//    @Bean
+//    public MediaPipeline mediaPipeline() {
+//        return kurentoClient().createMediaPipeline();
+//    }
+//
+//    @Bean
+//    public KurentoClient kurentoClient() {
+//        return KurentoClient.create();
+//    }
 }

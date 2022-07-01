@@ -6,19 +6,20 @@ import com.example.mediacommunity.community.domain.category.BoardCategory;
 import com.example.mediacommunity.community.domain.member.Member;
 import com.example.mediacommunity.community.domain.member.SignUpDto;
 import com.example.mediacommunity.community.domain.reply.Reply;
+import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.board.BoardCategoryService;
 import com.example.mediacommunity.community.service.board.BoardService;
 import com.example.mediacommunity.community.service.member.MemberService;
 import com.example.mediacommunity.community.service.reply.ReplyService;
 
 public class BeforeTest {
-     protected long createBoard(BoardService boardService, String categoryName, Member member) {
+     protected long createBoard(BoardRepository boardRepository, String categoryName, Member member) {
         Board board = Board.convertBoardRequestDtoToBoard(
                 new BoardRequestDto("newTitle", "newContent", categoryName, false),
                 member,
                 new BoardCategory(categoryName)
         );
-        Board savedBoard = boardService.save(board);
+        Board savedBoard = boardRepository.save(board);
         return savedBoard.getId();
     }
 
