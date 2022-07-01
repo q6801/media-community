@@ -23,7 +23,7 @@ public class HeartController {
     public ApiResult<HeartDto> hearts(@PathVariable long boardId, @AuthenticationPrincipal UserInfo userInfo) {
         int heartsCnt = boardService.findBoardById(boardId).getHeartsCnt();
         Boolean pushed = false;
-        if (userInfo != null && heartService.findTheHeart(boardId, userInfo.getUsername()).isPresent()) {
+        if (heartService.findTheHeart(boardId, userInfo.getUsername()).isPresent()) {
             pushed = true;
         }
         return ApiUtils.success(new HeartDto(heartsCnt, pushed));
@@ -31,9 +31,6 @@ public class HeartController {
 
     @PutMapping("board/{boardId}/heart")
     public ApiResult<HeartDto> hitTheLikeButton(@AuthenticationPrincipal UserInfo userInfo, @PathVariable Long boardId) {
-        if (userInfo == null) {
-            throw new UserInfoNotFoundException(ExceptionEnum.USER_INFO_NOT_FOUND);
-        }
         HeartDto heartDto = heartService.toggleTheHeart(boardId, userInfo.getUsername());
         return ApiUtils.success(heartDto);
     }

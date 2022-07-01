@@ -74,4 +74,9 @@ public class Member {
         member.roleType = RoleType.USER;
         return member;
     }
+
+    public MemberDto convertMemberToDto() {
+        return new MemberDto(this.getLoginId(), this.getEmail(),
+                this.getNickname(), this.getImageUrl());
+    }
 }

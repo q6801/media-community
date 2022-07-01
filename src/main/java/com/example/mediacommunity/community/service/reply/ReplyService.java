@@ -9,6 +9,6 @@ import java.util.List;
 public interface ReplyService {
     List<Reply> findAllReplies(Long boardId);
     Reply reply(Long boardId, String memberId, String content);
-    void deleteReply(Long replyId);
+    void deleteReply(String memberId, Long replyId);
     Reply modifyReply(Long replyId, ReplyRequestDto replyDto, String memberId);
 }

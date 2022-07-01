@@ -3,20 +3,17 @@ package com.example.mediacommunity.community.service.board;
 import com.example.mediacommunity.community.domain.board.*;
 import com.example.mediacommunity.community.domain.category.BoardCategoriesDto;
 import com.example.mediacommunity.community.domain.category.BoardCategory;
-import com.example.mediacommunity.community.service.Pagination;
 
 import java.util.List;
 
 public interface BoardService {
-    Board save(Board board);
+    Board save(BoardRequestDto boardReqDto, String memberId);
     Board findBoardById(Long id);
     List<Board> findByWriterId(String writerId);
-    List<Board> findBoards(Pagination pagination, String category, BoardOrderCriterion orderCriterion);
-    boolean modifyBoardUsingDto(Long BoardIdx, BoardRequestDto updateParam, String memberId);
+    BoardDtos findBoardDtos(int page, String category, BoardOrderCriterion orderCriterion);
+    BoardDto modifyBoardUsingDto(Long BoardIdx, BoardRequestDto updateParam, String memberId);
     Board increaseViewCnt(long id);
-    boolean deleteBoard(Long boardIdx, String memberId);
-    int getTotalBoardsNum(String category);
+    void deleteBoard(Long boardIdx, String memberId);
     BoardCategoriesDto findAllCategories();
     BoardCategory findCategory(String categoryId);
-    BoardDto convertBoardToBoardDto(long boardId);
 }
