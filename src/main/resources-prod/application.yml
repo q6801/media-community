@@ -1,0 +1,68 @@
+spring:
+  profiles:
+    group:
+      "dev": "common, oauth, dev, devOauth"
+      "prod": "common, oauth, prod, prodOauth"
+      "test": "common, oauth, test, devOauth"
+    active: prod
+  #    open-in-view: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: q6801234@gmail.com
+    password: ENC(jmjVhoBw0LRKDpVN7CnPoiFV6Ad4sI0ifrS4VlJT9AU=)
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    root: info
+
+log:
+  config:
+    path: /logs/local
+  filename: local_log
+
+
+jasypt:
+  encryptor:
+    password:
+    bean: jasyptStringEncryptor
+
+kms:
+  url: ws://13.209.253.79:8888/kurento
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ENC(8x2SySHHil1bw9KvbsYqZNsbwCaDkYMxDordejUtaq0=)
+      secretKey: ENC(U/twQBZQyRj5KdnFGZHGiZ0g4NpEafjB65rB8NeREptkqRTAS6EjawbDvBIB459ZZosGZL3sW9w=)
+    S3:
+      bucket: dremean
+
+path:
+  img: static/img/
+
+server:
+  port: 8000
+  forward-headers-strategy: native
+  tomcat:
+    remoteip:
+      protocol-header: "X-Forwarded-Proto"
+      remote-ip-header: "X-Forwarded-For"
+---
+
+spring:
+  config:
+    activte:
+      on-profile: "common"
+  messages:
+    basename: errors
