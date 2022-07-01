@@ -1,8 +1,7 @@
 package com.example.mediacommunity.community.service;
 
-import com.example.mediacommunity.community.domain.board.Board;
-import com.example.mediacommunity.community.domain.board.BoardOrderCriterion;
-import com.example.mediacommunity.community.domain.board.BoardRequestDto;
+import com.example.mediacommunity.Exception.CustomRuntimeException;
+import com.example.mediacommunity.community.domain.board.*;
 import com.example.mediacommunity.community.domain.category.BoardCategoriesDto;
 import com.example.mediacommunity.community.domain.category.BoardCategory;
 import com.example.mediacommunity.community.domain.member.Member;
@@ -10,6 +9,7 @@ import com.example.mediacommunity.community.repository.board.BoardRepository;
 import com.example.mediacommunity.community.service.board.BoardCategoryService;
 import com.example.mediacommunity.community.service.board.BoardServiceImpl;
 import com.example.mediacommunity.community.service.member.MemberService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,14 +64,13 @@ class BoardServiceImplTest {
         //given
         Pagination pagination = new Pagination();
         String category = "community";
-        given(boardRepository.findBoards(pagination,
-                category, BoardOrderCriterion.CREATED))
+        given(boardRepository.findBoards(any(Pagination.class),
+                eq(category), eq(BoardOrderCriterion.CREATED)))
                 .willReturn(null);
         //when
-        List<Board> boards = boardService.findBoards(
-                pagination, category, BoardOrderCriterion.CREATED);
+        BoardDtos boardDtos = boardService.findBoardDtos(0, category, BoardOrderCriterion.CREATED);
         //then
-        assertThat(boards).isEmpty();
+        assertThat(boardDtos.getBoardInfoDtos()).isEmpty();
     }
 
 
@@ -104,12 +105,12 @@ class BoardServiceImplTest {
         BoardRequestDto board0Alpha = new BoardRequestDto("title", updatedContent, "community", false);
 
         given(boardRepository.findBoardById(board0.getId())).willReturn(board0);
-        given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
+//        given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
         given(boardCategoryService.findById("community")).willReturn(board0.getBoardCategory());
         //when
-        boolean result = boardService.modifyBoardUsingDto(board0.getId(), board0Alpha, writer.getLoginId());
+        BoardDto boardDto = boardService.modifyBoardUsingDto(board0.getId(), board0Alpha, writer.getLoginId());
         //then
-        assertThat(result).isTrue();
+        assertThat(boardDto.getContent()).isEqualTo(updatedContent);
     }
 
     @Test
@@ -122,12 +123,12 @@ class BoardServiceImplTest {
         BoardRequestDto board0Alpha = new BoardRequestDto("title", updatedContent, "community", false);
 
         given(boardRepository.findBoardById(board0.getId())).willReturn(board0);
-        given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
+//        given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
         given(boardCategoryService.findById("community")).willReturn(board0.getBoardCategory());
         //when
-        boolean result = boardService.modifyBoardUsingDto(board0.getId(), board0Alpha, writer.getLoginId());
-        //then
-        assertThat(result).isFalse();
+        Assertions.assertThatThrownBy(() -> {
+            boardService.modifyBoardUsingDto(board0.getId(), board0Alpha, writer.getLoginId());
+        }).isInstanceOf(CustomRuntimeException.class);
     }
 
     @Test
@@ -151,11 +152,9 @@ class BoardServiceImplTest {
         Board board0 = getStubBoardList().get(0);
         Member writer = board0.getMember();
         given(boardRepository.findBoardById(board0.getId())).willReturn(board0);
-        given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
 //        given(boardRepository.delete(board0))
 
-        boolean result = boardService.deleteBoard(board0.getId(), writer.getLoginId());
-        assertThat(result).isTrue();
+        boardService.deleteBoard(board0.getId(), writer.getLoginId());
     }
 
     @Test
@@ -164,11 +163,12 @@ class BoardServiceImplTest {
         Board board0 = getStubBoardList().get(0);
         Member writer = getStubMemberList().get(1);
         given(boardRepository.findBoardById(board0.getId())).willReturn(board0);
-        given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
+//        given(memberService.findMemberById(writer.getLoginId())).willReturn(writer);
 //        given(boardRepository.delete(board0))
 
-        boolean result = boardService.deleteBoard(board0.getId(), writer.getLoginId());
-        assertThat(result).isFalse();
+
+        Assertions.assertThatThrownBy(() -> {boardService.deleteBoard(board0.getId(), writer.getLoginId());})
+                .isInstanceOf(CustomRuntimeException.class);
     }
 
 
