@@ -155,3 +155,18 @@ test {
 //	tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
 //	tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
 //}
+
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
+sourceSets {
+	main {
+		resources {
+			srcDirs "src/main/resources", "src/main/resources-${profile}"
+		}
+	}
+}
+
+tasks {
+	processResources {
+		duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+	}
+}
