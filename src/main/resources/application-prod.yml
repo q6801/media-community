@@ -7,6 +7,13 @@ spring:
     url: "jdbc:mysql://media-community-db.cidduoynnhpa.ap-northeast-2.rds.amazonaws.com:3306/community?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
     username: "q6801"
     password: "ENC(cEbFjyIRWamKyEuiVg1Q6SRsgpjrmHNP)"
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
 
 #server:
 #  ssl:
